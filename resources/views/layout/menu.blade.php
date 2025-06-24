@@ -14,10 +14,10 @@
                         Department of Environment and Natural Resources, Region V
                     </sub>
                     <br>
-                    ENHANCED REGIONAL ELECTRONIC DOCUMENT TRACKING SYSTEM
+                    ENHANCED REGIONAL ELECTRONIC DOCUMENT TRACKING SYSTEM <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL<span>
                 </label>
                 <label class="text-black text-bold navbar-brand-label-small text-start">
-                    DENR V
+                    DENR V <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL<span>
                 </label>
             </a>
         </div>

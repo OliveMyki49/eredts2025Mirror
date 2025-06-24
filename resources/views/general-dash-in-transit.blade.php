@@ -278,6 +278,20 @@
                     /* column 1 : doc_no */
                     {
                         data: 'doc_no',
+                        render: function(data, typw, row) {
+                            return '<a' +
+                                '   style="cursor: pointer" ' +
+                                '   class="btn-fetchdocInfoInTransit dropdown-item" ' +
+                                '   data-bs-toggle="modal" ' +
+                                '   data-bs-target="#vDIITModal"' +
+                                '   data-action_id="' + row['id'] + '"' +
+                                '   data-action_uuid="' + row['uuid'] + '"' +
+                                '   data-doc_id="' + row['doc_id'] + '"' +
+                                '   data-doc_uuid="' + row['doc_uuid'] + '"' +
+                                '   onMouseOut="this.style.color=`#000`" ' +
+                                '   onMouseOver="this.style.color=`#0d6efd`" ' +
+                                '>' + row['doc_no'] + '</a>';
+                        }
                     },
                     /* column 2 : subject */
                     {
@@ -532,11 +546,11 @@
                             }
                             let disp_overdue = '';
                             if (diffdays > 0) {
-                                disp_overdue = '<span class="badge bg-warning text-black text-uppercase mb-1 me-2">URGENT (' + diffdays + ' DAY/S)</span>';
+                                disp_overdue = '<span class="badge bg-warning text-black text-uppercase mb-1 me-2 badge-status-overdue">URGENT (' + diffdays + ' DAY/S)</span>';
                             }
                             let past_deadline = '';
                             if (diffdaysdeadline > 0) {
-                                past_deadline = '<span class="badge bg-danger text-white text-uppercase mb-1 me-2">OVERDUE (' + diffdaysdeadline + ' DAY/S)</span>';
+                                past_deadline = '<span class="badge bg-danger text-white text-uppercase mb-1 me-2 badge-status-overdue">OVERDUE (' + diffdaysdeadline + ' DAY/S)</span>';
                             }
 
                             let dropdownMenu = '' +

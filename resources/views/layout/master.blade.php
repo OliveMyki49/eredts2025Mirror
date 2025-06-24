@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/logoAlone.webp">
     <link rel="icon" href="../assets/img/logoAlone.webp" type="image/x-icon">
-    <link rel="icon" type="image/png" href="../assets/img/logoAlone.webp">
+    <link rel="icon" href="../assets/img/logoAlone.webp" type="image/png">
     <title>EREDTS - @yield('title')</title>
 
     @if (file_exists(public_path('assets/js/jquery.3.2.1.min.js')))
@@ -243,7 +243,7 @@
 
         @keyframes blink-animation {
             0% { opacity: 1; } /* Fully visible */
-            50% { opacity: 0; } /* Hidden */
+            50% { opacity: 0.25; } /* Hidden */
             100% { opacity: 1; } /* Visible again */
         }
     </style>

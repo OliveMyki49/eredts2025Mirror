@@ -215,6 +215,20 @@
                     /* column 1 : doc_no */
                     {
                         data: 'doc_no',
+                        render: function(data, typw, row) {
+                            return '<a' +
+                                '   style="cursor: pointer" ' +
+                                '   onMouseOut="this.style.color=`#000`" ' +
+                                '   onMouseOver="this.style.color=`#0d6efd`" ' +
+                                '   class="btn-fetchdocInfo_vDCrtd dropdown-item" ' +
+                                '   data-bs-toggle="modal" ' +
+                                '   data-bs-target="#vDCrtdModal"' +
+                                // '   data-action_id="' + row['id'] + '"' + // the action id is fetched all per document
+                                // '   data-action_uuid="' + row['uuid'] + '"' + // the action id is fetched all per document
+                                '   data-doc_id="' + row['id'] + '"' +
+                                '   data-doc_uuid="' + row['uuid'] + '"' +
+                                '>' + row['doc_no'] + '</a>';
+                        }
                     },
                     /* column 2 : subject / remarks */
                     {

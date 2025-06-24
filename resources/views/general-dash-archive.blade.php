@@ -211,6 +211,20 @@
                     /* column 1 : doc_no */
                     {
                         data: 'doc_no',
+                        render: function(data, typw, row) {
+                            return '<a' +
+                                '   style="cursor: pointer" ' +
+                                '   onMouseOut="this.style.color=`#000`" ' +
+                                '   onMouseOver="this.style.color=`#0d6efd`" ' +
+                                '   class="btn-fetchdocInfo_vDIA dropdown-item" ' +
+                                '   data-bs-toggle="modal" ' +
+                                '   data-bs-target="#vDIAModal"' +
+                                '   data-action_id="' + row['id'] + '"' +
+                                '   data-action_uuid="' + row['uuid'] + '"' +
+                                '   data-doc_id="' + row['doc_id'] + '"' +
+                                '   data-doc_uuid="' + row['doc_uuid'] + '"' +
+                                '>' + row['doc_no'] + '</a>';
+                        }
                     },
                     /* column 2 : subject */
                     {
