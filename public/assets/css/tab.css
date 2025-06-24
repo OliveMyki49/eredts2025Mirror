@@ -1,0 +1,97 @@
+/**
+ * Tabs
+ */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.tabs label.tab-label {
+  order: 1;
+  display: block;
+  padding: .5rem .5rem;
+  margin-right: 0.2rem;
+  cursor: pointer;
+  background: #b8d3e6;
+  font-weight: bold;
+  transition: background ease 0.2s;
+  font-size: 12px;
+
+}
+
+.tabs .tab {
+  order: 99;
+  flex-grow: 1;
+  width: 100%;
+  display: none;
+  padding: 1rem;
+  background: #fff;
+  border: solid;
+  border-color: #035785;
+  font-size: 13px;
+
+}
+
+.tabs input[type="radio"] {
+  display: none;
+}
+
+.tabs input[type="radio"]:checked+label {
+  background: #035785;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: #fff;
+}
+
+.tabs input[type="radio"]:checked+label+.tab {
+  display: block;
+}
+
+@media (max-width: 45em) {
+
+  .tabs .tab,
+  .tabs label {
+    order: initial;
+  }
+
+  .tabs label {
+    width: 100%;
+    margin-right: 0;
+    margin-top: 0.2rem;
+    order: 1;
+    /* Ensure labels are ordered first */
+  }
+
+  .tabs .tab {
+    order: 99;
+    /* Ensure tabs are ordered after labels */
+  }
+
+  .in-transit-msg-1 {
+    width: 100%;
+    word-wrap: break-word;
+    /* Ensure the message wraps */
+  }
+}
+
+/* custom align to right */
+.tabs .align-end {
+  margin-left: auto;
+}
+
+/**
+ * Generic Styling
+*/
+body {
+  background: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-top: 10vh;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  max-width: 100%;
+  margin: 0 auto;
+  font-size: 112%;
+}

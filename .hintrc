@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "scroll-behavior",
+          "text-size-adjust",
+          "text-align: -webkit-match-parent",
+          "-webkit-tap-highlight-color",
+          "text-decoration-skip-ink",
+          "-webkit-overflow-scrolling",
+          "overflow-anchor",
+          "print-color-adjust",
+          "user-select",
+          "backface-visibility",
+          "mask-image",
+          "mask-size",
+          "mask-position",
+          "min-height: auto",
+          "user-select: all",
+          "backdrop-filter",
+          "orphans",
+          "widows"
+        ]
+      }
+    ],
+    "css-prefix-order": "off"
+  }
+}

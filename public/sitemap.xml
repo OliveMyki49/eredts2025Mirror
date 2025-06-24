@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/sign-in</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard-kiosk</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard?active_sidebar=client_dashboard</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard-doc-tracking</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard-home</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard-map</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard-home?active_sidebar=client-dashboard-home</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/client-dashboard-img-to-pdf</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/how-to-request</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Investment/Potential%20Investment%20Areas%20-%20May%205%202024.kmz,Forest%20Investment/Production%20and%20Protection%20Forests%20-%20May%2025%202024.kmz,</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Investment/Potential%20Investment%20Areas%20-%20May%205%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Investment/Production%20and%20Protection%20Forests%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/CBFMA%20-%20May%2025%202024.kmz,Forest%20Land%20Use%20and%20Allocation/FLAg%20-%20May%2025%202024.kmz,Forest%20Land%20Use%20and%20Allocation/FLAgT%20-%20May%2025%202024.kmz,Forest%20Land%20Use%20and%20Allocation/FLGMA%20-%20May%2025%202024.kmz,Forest%20Land%20Use%20and%20Allocation/GSUP%20-%20May%2025%202024.kmz,Forest%20Land%20Use%20and%20Allocation/SLUP%20-%20May%2025%202024.kmz,</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/CBFMA%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/FLAg%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/FLAgT%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/FLGMA%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/GSUP%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Land%20Use%20and%20Allocation/SLUP%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Monitoring%20and%20Protection/DENR%20Field%20Offices%20-%20May%2025%202024.kmz,Forest%20Monitoring%20and%20Protection/DENR%20Forest%20Products%20Monitoring%20Station%20-%20May%2025%202024.kmz,Forest%20Monitoring%20and%20Protection/DENR%20Forest%20Ranger%20Stations%20Lookout%20Towers%20-%20May%2025%202024.kmz,</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Monitoring%20and%20Protection/DENR%20Field%20Offices%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Monitoring%20and%20Protection/DENR%20Forest%20Products%20Monitoring%20Station%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Forest%20Monitoring%20and%20Protection/DENR%20Forest%20Ranger%20Stations%20Lookout%20Towers%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Protected%20Areas/Region%20V.kmz,</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Protected%20Areas/Region%20V.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Reforestation%20and%20Forest%20Rehabilitation/Clonal%20Nurseries%20-%20May%2025%202024.kmz,Reforestation%20and%20Forest%20Rehabilitation/Established%20Mechanized%20and%20Modernized%20Nurseries%20-%20May%2025%202024.kmz,Reforestation%20and%20Forest%20Rehabilitation/Urban%20Green%20Spaces%20-%20May%2025%202024.kmz,</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Reforestation%20and%20Forest%20Rehabilitation/Clonal%20Nurseries%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Reforestation%20and%20Forest%20Rehabilitation/Established%20Mechanized%20and%20Modernized%20Nurseries%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Reforestation%20and%20Forest%20Rehabilitation/Urban%20Green%20Spaces%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Watershed%20Ecosystem%20Management/Critical%20Watersheds%20-%20May%2025%202024.kmz,Watershed%20Ecosystem%20Management/Established%20Watershed%20Instrumentations%20-%20May%2025%202024.kmz,Watershed%20Ecosystem%20Management/Proclaimed%20Watersheds%20-%20May%2025%202024.kmz,Watershed%20Ecosystem%20Management/Soil%20and%20Water%20Conservation%20Measures%20-%20May%2025%202024.kmz,</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Watershed%20Ecosystem%20Management/Critical%20Watersheds%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Watershed%20Ecosystem%20Management/Established%20Watershed%20Instrumentations%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Watershed%20Ecosystem%20Management/Proclaimed%20Watersheds%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://rfsoats.duckdns.org:9133/map-dashboard-main?map=Watershed%20Ecosystem%20Management/Soil%20and%20Water%20Conservation%20Measures%20-%20May%2025%202024.kmz</loc>
+  <lastmod>2024-06-11T06:22:16+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+
+
+</urlset>

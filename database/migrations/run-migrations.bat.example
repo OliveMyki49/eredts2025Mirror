@@ -1,0 +1,88 @@
+@echo off
+@REM run migration
+
+
+@REM ===================================================================================================== functions are commenteed to prevent accident migration refresh
+
+@REM COMMENT: remove existing table and reset migration
+php artisan migrate --path=database\migrations\2023_12_21_172124_drop_tables.php
+php artisan migrate:reset
+
+@REM ===================================================================================================== functions are commenteed to prevent accident migration refresh
+
+php artisan migrate --path=database\migrations\2023_12_21_151926_create_redts_a_accesss_table.php
+php artisan db:seed --class=accessSeeder
+
+php artisan migrate --path=database\migrations\2023_12_21_161341_create_redts_b_user_table.php
+php artisan db:seed --class=UserSeeder
+
+php artisan migrate --path=database\migrations\2023_12_21_163045_create_redts_d_profile_table.php
+php artisan db:seed --class=profileSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_102159_create_redts_ee_classification_table.php
+php artisan db:seed --class=classificationSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_081449_create_redts_e_region_table.php
+php artisan db:seed --class=regionSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_085857_create_redts_f_offices_table.php
+php artisan db:seed --class=officeSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_092240_create_redts_g_carousel_imgs_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_093210_create_redts_j_user_offices_table.php
+php artisan db:seed --class=user_officesSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_095219_create_redts_l_sub_class_table.php
+php artisan db:seed --class=subclassSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_094538_create_redts_la_process_lengths_table.php
+php artisan db:seed --class=processLengthSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_103510_create_redts_zc_client_infos_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_104533_create_redts_za_transaction_types_table.php
+php artisan db:seed --class=transactionTypeSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_104509_create_redts_z_applicant_types_table.php
+php artisan db:seed --class=applicantTypeSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_111322_create_redts_zd_client_doc_infos_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_112027_create_redts_n_actions_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_112457_create_redts_w_upload_size_limit_table.php
+php artisan db:seed --class=uploadsizelimitSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_114713_create_redts_y_requirements_table.php
+php artisan db:seed --class=requirementsSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_133128_create_redts_zb_agencies_table.php
+php artisan db:seed --class=agenciesSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_133536_create_redts_ze_client_doc_attachments_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_134155_create_redts_zf_order_of_payments_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_135829_create_redts_zg_payment_cost_breakdowns_table.php
+
+php artisan migrate --path=database\migrations\2023_12_22_140552_create_redts_zh_cert_perm_routes_table.php
+php artisan db:seed --class=redts_zh_cert_perm_routesSeeder
+
+php artisan migrate --path=database\migrations\2023_12_22_141313_create_redts_zi_origin_offices_table.php 
+
+php artisan migrate --path=database\migrations\2023_12_22_142339_create_redts_na_action_attachments_table.php
+
+php artisan migrate --path=database\migrations\2024_02_13_160222_create_redts_lc_rstct_sbmsn_of_reqs_table.php
+php artisan db:seed --class=officerRestrictionSeeder
+
+php artisan migrate --path=database\migrations\2024_02_15_143655_create_redts_le_subclass_fees_table.php
+php artisan db:seed --class=subclassFeesSeeder
+
+php artisan migrate --path=database\migrations\2024_02_15_164606_create_redts_zj_user_oop_approvees_table.php
+
+php artisan migrate --path=database\migrations\2024_02_27_134710_create_redts_nb_releasing_routes_table.php
+
+php artisan migrate --path=database\migrations\2024_03_06_122517_create_redts_nc_act_seens_table.php
+
+php artisan migrate --path=database\migrations\2024_04_17_152946_create_redts_ba_view_reqs_specs_table.php
