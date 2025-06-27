@@ -7,6 +7,11 @@ use App\Models\register;
 use App\Models\redts_p_logs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\redts_a_access;
+use App\Models\redts_d_profile;
+use App\Models\redts_j_user_offices;
+use App\Models\redts_f_offices;
+use App\Models\redts_w_upload_size_limit;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -144,4 +149,158 @@ class AuthController extends Controller
 
         return Redirect('login');
     }
+
+    #region communicate with api
+    function syncuserlist()
+    {
+        // 👇 API call before rendering sign-in view
+        $baseUrl = config('app.bapiu'); // e.g. from APP_BAPIU in .env
+
+        try {
+            $apiGetCount = Http::get($baseUrl . '7ebe57f0-5992-484b-bb00-d8f15a123bd8');
+        } catch (\Throwable $th) {
+            return response()->json([
+                "success" => false,
+                "msg" => "api failed to respond",
+            ]);
+        }
+
+        // count users from the api
+        $apiGetCountData = $apiGetCount->ok() ? $apiGetCount->json() : [];
+        $usersCounted = 0;
+        $officesCounted = 0;
+        $accessCounted = 0;
+        $get_size_limit = [];
+        if ($apiGetCountData != []) {
+            $usersCounted = $apiGetCountData['usersCounted'] ?? 0;
+            $officesCounted = $apiGetCountData['officesCounted'] ?? 0;
+            $accessCounted = $apiGetCountData['accessCounted'] ?? 0;
+            $get_size_limit = $apiGetCountData['get_size_limit'] ?? [];
+        }
+
+        //count users in local database
+        $localUsersCounted = User::whereNull('deleted_at')->count();
+        $localofficesCounted = redts_f_offices::whereNull('deleted_at')->count();
+        $localaccessCounted = redts_a_access::whereNull('deleted_at')->count();
+
+        // compare users in local database
+        if ($usersCounted == $localUsersCounted) {
+            // if same do nothing
+        } else {
+            //get data from getusers api
+            $apiGetUsersFromApi = http::get($baseUrl . 'd1e2a17f-8b7e-4552-898e-aab919461c29');
+            $apiGetUsersFromApiData = $apiGetUsersFromApi->ok() ? $apiGetUsersFromApi->json() : [];
+
+            $fetchedusers = $apiGetUsersFromApiData['users'] ?? [];
+            $fetchedprofiles = $apiGetUsersFromApiData['profiles'] ?? [];
+            $fetchedusers_office = $apiGetUsersFromApiData['users_office'] ?? [];
+
+            // insert in local database while checking if user exists
+            foreach ($fetchedusers as $key => $user) {
+                if (!User::where('uuid', $user['uuid'])->exists()) {
+                    User::create([
+                        'uuid' => $user['uuid'],
+                        'username' => $user['username'],
+                        'password' => $user['hashed_password'],
+                        'email' => $user['email'],
+                        'access_id' => $user['access_id'],
+                        'access_uuid' => $user['access_uuid'],
+                        'status' => $user['status'],
+                        'remember_token' => null,
+                        'admin_delete' => $user['admin_delete'],
+
+                    ]);
+                }
+            }
+
+            foreach ($fetchedprofiles as $key => $profiles) {
+                if (!redts_d_profile::where('user_uuid', $profiles['user_uuid'])->exists()) {
+                    redts_d_profile::create([
+                        'user_uuid' => $profiles['user_uuid'],
+                        'fname' => $profiles['fname'],
+                        'mname' => $profiles['mname'],
+                        'sname' => $profiles['sname'],
+                        'suffix' => $profiles['suffix'],
+                        'position' => $profiles['position'],
+                        'image' => $profiles['image'],
+                    ]);
+                }
+            }
+
+            foreach ($fetchedusers_office as $key => $users_office) {
+                if (!redts_j_user_offices::where('user_uuid', $users_office['user_uuid'])->exists()) {
+                    redts_j_user_offices::create([
+                        'user_id' => $users_office['user_id'],
+                        'user_uuid' => $users_office['user_uuid'],
+                        'offices_id' => $users_office['offices_id'],
+                        'offices_uuid' => $users_office['offices_uuid'],
+                    ]);
+                }
+            }
+        }
+
+        if ($officesCounted == $localofficesCounted) {
+        } else {
+            //get data from offices api
+            $officesApi = http::get($baseUrl . 'd5f75114-f3a7-4ddd-a265-0e663dd13b29');
+            $officesApiData = $officesApi->ok() ? $officesApi->json() : [];
+            foreach ($officesApiData['offices'] as $key => $office) {
+                if (!redts_f_offices::where('uuid', $office['uuid'])->exists()) {
+                    redts_f_offices::create([
+                        'uuid' => $office['uuid'],
+                        'region_id' => $office['region_id'],
+                        'slug' => $office['slug'],
+                        'office' => $office['office'],
+                        'full_office_name' => $office['full_office_name'],
+                        'office_type' => $office['office_type'],
+                        'mother_unit' => $office['mother_unit'],
+                        'header_office_title' => $office['header_office_title'],
+                        'email' => $office['email'],
+                        'tel_no' => $office['tel_no'],
+                        'cp_no' => $office['cp_no'],
+                        'office_address' => $office['office_address'],
+                    ]);
+                }
+            }
+        }
+
+        if ($accessCounted == $localaccessCounted) {
+        } else {
+            // Get data from offices API
+            $accessTypesApi = http::get($baseUrl . 'b62fc338-0986-4c1a-8995-003d356018b4');
+            $accessTypesData = $accessTypesApi->ok() ? $accessTypesApi->json() : [];
+
+            foreach ($accessTypesData['access_types'] as $key => $accessType) {
+                if (!redts_a_access::where('uuid', $accessType['uuid'])->exists()) {
+                    redts_a_access::create([
+                        'uuid' => $accessType['uuid'],
+                        'type' => $accessType['type'],
+                    ]);
+                }
+            }
+
+
+            return response()->json([
+                "success" => true,
+                "access_types" => $accessTypesData['access_types'],
+            ]);
+        }
+
+
+
+        //databases to sync when not same
+        /* 
+            - users
+            - profile
+            - user offices links
+            - access types
+        */
+
+        return response()->json([
+            "success" => true,
+            "msg" => "No changes detected",
+            "apiGetCountData" => $apiGetCountData,
+        ]);
+    }
+    #endregion communicate with api
 }

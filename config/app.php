@@ -213,4 +213,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    // custom aliases
+    'bapiu' => env('APP_BAPIU', 'http://192.168.2.14:8001/api/'), // BASE API URL
 ];

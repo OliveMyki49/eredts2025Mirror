@@ -78,6 +78,10 @@ Route::get('/sign-in', function () {
     return view('registrationpanel');
 }); */
 
+#region login page
+Route::get('sync-user-list', [AuthController::class, 'syncuserlist'])->name('syncuserlist');
+#endregion login page
+
 #region admin dashboard
 Route::get('get-redtsstats', [adminController::class, 'getredtsstats'])->name('getredtsstats');
 

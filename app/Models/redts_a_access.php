@@ -13,6 +13,7 @@ class redts_a_access extends Model
 
     protected $fillable = [
         'id',
+        'uuid',
         'type',
         'deleted_at',
     ];

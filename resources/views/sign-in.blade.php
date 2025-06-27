@@ -42,6 +42,17 @@
         .btn-go-to-top-page {
             display: none;
         }
+
+        span.lbl-local {
+            margin-left: 10px;
+            padding: 4px 10px;
+            background-color: #f0f0f0;
+            border: 2px solid grey;
+            border-radius: 4px;
+            font-weight: bold;
+            color: grey;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 
     {{-- region crystal background --}}
@@ -119,30 +130,101 @@
         }
     </style>
     {{-- endregion crystal background --}}
+
+    {{-- region loader --}}
+    <style>
+        /* HTML: <div class="loader"></div> */
+        .loader {
+            width: 25px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 4px solid #000000;
+            animation:
+                l20-1 0.8s infinite linear alternate,
+                l20-2 1.6s infinite linear;
+        }
+
+        @keyframes l20-1 {
+            0% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%)
+            }
+
+            12.5% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%)
+            }
+
+            25% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%)
+            }
+
+            50% {
+                clip-path: polygon(50% 50%, 0 0, 50% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%)
+            }
+
+            62.5% {
+                clip-path: polygon(50% 50%, 100% 0, 100% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%)
+            }
+
+            75% {
+                clip-path: polygon(50% 50%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 50% 100%, 0% 100%)
+            }
+
+            100% {
+                clip-path: polygon(50% 50%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 0% 100%)
+            }
+        }
+
+        @keyframes l20-2 {
+            0% {
+                transform: scaleY(1) rotate(0deg)
+            }
+
+            49.99% {
+                transform: scaleY(1) rotate(135deg)
+            }
+
+            50% {
+                transform: scaleY(-1) rotate(0deg)
+            }
+
+            100% {
+                transform: scaleY(-1) rotate(-135deg)
+            }
+        }
+    </style>
+    {{-- endregion loader --}}
 @endsection
 
 <!-- Main Content -->
 @section('content')
     <div class="crystals">
-        <div class="crystal" style="left: {{rand(10, 10+10)}}%; top: {{rand(90, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(40, 40+10)}}%; top: {{rand(100, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(70, 70+10)}}%; top: {{rand(95, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(20, 20+10)}}%; top: {{rand(110, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(60, 60+10)}}%; top: {{rand(105, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(10, 10+10)}}%; top: {{rand(90, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(40, 40+10)}}%; top: {{rand(100, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(70, 70+10)}}%; top: {{rand(95, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(20, 20+10)}}%; top: {{rand(110, 120)}}%;"></div>
-        <div class="crystal" style="left: {{rand(60, 60+10)}}%; top: {{rand(105, 120)}}%;"></div>
+        <div class="crystal" style="left: {{ rand(10, 10 + 10) }}%; top: {{ rand(90, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(40, 40 + 10) }}%; top: {{ rand(100, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(70, 70 + 10) }}%; top: {{ rand(95, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(20, 20 + 10) }}%; top: {{ rand(110, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(60, 60 + 10) }}%; top: {{ rand(105, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(10, 10 + 10) }}%; top: {{ rand(90, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(40, 40 + 10) }}%; top: {{ rand(100, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(70, 70 + 10) }}%; top: {{ rand(95, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(20, 20 + 10) }}%; top: {{ rand(110, 120) }}%;"></div>
+        <div class="crystal" style="left: {{ rand(60, 60 + 10) }}%; top: {{ rand(105, 120) }}%;"></div>
     </div>
 
-    <div class="container-fluid pt-5" style="position: relative; z-index:10;">
+    <div class="container pt-5" style="position: relative; z-index:10;">
+
+        <div class="row main-content text-center mb-2">
+            <div class="loader-container">
+                {{-- loader append here --}}
+            </div>
+        </div>
+
         <div class="row main-content border border-light bg-white text-center">
             <div class="col-md-4 p-3 text-center company__info d-flex image-wrapper shine">
                 {{-- <a href="{{ url('client-dashboard-home') }}" tooltip="Visit me" flow="down"> --}}
-                    <img src="{{ asset('assets/img/eredtslogo.webp') }}" class="h-2 v-2" alt="main_logo" width="100%" height="100%">
+                <img src="{{ asset('assets/img/eredtslogo.webp') }}" class="h-2 v-2" alt="main_logo" width="100%" height="100%">
                 {{-- </a> --}}
-                <h3>E-REDTS <span>LOCAL</span></h3>
+                <h3>E-REDTS</h3>
+                <span class="lbl-local mb-1">LOCAL</span>
                 <sub>{{ config('app.version') }}</sub>
             </div>
             <div class="col-md-8 col-xs-12 col-sm-12 bg-white" style="margin: auto;">
@@ -156,18 +238,20 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
+
                 <div class="row">
                     <div class="col p-4">
                         <form control="form-control" class="form-group" action="{{ route('login.post') }}" method="POST" role="form" class="text-start">
                             @csrf
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" name="username" id="username" class="form__input" value="{{ old('username') }}" placeholder="Username">
+                                    <input type="text" name="username" id="username" class="form__input" value="{{ old('username') }}" placeholder="Username" autocomplete="username">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <input type="password" name="password" id="password" class="form__input" placeholder="Password">
+                                    <input type="password" name="password" id="password" class="form__input" placeholder="Password" autocomplete="password">
                                 </div>
                             </div>
                             @if ($errors->has('username'))
@@ -193,4 +277,83 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="base-url" value="{{ config('app.bapiu') }}">
+
+    <script>
+        $(function() {
+
+            $('.loader-container').append(`
+                <div class="alert alert-primary row mb-0" role="alert">
+                    <div class="col-md-1">
+                        <div class="loader"></div>
+                    </div>
+                    <div class="col-md">
+                        PERFORMING SYSTEM SYNC, PLEASE WAIT...
+                    </div>
+                </div>
+            `);
+
+            $.ajax({
+                url: "/sync-user-list",
+                type: "GET",
+                success: function(r) {
+                    if (r.success) {
+                        $('.loader-container').empty();
+
+                        console.log(r);
+
+                        if (r.msg == "No changes detected") {
+                            $('.loader-container').empty().append(`
+                                <div class="alert alert-success row mb-0" role="alert">
+                                    <div class="col-md-1">
+                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-md">
+                                        NO CHANGES DETECT, YOUR DATABASE IS UP TO DATE.
+                                    </div>
+                                </div>
+                            `);
+                        }else{
+                            $('.loader-container').empty().append(`
+                                <div class="alert alert-success row mb-0" role="alert">
+                                    <div class="col-md-1">
+                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-md">
+                                        DATABASE SYNC COMPLETED
+                                    </div>
+                                </div>
+                            `);
+                        }
+                    } else {
+                        $('.loader-container').empty().append(`
+                            <div class="alert alert-warning row mb-0" role="alert">
+                                <div class="col-md-1">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-md">
+                                    SYSTEM IS OFFLINE, CONTINUE EREDTS LOCALLY.
+                                </div>
+                            </div>
+                        `);
+                        console.log("System Offline")
+                    }
+                },
+                error: function(err) {
+                    $('.loader-container').empty().append(`
+                            <div class="alert alert-danger row mb-0" role="alert">
+                                <div class="col-md-1">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-md">
+                                    ERROR OCCURRED DURING SYNC, PLEASE TRY AGAIN LATER.
+                                </div>
+                            </div>
+                        `);
+                    console.log(err);
+                }
+            });
+        });
+    </script>
 @endsection
