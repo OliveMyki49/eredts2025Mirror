@@ -617,9 +617,6 @@
                             $('.cnt_arhived').empty().append(r.cnt_arhived);
                             $('.cnt_snt_crtd_docs').empty().append(r.cnt_snt_crtd_docs);
 
-                            console.log('get_doc_deadline');
-                            console.log(r.get_doc_deadline);
-
                             if(r.overdue_count > 0){
                                 $('.status-overdue').empty().append('<span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">❗ URGENT (' +r.overdue_count +')<span>');
                             }

@@ -183,6 +183,11 @@ class AuthController extends Controller
         $localofficesCounted = redts_f_offices::whereNull('deleted_at')->count();
         $localaccessCounted = redts_a_access::whereNull('deleted_at')->count();
 
+        $uptmsguser = false;
+        $uptmsgoffice = false;
+        $uptmsgaccess = false;
+        $uptmsguploadlimit = false;
+
         // compare users in local database
         if ($usersCounted == $localUsersCounted) {
             // if same do nothing
@@ -237,6 +242,8 @@ class AuthController extends Controller
                     ]);
                 }
             }
+
+            $uptmsguser = true;
         }
 
         if ($officesCounted == $localofficesCounted) {
@@ -262,6 +269,8 @@ class AuthController extends Controller
                     ]);
                 }
             }
+
+            $uptmsgoffice = true;
         }
 
         if ($accessCounted == $localaccessCounted) {
@@ -279,13 +288,25 @@ class AuthController extends Controller
                 }
             }
 
-
-            return response()->json([
-                "success" => true,
-                "access_types" => $accessTypesData['access_types'],
-            ]);
+            $uptmsgaccess = true;
         }
 
+        //update upload size limit
+        if (redts_w_upload_size_limit::count() > 0) {
+            $upl_dtls = redts_w_upload_size_limit::first();
+            if ($upl_dtls->size == $get_size_limit['size']) {
+            } else {
+                redts_w_upload_size_limit::where('id', 1)->update([
+                    'size' => $get_size_limit['size'] ?? 0,
+                ]);
+                $uptmsguploadlimit = true;
+            }
+        } else {
+            redts_w_upload_size_limit::create([
+                'size' => $get_size_limit['size'] ?? 0,
+            ]);
+            $uptmsguploadlimit = true;
+        }
 
 
         //databases to sync when not same
@@ -298,8 +319,11 @@ class AuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "msg" => "No changes detected",
             "apiGetCountData" => $apiGetCountData,
+            "uptmsguser" =>  $uptmsguser,
+            "uptmsgoffice" =>  $uptmsgoffice,
+            "uptmsgaccess" =>  $uptmsgaccess,
+            "uptmsguploadlimit" =>  $uptmsguploadlimit,
         ]);
     }
     #endregion communicate with api

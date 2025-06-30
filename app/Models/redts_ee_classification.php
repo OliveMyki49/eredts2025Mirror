@@ -12,9 +12,10 @@ class redts_ee_classification extends Model
     protected $table = "redts_ee_classification";
 
     protected $fillable = [
+        'uuid',
         'description',
+        'classification_type',
         'slug',
-        'classification',
-        'deleted_at'
+        'deleted_at',
     ];
 }

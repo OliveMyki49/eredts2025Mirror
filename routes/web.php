@@ -168,7 +168,7 @@ Route::get('fetch-office-restriction-for/{subclass_id}/', [clientController::cla
 Route::get('how-to-request', [clientController::class, 'indexhowtorequest'])->name('indexhowtorequest');
 Route::get('rfsoats/pdv', [clientController::class, 'indexpublicdocview'])->name('indexpublicdocview');
 Route::get('client-dashboard-ty-msg', [clientController::class, 'indexclientdashboardtymsg'])->name('indexclientdashboardtymsg');
-#region client dashboard
+#endregion client dashboard
 
 #region guest dashboard
 Route::get('client-dashboard-home-original', [guestController::class, 'indexdashboardhome'])->name('indexdashboardhome');
@@ -223,19 +223,19 @@ Route::get('insert-seen-recvd-act/{action_id}/{action_uuid}/', [generalControlle
 
 #region released
 Route::post('get-clientReqReleased', [generalController::class, 'fetchclientReqReleased'])->name('fetchclientReqReleased');
-#region released
+#endregion released
 
 #region archived
 Route::post('get-clientReqAchived', [generalController::class, 'fetchclientReqAchived'])->name('fetchclientReqAchived');
-#region archived
+#endregion archived
 
 #region rejected
 // Route::post('get-clientReqRejected', [generalController::class, 'fetchclientReqRejected'])->name('fetchclientReqRejected'); //DEPRECATED
-#region rejected
+#endregion rejected
 
 #region created
 Route::post('get-clientReqCreated', [generalController::class, 'fetchclientReqCreated'])->name('fetchclientReqCreated');
-#region created
+#endregion created
 
 #region add new document
 /* 
@@ -246,7 +246,7 @@ Route::post('get-class-slug', [generalController::class, 'fetchclassslug'])->nam
 Route::get('get-user-office', [generalController::class, 'fetchuseroffice'])->name('fetchuseroffice');
 Route::get('get-app-transact-type', [generalController::class, 'fetchapptransacttype'])->name('fetchapptransacttype');
 Route::post('insert-new-doc', [generalController::class, 'storenewdoc'])->name('storenewdoc');
-#region add new document
+#endregion add new document
 
 #region routing slip
 Route::get('get-routingslip/{doc_no}/', [generalController::class, 'fetchroutingslip'])->name('fetchroutingslip');
@@ -342,6 +342,10 @@ Route::get('user-dashboard-mobile', [generalController::class, 'indexuserdashboa
 #region user img to pdf generator
 Route::get('general-dash-img-to-pdf', [generalController::class, 'indexgeneraldashimgtopdf'])->name('indexgeneraldashimgtopdf');
 #endregion user img to pdf generator
+
+#region server handshake
+Route::get('eredts-server-hand-shake', [generalController::class, 'eredtsserverhandshake'])->name('eredtsserverhandshake');
+#endregion server handshake
 
 #region test blade
 Route::get('test', function () {

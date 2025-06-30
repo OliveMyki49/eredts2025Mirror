@@ -303,18 +303,7 @@
 
                         console.log(r);
 
-                        if (r.msg == "No changes detected") {
-                            $('.loader-container').empty().append(`
-                                <div class="alert alert-success row mb-0" role="alert">
-                                    <div class="col-md-1">
-                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="col-md">
-                                        NO CHANGES DETECT, YOUR DATABASE IS UP TO DATE.
-                                    </div>
-                                </div>
-                            `);
-                        }else{
+                        if (r.uptmsguser == true || r.uptmsgoffice == false || r.uptmsgaccess == false || r.uptmsguploadlimit == false) {
                             $('.loader-container').empty().append(`
                                 <div class="alert alert-success row mb-0" role="alert">
                                     <div class="col-md-1">
@@ -322,6 +311,17 @@
                                     </div>
                                     <div class="col-md">
                                         DATABASE SYNC COMPLETED
+                                    </div>
+                                </div>
+                            `);
+                        } else {
+                            $('.loader-container').empty().append(`
+                                <div class="alert alert-success row mb-0" role="alert">
+                                    <div class="col-md-1">
+                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-md">
+                                        NO CHANGES DETECT, YOUR DATABASE IS UP TO DATE.
                                     </div>
                                 </div>
                             `);

@@ -1232,130 +1232,6 @@ class generalController extends Controller
     }
     #endregion archived
 
-    #region rejected
-    /* 
-    public function fetchclientReqRejected() // DEPRECATED
-    {
-        $response = $this->fetchotheruserinfo();
-        $data = json_decode($response->getContent(), true); // Decoding the JSON response to an associative array
-        $user_offices_id = $data['user_offices_id'];
-        $user_id = Auth::user()->id;
-
-        $data = redts_n_action::select(
-            'redts_n_actions.id',
-            'redts_n_actions.doc_id',
-            'redts_n_actions.sender_client_id',
-            'redts_n_actions.sender_user_id',
-            'redts_n_actions.sender_type',
-            'redts_n_actions.referred_by_office',
-            'redts_n_actions.action_taken',
-            'redts_n_actions.send_to_office',
-            'redts_n_actions.received_id',
-            'redts_n_actions.received',
-            'redts_n_actions.validated',
-            'redts_n_actions.released',
-            'redts_n_actions.final_action',
-            'redts_n_actions.rejected',
-            'redts_n_actions.verification_date',
-            'redts_n_actions.subject',
-            'redts_n_actions.action_remarks',
-            'redts_n_actions.attachment_remarks',
-            'redts_n_actions.deleted_at',
-            'redts_n_actions.created_at',
-            'redts_n_actions.updated_at',
-
-            #region document info
-            'doc_info.doc_no',
-            'doc_info.validated',
-            'doc_info.subclass_slug',
-            'app_type.applicant',
-            #endregion document info
-
-            #region client info
-            'clientInf.fname as clientfname',
-            'clientInf.mname as clientmname',
-            'clientInf.sname as clientsname',
-            'clientInf.suffix as clientsuffix',
-            'clientInf.valid_id_front as client_valid_id_front',
-            'clientInf.valid_id_back as client_valid_id_back',
-            #endregion client info
-
-            #region user sender
-            'sender_user.username as sender_username',
-            #endregion user sender
-
-            #region referred by office
-            'referred_by.office as referred_by_abbrv',
-            'referred_by.full_office_name as referred_by_full_office_name',
-            #endregion referred by office
-
-            #region send to office
-            'send_to.office as send_to_abbrv',
-            'send_to.full_office_name as send_to_full_office_name',
-            #endregion send to office
-        )
-            ->leftJoin('redts_zd_client_doc_infos as doc_info', 'doc_info.id', '=', 'redts_n_actions.doc_id')
-            ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'doc_info.application_type_id')
-            ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_n_actions.sender_client_id')
-            ->leftJoin('redts_b_user as sender_user', 'sender_user.id', '=', 'redts_n_actions.sender_user_id')
-            ->leftJoin('redts_f_offices as referred_by', 'referred_by.id', '=', 'redts_n_actions.referred_by_office')
-            ->leftJoin('redts_f_offices as send_to', 'send_to.id', '=', 'redts_n_actions.send_to_office')
-            ->where('redts_n_actions.send_to_office', $user_offices_id)
-            ->where('redts_n_actions.received_id', $user_id)
-            ->whereNotNull('redts_n_actions.rejected')
-            ->whereNull('redts_n_actions.deleted_at')
-            ->get();
-
-        foreach ($data as $key => $dt) {
-            // document attachments
-            $req_attachments_arr = array();
-            $req_attachments = redts_ze_client_doc_attachments::where('doc_info_id', $dt->doc_id)->where('attachment_type', 'file')->whereNull('deleted_at')->get();
-            foreach ($req_attachments as $key => $attach) {
-                array_push($req_attachments_arr, [
-                    'slug' => $attach->req_slug,
-                    'app_form_no' => $attach->app_form_no,
-                    'file_path' => $attach->file_path,
-                    'file_name' => $attach->file_name,
-                ]);
-            }
-            $dt->req_attachments = $req_attachments_arr;
-
-            // action attachments
-            $act_attachments_arr = array();
-            $act_attachments = redts_na_action_attachments::where('action_id', $dt->id)->whereNull('deleted_at')->get();
-            foreach ($act_attachments as $key => $attach) {
-                array_push($act_attachments_arr, [
-                    'slug' => $attach->act_slug,
-                    'file_path' => $attach->file_path,
-                    'file_name' => $attach->file_name,
-                    'remarks' => $attach->remarks,
-                ]);
-            }
-            $dt->act_attachments = $act_attachments_arr;
-
-            // order of payment
-            $order_of_payment_arr = array();
-            if (redts_zf_order_of_payment::where('doc_id', $dt->doc_id)->whereNull('deleted_at')->exists()) {
-                $order_of_payment = redts_zf_order_of_payment::where('doc_id', $dt->doc_id)->whereNull('deleted_at')->get();
-                foreach ($order_of_payment as $key => $ofp) {
-                    array_push($order_of_payment_arr, [
-                        'id' => $ofp->id,
-                        'doc_id' => $ofp->doc_id,
-                        'order_of_payment' => $ofp->order_of_payment,
-                        'payment_receipt' => $ofp->payment_receipt,
-                        'verified' => $ofp->verified,
-                    ]);
-                }
-            };
-
-            $dt->order_of_payment = $order_of_payment_arr;
-        }
-
-        return dataTables($data)->toJson();
-    } 
-    */
-    #endregion rejected
-
     #region created
     public function fetchclientReqCreated()
     {
@@ -1574,7 +1450,7 @@ class generalController extends Controller
         $user_office = redts_j_user_offices::select(
             'office.office',
         )
-            ->leftJoin('redts_f_offices as office', 'office.id', '=', 'redts_j_user_offices.offices_id')
+            ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
             ->where('redts_j_user_offices.user_id', $user_id)
             ->whereNull('redts_j_user_offices.deleted_at')
             ->first();
@@ -2407,7 +2283,7 @@ class generalController extends Controller
                 'office.header_office_title',
                 'office.office_address',
             )
-                ->leftJoin('redts_f_offices as office', 'office.id', '=', 'redts_j_user_offices.offices_id')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
                 ->where('redts_j_user_offices.user_id', Auth::user()->id)
                 ->first();
 
@@ -2514,7 +2390,7 @@ class generalController extends Controller
                 'office.header_office_title',
                 'office.office_address',
             )
-                ->leftJoin('redts_f_offices as office', 'office.id', '=', 'redts_j_user_offices.offices_id')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
                 ->where('redts_j_user_offices.user_id', Auth::user()->id)
                 ->first();
 
@@ -3101,7 +2977,7 @@ class generalController extends Controller
                 'office.header_office_title',
                 'office.office_address',
             )
-                ->leftJoin('redts_f_offices as office', 'office.id', '=', 'redts_j_user_offices.offices_id')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
                 ->where('redts_j_user_offices.user_id', Auth::user()->id)
                 ->first();
 
@@ -3210,7 +3086,7 @@ class generalController extends Controller
                 'office.header_office_title',
                 'office.office_address',
             )
-                ->leftJoin('redts_f_offices as office', 'office.id', '=', 'redts_j_user_offices.offices_id')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
                 ->where('redts_j_user_offices.user_id', Auth::user()->id)
                 ->first();
 
@@ -3469,7 +3345,7 @@ class generalController extends Controller
             ->leftJoin('redts_ee_classification as class', 'class.id', '=', 'redts_zd_client_doc_infos.class_id')
             ->leftJoin('redts_l_sub_class as subclass', 'subclass.id', '=', 'redts_zd_client_doc_infos.subclass_id')
             ->leftJoin('redts_zi_origin_offices as origin', 'origin.doc_id', '=', 'redts_zd_client_doc_infos.id')
-            ->leftJoin('redts_f_offices as office', 'office.id', '=', 'origin.origin_office_id')
+            ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'origin.origin_office_uuid')
             ->whereNull('redts_zd_client_doc_infos.deleted_at')
             ->where(function ($query) { /* this query will select all action with the doc id and check if the user received / process the document if not it will not add to the fetch data */
                 $query->whereIn('redts_zd_client_doc_infos.id', function ($subquery) {
@@ -3664,7 +3540,7 @@ class generalController extends Controller
                 ->leftJoin('redts_ee_classification as class', 'class.id', '=', 'redts_zd_client_doc_infos.class_id')
                 ->leftJoin('redts_l_sub_class as subclass', 'subclass.id', '=', 'redts_zd_client_doc_infos.subclass_id')
                 ->leftJoin('redts_zi_origin_offices as origin', 'origin.doc_id', '=', 'redts_zd_client_doc_infos.id')
-                ->leftJoin('redts_f_offices as office', 'office.id', '=', 'origin.origin_office_id')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'origin.origin_office_uuid')
                 ->whereNull('redts_zd_client_doc_infos.deleted_at')
                 ->get();
 
@@ -3855,7 +3731,7 @@ class generalController extends Controller
                     ->leftJoin('redts_ee_classification as class', 'class.id', '=', 'redts_zd_client_doc_infos.class_id')
                     ->leftJoin('redts_l_sub_class as subclass', 'subclass.id', '=', 'redts_zd_client_doc_infos.subclass_id')
                     ->leftJoin('redts_zi_origin_offices as origin', 'origin.doc_id', '=', 'redts_zd_client_doc_infos.id')
-                    ->leftJoin('redts_f_offices as office', 'office.id', '=', 'origin.origin_office_id')
+                    ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'origin.origin_office_uuid')
                     ->where('origin.origin_office_id', $user_allowed_origin->office_id)
                     ->whereNull('redts_zd_client_doc_infos.deleted_at')
                     ->get();
@@ -4199,7 +4075,7 @@ class generalController extends Controller
                 'office.header_office_title',
                 'office.office_address',
             )
-                ->leftJoin('redts_f_offices as office', 'office.id', '=', 'redts_j_user_offices.offices_id')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
                 ->where('redts_j_user_offices.user_id', Auth::user()->id)
                 ->first();
 
@@ -4465,6 +4341,71 @@ class generalController extends Controller
             return $this->pageResponse()['page403'];
         }
     }
+
+    #region eredts server hand-shake
+    public function eredtsserverhandshake()
+    {
+        // 👇 API call before rendering sign-in view
+        $baseUrl = config('app.bapiu'); // e.g. from APP_BAPIU in .env
+
+        try {
+            $apiCall = Http::get($baseUrl . '251e7804-0934-493a-a175-8fb304e6d362');
+        } catch (\Throwable $th) {
+            return response()->json([
+                "success" => false,
+                "msg" => "api failed to respond",
+            ]);
+        }
+
+        // count users from the api
+        $apiCallData = $apiCall->ok() ? $apiCall->json() : [];
+
+        $classCounted = 0;
+        $applicantTypeCounted = 0;
+        $transactionTypeCounted = 0;
+        if ($apiCallData != []) {
+            $classCounted = $apiCallData['classCounted'] ?? 0;
+            $applicantTypeCounted = $apiCallData['applicantTypeCounted'] ?? 0;
+            $transactionTypeCounted = $apiCallData['transactionTypeCounted'] ?? 0;
+        }
+
+        // local count here
+        $classCountedLocal = redts_ee_classification::whereNull('deleted_at')->count();
+
+        // check update classifications
+        $classUptMsg = false;
+        if ($classCounted == $classCountedLocal) {
+            //do nothing if class count is the same
+        } else {
+            //get api class data and insert to local
+            $apiClasses = http::get($baseUrl . '22e179f2-2430-4610-8e64-a3d58fe0a481');
+            $apiClassesArr = $apiClasses->ok() ? $apiClasses->json() : [];
+            $apiClassesData = $apiClassesArr['classes'] ?? [];
+
+            foreach ($apiClassesData as $key => $class) {
+                redts_ee_classification::create([
+                    'uuid' => $class['uuid'],
+                    'description' => $class['description'],
+                    'classification_type' => $class['classification_type'],
+                    'slug' => $class['slug'],
+                ]);
+            }
+
+            
+            $classUptMsg = true;
+        }
+        
+        // check app types
+
+
+        // check transaction types
+
+        return response()->json([
+            'success' => true,
+            'apiCallData' => $apiCallData,
+        ]);
+    }
+    #endregion eredts server hand-shake
 
     #region get ip
     public function fetchExternalIp()

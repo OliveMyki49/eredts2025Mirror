@@ -14,7 +14,8 @@
                         Department of Environment and Natural Resources, Region V
                     </sub>
                     <br>
-                    ENHANCED REGIONAL ELECTRONIC DOCUMENT TRACKING SYSTEM <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL<span>
+                    ENHANCED REGIONAL ELECTRONIC DOCUMENT TRACKING SYSTEM <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL SERVER</span>
+                       <span class="loader-container"></span>
                 </label>
                 <label class="text-black text-bold navbar-brand-label-small text-start">
                     DENR V <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL<span>
@@ -839,6 +840,33 @@
         window.addEventListener('offline', updateOnlineStatus);
 
         // Initial check
-        updateOnlineStatus();
+        //updateOnlineStatus();
     </script>
     {{-- endregion check if connected to internet --}}
+
+    {{-- region server connection check and sync --}}
+    <script type="text/javascript">
+        $(function() {
+            //check conneciton
+            $('.loader-container').append(`<span class="badge bg-primary text-white badge-status-overdue" style="cursor: pointer">GETTING UPDATED RECORDS...<span>`);
+
+            $.ajax({
+                url: "/eredts-server-hand-shake",
+                method: "GET",
+                success: function(r) {
+                    if (r.success) {
+                        console.log(r);
+                        $('.loader-container').empty();
+                    } else {
+                        console.log('Server responded but returned error')
+                        $('.loader-container').empty().append(`<span class="badge bg-danger text-white badge-status-overdue" style="cursor: pointer">SERVER RESPONDED WITH AN ERROR<span>`);
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                    $('.loader-container').empty();
+                }
+            });
+        });
+    </script>
+    {{-- region server connection check and sync --}}
