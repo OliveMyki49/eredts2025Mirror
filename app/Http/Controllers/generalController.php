@@ -33,6 +33,7 @@ use App\Models\redts_zf_order_of_payment;
 use App\Models\redts_zh_cert_perm_routes;
 use App\Models\redts_zj_user_oop_approvee;
 use App\Models\redts_na_action_attachments;
+use App\Models\redts_za_transaction_type;
 use App\Models\redts_ze_client_doc_attachments;
 use App\Models\redts_zg_payment_cost_breakdown;
 use App\Models\redts_zga_other_pymnt_cost_brkdwn;
@@ -42,9 +43,7 @@ class generalController extends Controller
     #region user info 
     public function fetchotheruserinfo() //CONVERTED TO UUID
     {
-        // $user_id = Auth::user()->id; //DEPRECATED
         $user_uuid = Auth::user()->uuid;
-        // $access_id = Auth::user()->access_id; //DEPRECATED
         $access_uuid = Auth::user()->access_uuid;
 
         $access_type = redts_a_access::where('uuid', $access_uuid)->whereNull('deleted_at')->first();
@@ -499,7 +498,6 @@ class generalController extends Controller
         $data = $request->all();
 
         $action_uuid = $request->input('action_uuid');
-        $user_id = Auth::user()->id;
         $user_uuid = Auth::user()->uuid;
         $user_access = redts_a_access::where('uuid', Auth::user()->access_uuid)->first();
         $user_office = redts_j_user_offices::where('user_uuid', Auth::user()->uuid)->first();
@@ -554,7 +552,6 @@ class generalController extends Controller
                         'doc_uuid' => $prev_doc_uuid,
                         'doc_no' => $prev_doc_no,
                         'sender_client_id' => null, //as is
-                        'sender_user_id' => $user_id,
                         'sender_user_uuid' => $user_uuid,
                         'sender_type' => $user_access->type, //user info
                         'referred_by_office' => $user_office->offices_id, //user infoz
@@ -824,7 +821,6 @@ class generalController extends Controller
     public function updaterejectDocAction(Request $request) //DEPRECATED
     {
         $action_id = $request->input('action_id');
-        $user_id = Auth::user()->id;
         $user_access = redts_a_access::where('id', Auth::user()->access_id)->first();
         $user_office = redts_j_user_offices::where('user_id', Auth::user()->id)->first();
         $action_taken = $request->input('action_taken');
@@ -1445,13 +1441,13 @@ class generalController extends Controller
     //get user offfice
     public function fetchuseroffice()
     {
-        $user_id = Auth::user()->id;
+        $user_uuid = Auth::user()->uuid;
 
         $user_office = redts_j_user_offices::select(
             'office.office',
         )
             ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
-            ->where('redts_j_user_offices.user_id', $user_id)
+            ->where('redts_j_user_offices.user_uuid', $user_uuid)
             ->whereNull('redts_j_user_offices.deleted_at')
             ->first();
 
@@ -2214,1060 +2210,6 @@ class generalController extends Controller
     }
     #endregion routing slip
 
-    #region order of payment
-    public function fetchorderOfPayment($doc_id) //DEPRECATED
-    {
-        if (Auth::check()) {
-            $doc_info = redts_zd_client_doc_info::select(
-                'redts_zd_client_doc_infos.id',
-                'redts_zd_client_doc_infos.doc_no',
-                'redts_zd_client_doc_infos.application_type_id',
-                'redts_zd_client_doc_infos.transaction_type_id',
-                'redts_zd_client_doc_infos.agency',
-                'redts_zd_client_doc_infos.client_id',
-                'redts_zd_client_doc_infos.class_id',
-                'redts_zd_client_doc_infos.class_slug',
-                'redts_zd_client_doc_infos.subclass_id',
-                'redts_zd_client_doc_infos.subclass_slug',
-                'redts_zd_client_doc_infos.remarks',
-                'redts_zd_client_doc_infos.validated',
-                'redts_zd_client_doc_infos.compliance_deadline',
-
-                #region app type
-                'app_type.applicant',
-                #endregion app type
-
-                #region transaction type
-                'transac_type.transaction',
-                'transac_type.slug as transaction_slug',
-                #endregion transaction type
-
-                #region client info
-                'clientInf.fname as client_fname',
-                'clientInf.mname as client_mname',
-                'clientInf.sname as client_sname',
-                'clientInf.suffix as client_suffix',
-                'clientInf.address as client_address',
-                'clientInf.email as client_email',
-                'clientInf.email_verify as client_email_verify',
-                'clientInf.contact_no as client_contact_no',
-                #endregion client info
-
-                #region doc clas
-                'doc_class.description as doc_class_full',
-                #endregion doc clas
-
-                #region doc type
-                'req_type.description as req_type_full',
-                #endregion doc type
-            )
-                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'redts_zd_client_doc_infos.application_type_id')
-                ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.id', '=', 'redts_zd_client_doc_infos.transaction_type_id')
-                ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
-                ->leftJoin('redts_ee_classification as doc_class', 'doc_class.id', '=', 'redts_zd_client_doc_infos.class_id')
-                ->leftJoin('redts_l_sub_class as req_type', 'req_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
-                ->where('redts_zd_client_doc_infos.id', $doc_id)
-                ->whereNull('redts_zd_client_doc_infos.deleted_at')
-                ->first();
-
-            $user_profile = redts_d_profile::where('user_id', Auth::user()->id)->first();
-
-            $access_type = redts_a_access::where('id', Auth::user()->access_id)->whereNull('deleted_at')->first();
-
-            $user_office = redts_j_user_offices::select(
-                'office.slug',
-                'office.office',
-                'office.full_office_name',
-                'office.office_type',
-                'office.mother_unit',
-                'office.header_office_title',
-                'office.office_address',
-            )
-                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
-                ->where('redts_j_user_offices.user_id', Auth::user()->id)
-                ->first();
-
-            $ofp = redts_zf_order_of_payment::where('doc_id', $doc_id)->whereNull('deleted_at')->first();
-
-            $ofp_cost_breakdown = redts_zg_payment_cost_breakdown::where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-
-            //get original cost breakdown used when oop is not yet created 
-            $subclass_fees = redts_le_subclass_fees::where('subclass_id', $doc_info->subclass_id)->where('cost_grouping', 'a1')->whereNull('deleted_at')->get();
-
-            //get approving officer
-            $user_id = Auth::user()->id;
-            $user_oop_approvee = redts_zj_user_oop_approvee::where('user_id', $user_id)->first();
-
-            if (Auth::user()->access_id == 10 || Auth::user()->access_id == 11 || Auth::user()->access_id == 12 || Auth::user()->access_id == 14) { //access type is equal to 10:Credit Office or Accounting Officer or Both
-                return view('general-dash-orderOfPaymentSlip', [
-                    'doc_info' => $doc_info,
-                    'creator_id' => Auth::user()->id,
-                    'user_profile' => $user_profile,
-                    'access_type' => $access_type,
-                    'user_office' => $user_office,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                    'subclass_fees' => $subclass_fees,
-                    'user_oop_approvee' => $user_oop_approvee,
-                ]);
-            } else {
-                return view('general-dash-orderOfPaymentSlip-view-only', [
-                    'doc_info' => $doc_info,
-                    'creator_id' => Auth::user()->id,
-                    'user_profile' => $user_profile,
-                    'user_office' => $user_office,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                ]);
-            }
-        } else {
-            return $this->pageResponse()['page403'];
-        }
-    }
-    public function fetchorderOfPaymentviewonly($doc_id) //DEPRECATED
-    {
-        if (Auth::check()) {
-            $doc_info = redts_zd_client_doc_info::select(
-                'redts_zd_client_doc_infos.id',
-                'redts_zd_client_doc_infos.doc_no',
-                'redts_zd_client_doc_infos.application_type_id',
-                'redts_zd_client_doc_infos.transaction_type_id',
-                'redts_zd_client_doc_infos.agency',
-                'redts_zd_client_doc_infos.client_id',
-                'redts_zd_client_doc_infos.class_id',
-                'redts_zd_client_doc_infos.class_slug',
-                'redts_zd_client_doc_infos.subclass_id',
-                'redts_zd_client_doc_infos.subclass_slug',
-                'redts_zd_client_doc_infos.remarks',
-                'redts_zd_client_doc_infos.validated',
-                'redts_zd_client_doc_infos.compliance_deadline',
-
-                #region app type
-                'app_type.applicant',
-                #endregion app type
-
-                #region transaction type
-                'transac_type.transaction',
-                'transac_type.slug as transaction_slug',
-                #endregion transaction type
-
-                #region client info
-                'clientInf.fname as client_fname',
-                'clientInf.mname as client_mname',
-                'clientInf.sname as client_sname',
-                'clientInf.suffix as client_suffix',
-                'clientInf.address as client_address',
-                'clientInf.email as client_email',
-                'clientInf.email_verify as client_email_verify',
-                'clientInf.contact_no as client_contact_no',
-                #endregion client info
-
-                #region doc clas
-                'doc_class.description as doc_class_full',
-                #endregion doc clas
-
-                #region doc type
-                'req_type.description as req_type_full',
-                #endregion doc type
-            )
-                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'redts_zd_client_doc_infos.application_type_id')
-                ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.id', '=', 'redts_zd_client_doc_infos.transaction_type_id')
-                ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
-                ->leftJoin('redts_ee_classification as doc_class', 'doc_class.id', '=', 'redts_zd_client_doc_infos.class_id')
-                ->leftJoin('redts_l_sub_class as req_type', 'req_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
-                ->where('redts_zd_client_doc_infos.id', $doc_id)
-                ->whereNull('redts_zd_client_doc_infos.deleted_at')
-                ->first();
-
-            $user_profile = redts_d_profile::where('user_id', Auth::user()->id)->first();
-
-            $user_office = redts_j_user_offices::select(
-                'office.slug',
-                'office.office',
-                'office.full_office_name',
-                'office.office_type',
-                'office.mother_unit',
-                'office.header_office_title',
-                'office.office_address',
-            )
-                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
-                ->where('redts_j_user_offices.user_id', Auth::user()->id)
-                ->first();
-
-            $ofp = redts_zf_order_of_payment::where('doc_id', $doc_id)->whereNull('deleted_at')->first();
-            $ofp_cost_breakdown = redts_zg_payment_cost_breakdown::where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-
-            return view('general-dash-orderOfPaymentSlip-view-only', [
-                'doc_info' => $doc_info,
-                'creator_id' => Auth::user()->id,
-                'user_profile' => $user_profile,
-                'user_office' => $user_office,
-                'ofp' => $ofp,
-                'ofp_cost_breakdown' => $ofp_cost_breakdown,
-            ]);
-        } else {
-            return $this->pageResponse()['page403'];
-        }
-    }
-    public function fetchorderOfPaymentForBilling($doc_id) //DEPRECATED
-    {
-        if (Auth::check()) {
-            $doc_info = redts_zd_client_doc_info::select(
-                'redts_zd_client_doc_infos.id',
-                'redts_zd_client_doc_infos.doc_no',
-                'redts_zd_client_doc_infos.application_type_id',
-                'redts_zd_client_doc_infos.transaction_type_id',
-                'redts_zd_client_doc_infos.agency',
-                'redts_zd_client_doc_infos.client_id',
-                'redts_zd_client_doc_infos.class_id',
-                'redts_zd_client_doc_infos.class_slug',
-                'redts_zd_client_doc_infos.subclass_id',
-                'redts_zd_client_doc_infos.subclass_slug',
-                'redts_zd_client_doc_infos.remarks',
-                'redts_zd_client_doc_infos.validated',
-                'redts_zd_client_doc_infos.compliance_deadline',
-
-                #region app type
-                'app_type.applicant',
-                #endregion app type
-
-                #region transaction type
-                'transac_type.transaction',
-                'transac_type.slug as transaction_slug',
-                #endregion transaction type
-
-                #region client info
-                'clientInf.fname as client_fname',
-                'clientInf.mname as client_mname',
-                'clientInf.sname as client_sname',
-                'clientInf.suffix as client_suffix',
-                'clientInf.address as client_address',
-                'clientInf.email as client_email',
-                'clientInf.email_verify as client_email_verify',
-                'clientInf.contact_no as client_contact_no',
-                #endregion client info
-
-                #region doc clas
-                'doc_class.description as doc_class_full',
-                #endregion doc clas
-
-                #region doc type
-                'req_type.description as req_type_full',
-                #endregion doc type
-            )
-                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'redts_zd_client_doc_infos.application_type_id')
-                ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.id', '=', 'redts_zd_client_doc_infos.transaction_type_id')
-                ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
-                ->leftJoin('redts_ee_classification as doc_class', 'doc_class.id', '=', 'redts_zd_client_doc_infos.class_id')
-                ->leftJoin('redts_l_sub_class as req_type', 'req_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
-                ->where('redts_zd_client_doc_infos.id', $doc_id)
-                ->whereNull('redts_zd_client_doc_infos.deleted_at')
-                ->first();
-
-            // main order of payment
-            $ofp = redts_zf_order_of_payment::where('doc_id', $doc_id)->whereNull('deleted_at')->first();
-            $ofp_cost_breakdown = redts_zg_payment_cost_breakdown::where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-
-            // additional order of payment
-            $additional_ofp = redts_zfa_additional_oop::where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-            $additional_ofp_cost_breakdown = redts_zga_other_pymnt_cost_brkdwn::where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-
-            $first_act = redts_n_action::where('doc_id', $doc_id)->whereNull('deleted_at')->first();
-
-            //10 - Processor
-            //11 - Accounting Officer
-            //12 - Credit Officer
-            if (Auth::user()->access_id == 1 || Auth::user()->access_id == 10 || Auth::user()->access_id == 11 || Auth::user()->access_id == 12 || Auth::user()->access_id == 14) { //access type is equal to 10:Credit Office or Accounting Officer or Both
-                return response()->json([
-                    'success' => true,
-                    'doc_info' => $doc_info,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                    'additional_ofp' => $additional_ofp,
-                    'additional_ofp_cost_breakdown' => $additional_ofp_cost_breakdown,
-                    'first_act' => $first_act,
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                ]);
-            }
-        } else {
-            return $this->pageResponse()['page403'];
-        }
-    }
-    public function storeupdateorderofpayment(Request $request) //DEPRECATED
-    {
-        $doc_id = $request->input('doc_id');
-        $creator_id = $request->input('creator_id');
-        $header_title = $request->input('header_title');
-        $header_address = $request->input('header_address');
-        $or_no = $request->input('or_no');
-        $or_no_dated = $request->input('or_no_dated');
-        $pay_amount = $request->input('pay_amount');
-        $payment_for = $request->input('payment_for');
-        $pay_amount_total = $request->input('pay_amount_total');
-        $clerk_fullname = $request->input('clerk_fullname');
-        $prepared_by_position = $request->input('prepared_by_position');
-        $approving_remarks = $request->input('approving_remarks');
-        $approving_fullname = $request->input('approving_fullname');
-        $approving_position = $request->input('approving_position');
-
-        $per_bill_no = $request->input('per_bill_no');
-        $per_bill_no_dated = $request->input('per_bill_no_dated');
-        $cost_break_down_item = $request->input('cost_break_down_item');
-        $cost_break_down_item_name = $request->input('cost_break_down_item_name');
-
-        $save_ofp = false;
-        $upt_ofp = false;
-        if (redts_zf_order_of_payment::where('doc_id', $doc_id)->whereNull('deleted_at')->exists()) {
-            $ofp = redts_zf_order_of_payment::where('doc_id', $doc_id)->first(['id']);
-            redts_zf_order_of_payment::where('doc_id', $doc_id)->update([
-                'order_of_payment' => null,
-                'payment_receipt' => null,
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'purpose' => $payment_for,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-                'verified' => 0,
-            ]);
-
-
-            //record log
-            $this->recordAction('Order of payment has been updated for doc_id ' . $doc_id);
-
-            // replace the cost breakdown
-            redts_zg_payment_cost_breakdown::where('doc_id', $doc_id)->delete();
-            if ($cost_break_down_item != null) {
-                foreach ($cost_break_down_item as $key => $dt) {
-                    redts_zg_payment_cost_breakdown::create([
-                        'doc_id' => $doc_id,
-                        'ofp_id' => $ofp->id,
-                        'cost_breakdown_amount' => $cost_break_down_item[$key],
-                        'cost_breakdown' => $cost_break_down_item_name[$key],
-                    ]);
-                }
-            }
-
-            $upt_ofp = true;
-        } else {
-            $ofp = redts_zf_order_of_payment::create([
-                'doc_id' => $doc_id,
-                'creator_id' => $creator_id,
-                'order_of_payment' => null,
-                'payment_receipt' => null,
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'purpose' => $payment_for,
-                'clerk_fullname' => $clerk_fullname,
-                'prepared_by_position' => $prepared_by_position,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-            ]);
-
-            //record log
-            $this->recordAction('Order of payment has been created for doc_id ' . $doc_id);
-
-            if ($cost_break_down_item != null) {
-                foreach ($cost_break_down_item as $key => $dt) {
-                    redts_zg_payment_cost_breakdown::create([
-                        'doc_id' => $doc_id,
-                        'ofp_id' => $ofp->id,
-                        'cost_breakdown_amount' => $cost_break_down_item[$key],
-                        'cost_breakdown' => $cost_break_down_item_name[$key],
-                    ]);
-                }
-            }
-
-            $save_ofp = true;
-        }
-
-        // check approvee name and save if it is avilable or saved before for an specific user
-        $user_id = Auth::user()->id;
-        if (redts_zj_user_oop_approvee::where('user_id', $user_id)->exists()) {
-            $user_oop_approvee = redts_zj_user_oop_approvee::where('user_id', $user_id)->first();
-            if ($user_oop_approvee->approvee_fullname ==  $approving_fullname && $user_oop_approvee->approvee_position == $approving_position) {
-                //do nothing
-            } else {
-                redts_zj_user_oop_approvee::where('user_id', $user_id)->update([
-                    'approvee_fullname' => $approving_fullname,
-                    'approvee_position' => $approving_position,
-                ]);
-            }
-        } else {
-            redts_zj_user_oop_approvee::create([
-                'user_id' => $user_id,
-                'approvee_fullname' => $approving_fullname,
-                'approvee_position' => $approving_position,
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => array([
-                'doc_id' => $doc_id,
-                'creator_id' => $creator_id,
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'pay_amount_total' => $pay_amount_total,
-                'clerk_fullname' => $clerk_fullname,
-                'prepared_by_position' => $prepared_by_position,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-                'cost_break_down_item' => $cost_break_down_item,
-                'cost_break_down_item_name' => $cost_break_down_item_name,
-            ]),
-            'save_ofp' => $save_ofp,
-            'upt_ofp' => $upt_ofp,
-        ]);
-    }
-    public function storeadditionalorderofpayment(Request $request) //DEPRECATED
-    {
-        $doc_id = $request->input('doc_id');
-        $creator_id = $request->input('creator_id');
-        $header_title = $request->input('header_title');
-        $header_address = $request->input('header_address');
-        $or_no = $request->input('or_no');
-        $or_no_dated = $request->input('or_no_dated');
-        $pay_amount = $request->input('pay_amount');
-        $payment_for = $request->input('payment_for');
-        $pay_amount_total = $request->input('pay_amount_total');
-        $clerk_fullname = $request->input('clerk_fullname');
-        $prepared_by_position = $request->input('prepared_by_position');
-        $approving_remarks = $request->input('approving_remarks');
-        $approving_fullname = $request->input('approving_fullname');
-        $approving_position = $request->input('approving_position');
-
-        $per_bill_no = $request->input('per_bill_no');
-        $per_bill_no_dated = $request->input('per_bill_no_dated');
-        $cost_break_down_item = $request->input('cost_break_down_item');
-        $cost_break_down_item_name = $request->input('cost_break_down_item_name');
-
-        #region save new additional record
-        $ofp = redts_zfa_additional_oop::create([
-            'doc_id' => $doc_id,
-            'creator_id' => $creator_id,
-            // 'order_of_payment' => null,
-            // 'payment_receipt' => null,
-            'header_title' => $header_title,
-            'header_address' => $header_address,
-            'or_no' => $or_no,
-            'or_no_dated' => $or_no_dated,
-            'pay_amount' => $pay_amount,
-            'purpose' => $payment_for,
-            'clerk_fullname' => $clerk_fullname,
-            'prepared_by_position' => $prepared_by_position,
-            'approving_remarks' => $approving_remarks,
-            'approving_fullname' => $approving_fullname,
-            'approving_position' => $approving_position,
-            'per_bill_no' => $per_bill_no,
-            'per_bill_no_dated' => $per_bill_no_dated,
-        ]);
-
-        //record log
-        $this->recordAction('Order of payment has been created for doc_id ' . $doc_id);
-
-        if ($cost_break_down_item != null) {
-            foreach ($cost_break_down_item as $key => $dt) {
-                redts_zga_other_pymnt_cost_brkdwn::create([
-                    'doc_id' => $doc_id,
-                    'ofp_id' => $ofp->id,
-                    'cost_breakdown_amount' => $cost_break_down_item[$key],
-                    'cost_breakdown' => $cost_break_down_item_name[$key],
-                ]);
-            }
-        }
-        #endregion save new additional record
-        return response()->json([
-            'success' => true,
-            'data' => array([
-                'doc_id' => $doc_id,
-                'creator_id' => $creator_id,
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'purpose' => $payment_for,
-                'pay_amount_total' => $pay_amount_total,
-                'clerk_fullname' => $clerk_fullname,
-                'prepared_by_position' => $prepared_by_position,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-                'cost_break_down_item' => $cost_break_down_item,
-                'cost_break_down_item_name' => $cost_break_down_item_name,
-            ])
-        ]);
-    }
-    public function indexclidashpymntrcptupld() //DEPRECATED
-    {
-        $upload_limit = redts_w_upload_size_limit::where('id', 1)->first();
-
-        return view('client-dashboard-payment-receipt-upload', [
-            'upload_limit' => $upload_limit->size,
-        ]);
-    }
-    public function updatepaymentreceipt(Request $request) //DEPRECATED
-    {
-        $doc_track_no = $request->input('doc_track_no');
-        $doc_inf = redts_zd_client_doc_info::where('doc_no', $doc_track_no)->first();
-
-        $upload_limit = redts_w_upload_size_limit::where('id', 1)->first();
-        $upload_path = "public/assets/doc/payment_receipt_files";
-        $receipt_upt = false;
-        $doc_inf_exist = false;
-        $data_privacy_consent = $request->input('data_privacy_consent') ?? 0;
-
-        if ($data_privacy_consent == 1) {
-            if ($doc_inf != null) {
-                if ($request->file('receipt') != null) {
-                    $file = $request->file('receipt');
-                    $file_path = null;
-                    if ($file->isValid()) {
-                        $extension = $file->getClientOriginalExtension();
-                        $fileName = 'doc' . $doc_inf->id . '_payment_receipt_' . date('YmdHi') . '.' . $extension;
-                        $size = $file->getSize();
-
-                        if ($size <= $upload_limit->size) {
-                            // You can move the uploaded file to a specific directory if needed
-                            $file->move(storage_path($upload_path), $fileName);
-                            $file_path = 'payment_receipt_files/' . $fileName;
-
-                            // add in database
-                            redts_zf_order_of_payment::where('doc_id', $doc_inf->id)->update([
-                                'payment_receipt' => $file_path,
-                                'payment_receipt_date' => date('Y-m-d H:i:s'),
-                            ]);
-
-                            // message
-                            $receipt_upt = true;
-                        }
-                    }
-                } else {
-                    $receipt_upt = false;
-                }
-
-                $doc_inf_exist = true;
-            }
-
-            //record log
-            $this->recordAction('Receipt has been uploaded ' . $doc_track_no);
-
-            return response()->json([
-                'success' => true,
-                'doc_track_no' => $doc_track_no,
-                'receipt_upt' => $receipt_upt,
-                'doc_inf_exist' => $doc_inf_exist,
-                'data_privacy_consent' => $data_privacy_consent,
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'doc_track_no' => $doc_track_no,
-                'receipt_upt' => $receipt_upt,
-                'doc_inf_exist' => $doc_inf_exist,
-                'data_privacy_consent' => $data_privacy_consent,
-            ]);
-        }
-    }
-    public function updatepaymentreceiptuser(Request $request) //DEPRECATED
-    {
-        $doc_id = $request->input('doc_id');
-        $doc_inf = redts_zd_client_doc_info::where('id', $doc_id)->first();
-
-        $upload_limit = redts_w_upload_size_limit::where('id', 1)->first();
-        $upload_path = "public/assets/doc/payment_receipt_files";
-        $receipt_upt = false;
-        $doc_inf_exist = false;
-        $fileisValid = false;
-
-        if ($doc_inf != null) {
-            if ($request->file('client_receipt') != null) {
-                $file = $request->file('client_receipt');
-                $file_path = null;
-                if ($file->isValid()) {
-                    $extension = $file->getClientOriginalExtension();
-                    $fileName = 'doc' . $doc_inf->id . '_payment_receipt_' . date('YmdHi') . '.' . $extension;
-                    $size = $file->getSize();
-
-                    if ($size <= $upload_limit->size) {
-                        // You can move the uploaded file to a specific directory if needed
-                        $file->move(storage_path($upload_path), $fileName);
-                        $file_path = 'payment_receipt_files/' . $fileName;
-
-                        // add in database
-                        redts_zf_order_of_payment::where('doc_id', $doc_inf->id)->update([
-                            'payment_receipt' => $file_path,
-                            'payment_receipt_date' => date('Y-m-d H:i:s'),
-                        ]);
-
-                        // message
-                        $receipt_upt = true;
-                    }
-                    $fileisValid = true;
-                }
-            } else {
-                $receipt_upt = false;
-            }
-
-            $doc_inf_exist = true;
-        }
-
-        //record log
-        $this->recordAction('Receipt has been uploaded by user for doc request with id ' . $doc_id);
-
-        return response()->json([
-            'success' => true,
-            'receipt_upt' => $receipt_upt,
-            'doc_inf_exist' => $doc_inf_exist,
-            'fileisValid' => $fileisValid,
-        ]);
-    }
-    public function updatesignedorderofpayment(Request $request) //DEPRECATED
-    {
-        $doc_id = $request->input('doc_id');
-
-        $upload_limit = redts_w_upload_size_limit::where('id', 1)->first();
-        $upload_path = "public/assets/doc/payment_receipt_files";
-        $signed_oop_upt = false;
-        if (redts_zf_order_of_payment::where('doc_id', $doc_id)->whereNull('deleted_at')->exists()) {
-            if ($request->file('ofp_signed') != null) {
-                $file = $request->file('ofp_signed');
-                $file_path = null;
-                if ($file->isValid()) {
-                    $extension = $file->getClientOriginalExtension();
-                    $fileName = 'doc' . $doc_id . '_signed_order_of_payment_' . date('YmdHi') . '.' . $extension;
-                    $size = $file->getSize();
-
-                    if ($size <= $upload_limit->size) {
-                        // You can move the uploaded file to a specific directory if needed
-                        $file->move(storage_path($upload_path), $fileName);
-                        $file_path = 'payment_receipt_files/' . $fileName;
-
-                        // add in database
-                        redts_zf_order_of_payment::where('doc_id', $doc_id)->update([
-                            'order_of_payment' => $file_path,
-                        ]);
-
-                        // message
-                        $signed_oop_upt = true;
-                    }
-                }
-            } else {
-                $signed_oop_upt = false;
-            }
-        } else {
-            $signed_oop_upt = false;
-        }
-
-        //record log
-        $this->recordAction('Order of payment file uploaded with doc_id ' . $doc_id);
-
-        return response()->json([
-            'success' => true,
-            'doc_track_no' => $doc_id,
-            'signed_oop_upt' => $signed_oop_upt,
-        ]);
-    }
-    public function updateverifyclientreceipt(Request $request) //DEPRECATED
-    {
-        $doc_id = $request->input('doc_id');
-
-        redts_zf_order_of_payment::where('doc_id', $doc_id)->update([
-            'verified' => 1,
-        ]);
-
-        //record log
-        $this->recordAction('Receipt has been verified for doc with doc_id ' . $doc_id);
-
-        return response()->json([
-            'success' => true,
-        ]);
-    }
-    #endregion order of payment
-
-    #region addition order of payment
-    public function fetchaddanotheroop($doc_id)
-    {
-        if (Auth::check()) {
-            $doc_info = redts_zd_client_doc_info::select(
-                'redts_zd_client_doc_infos.id',
-                'redts_zd_client_doc_infos.doc_no',
-                'redts_zd_client_doc_infos.application_type_id',
-                'redts_zd_client_doc_infos.transaction_type_id',
-                'redts_zd_client_doc_infos.agency',
-                'redts_zd_client_doc_infos.client_id',
-                'redts_zd_client_doc_infos.class_id',
-                'redts_zd_client_doc_infos.class_slug',
-                'redts_zd_client_doc_infos.subclass_id',
-                'redts_zd_client_doc_infos.subclass_slug',
-                'redts_zd_client_doc_infos.remarks',
-                'redts_zd_client_doc_infos.validated',
-                'redts_zd_client_doc_infos.compliance_deadline',
-
-                #region app type
-                'app_type.applicant',
-                #endregion app type
-
-                #region transaction type
-                'transac_type.transaction',
-                'transac_type.slug as transaction_slug',
-                #endregion transaction type
-
-                #region client info
-                'clientInf.fname as client_fname',
-                'clientInf.mname as client_mname',
-                'clientInf.sname as client_sname',
-                'clientInf.suffix as client_suffix',
-                'clientInf.address as client_address',
-                'clientInf.email as client_email',
-                'clientInf.email_verify as client_email_verify',
-                'clientInf.contact_no as client_contact_no',
-                #endregion client info
-
-                #region doc clas
-                'doc_class.description as doc_class_full',
-                #endregion doc clas
-
-                #region doc type
-                'req_type.description as req_type_full',
-                #endregion doc type
-            )
-                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'redts_zd_client_doc_infos.application_type_id')
-                ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.id', '=', 'redts_zd_client_doc_infos.transaction_type_id')
-                ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
-                ->leftJoin('redts_ee_classification as doc_class', 'doc_class.id', '=', 'redts_zd_client_doc_infos.class_id')
-                ->leftJoin('redts_l_sub_class as req_type', 'req_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
-                ->where('redts_zd_client_doc_infos.id', $doc_id)
-                ->whereNull('redts_zd_client_doc_infos.deleted_at')
-                ->first();
-
-            $user_profile = redts_d_profile::where('user_id', Auth::user()->id)->first();
-
-            $access_type = redts_a_access::where('id', Auth::user()->access_id)->whereNull('deleted_at')->first();
-
-            $user_office = redts_j_user_offices::select(
-                'office.slug',
-                'office.office',
-                'office.full_office_name',
-                'office.office_type',
-                'office.mother_unit',
-                'office.header_office_title',
-                'office.office_address',
-            )
-                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
-                ->where('redts_j_user_offices.user_id', Auth::user()->id)
-                ->first();
-
-            $ofp = redts_zf_order_of_payment::where('doc_id', $doc_id)->whereNull('deleted_at')->first();
-
-            $ofp_cost_breakdown = redts_zg_payment_cost_breakdown::where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-
-            //get original cost breakdown used when oop is not yet created 
-            $subclass_fees = redts_le_subclass_fees::where('subclass_id', $doc_info->subclass_id)->where('cost_grouping', 'a1')->whereNull('deleted_at')->get();
-
-            //get approving officer
-            $user_id = Auth::user()->id;
-            $user_oop_approvee = redts_zj_user_oop_approvee::where('user_id', $user_id)->first();
-
-            if (Auth::user()->access_id == 10 || Auth::user()->access_id == 11 || Auth::user()->access_id == 12 || Auth::user()->access_id == 14) { //access type is equal to 10:Credit Office or Accounting Officer or Both
-                return view('general-dash-orderOfPaymentSlip-additional', [
-                    'doc_info' => $doc_info,
-                    'creator_id' => Auth::user()->id,
-                    'user_profile' => $user_profile,
-                    'access_type' => $access_type,
-                    'user_office' => $user_office,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                    'subclass_fees' => $subclass_fees,
-                    'user_oop_approvee' => $user_oop_approvee,
-                ]);
-            } else {
-                return view('general-dash-orderOfPaymentSlip-view-only', [
-                    'doc_info' => $doc_info,
-                    'creator_id' => Auth::user()->id,
-                    'user_profile' => $user_profile,
-                    'user_office' => $user_office,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                ]);
-            }
-        } else {
-            return $this->pageResponse()['page403'];
-        }
-    }
-    public function fetchupdateanotheroop($doc_id, $aoop_id)
-    {
-        if (Auth::check()) {
-            $doc_info = redts_zd_client_doc_info::select(
-                'redts_zd_client_doc_infos.id',
-                'redts_zd_client_doc_infos.doc_no',
-                'redts_zd_client_doc_infos.application_type_id',
-                'redts_zd_client_doc_infos.transaction_type_id',
-                'redts_zd_client_doc_infos.agency',
-                'redts_zd_client_doc_infos.client_id',
-                'redts_zd_client_doc_infos.class_id',
-                'redts_zd_client_doc_infos.class_slug',
-                'redts_zd_client_doc_infos.subclass_id',
-                'redts_zd_client_doc_infos.subclass_slug',
-                'redts_zd_client_doc_infos.remarks',
-                'redts_zd_client_doc_infos.validated',
-                'redts_zd_client_doc_infos.compliance_deadline',
-
-                #region app type
-                'app_type.applicant',
-                #endregion app type
-
-                #region transaction type
-                'transac_type.transaction',
-                'transac_type.slug as transaction_slug',
-                #endregion transaction type
-
-                #region client info
-                'clientInf.fname as client_fname',
-                'clientInf.mname as client_mname',
-                'clientInf.sname as client_sname',
-                'clientInf.suffix as client_suffix',
-                'clientInf.address as client_address',
-                'clientInf.email as client_email',
-                'clientInf.email_verify as client_email_verify',
-                'clientInf.contact_no as client_contact_no',
-                #endregion client info
-
-                #region doc clas
-                'doc_class.description as doc_class_full',
-                #endregion doc clas
-
-                #region doc type
-                'req_type.description as req_type_full',
-                #endregion doc type
-            )
-                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'redts_zd_client_doc_infos.application_type_id')
-                ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.id', '=', 'redts_zd_client_doc_infos.transaction_type_id')
-                ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
-                ->leftJoin('redts_ee_classification as doc_class', 'doc_class.id', '=', 'redts_zd_client_doc_infos.class_id')
-                ->leftJoin('redts_l_sub_class as req_type', 'req_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
-                ->where('redts_zd_client_doc_infos.id', $doc_id)
-                ->whereNull('redts_zd_client_doc_infos.deleted_at')
-                ->first();
-
-            $user_profile = redts_d_profile::where('user_id', Auth::user()->id)->first();
-
-            $access_type = redts_a_access::where('id', Auth::user()->access_id)->whereNull('deleted_at')->first();
-
-            $user_office = redts_j_user_offices::select(
-                'office.slug',
-                'office.office',
-                'office.full_office_name',
-                'office.office_type',
-                'office.mother_unit',
-                'office.header_office_title',
-                'office.office_address',
-            )
-                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_j_user_offices.offices_uuid')
-                ->where('redts_j_user_offices.user_id', Auth::user()->id)
-                ->first();
-
-            $ofp = redts_zfa_additional_oop::where('id', $aoop_id)->where('doc_id', $doc_id)->whereNull('deleted_at')->first();
-
-            $ofp_cost_breakdown = redts_zga_other_pymnt_cost_brkdwn::where('ofp_id', $aoop_id)->where('doc_id', $doc_id)->whereNull('deleted_at')->get();
-
-            //get original cost breakdown used when oop is not yet created 
-            $subclass_fees = redts_le_subclass_fees::where('subclass_id', $doc_info->subclass_id)->where('cost_grouping', 'a1')->whereNull('deleted_at')->get();
-
-            //get approving officer
-            $user_id = Auth::user()->id;
-            $user_oop_approvee = redts_zj_user_oop_approvee::where('user_id', $user_id)->first();
-
-            if (Auth::user()->access_id == 10 || Auth::user()->access_id == 11 || Auth::user()->access_id == 12 || Auth::user()->access_id == 14) { //access type is equal to 10:Credit Office or Accounting Officer or Both
-                return view('general-dash-orderOfPaymentSlip-additional-upt', [
-                    'doc_info' => $doc_info,
-                    'creator_id' => Auth::user()->id,
-                    'user_profile' => $user_profile,
-                    'access_type' => $access_type,
-                    'user_office' => $user_office,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                    'subclass_fees' => $subclass_fees,
-                    'user_oop_approvee' => $user_oop_approvee,
-                ]);
-            } else {
-                return view('general-dash-orderOfPaymentSlip-additional-view-only', [
-                    'doc_info' => $doc_info,
-                    'creator_id' => Auth::user()->id,
-                    'user_profile' => $user_profile,
-                    'user_office' => $user_office,
-                    'ofp' => $ofp,
-                    'ofp_cost_breakdown' => $ofp_cost_breakdown,
-                ]);
-            }
-        } else {
-            return $this->pageResponse()['page403'];
-        }
-    }
-    public function updateanotheroop(Request $request)
-    {
-        $doc_id = $request->input('doc_id');
-        $creator_id = $request->input('creator_id');
-        $header_title = $request->input('header_title');
-        $header_address = $request->input('header_address');
-        $or_no = $request->input('or_no');
-        $or_no_dated = $request->input('or_no_dated');
-        $pay_amount = $request->input('pay_amount');
-        $payment_for = $request->input('payment_for');
-        $pay_amount_total = $request->input('pay_amount_total');
-        $clerk_fullname = $request->input('clerk_fullname');
-        $prepared_by_position = $request->input('prepared_by_position');
-        $approving_remarks = $request->input('approving_remarks');
-        $approving_fullname = $request->input('approving_fullname');
-        $approving_position = $request->input('approving_position');
-
-        $per_bill_no = $request->input('per_bill_no');
-        $per_bill_no_dated = $request->input('per_bill_no_dated');
-        $cost_break_down_item = $request->input('cost_break_down_item');
-        $cost_break_down_item_name = $request->input('cost_break_down_item_name');
-
-        $save_ofp = false;
-        $upt_ofp = false;
-        if (redts_zfa_additional_oop::where('doc_id', $doc_id)->whereNull('deleted_at')->exists()) {
-            $ofp = redts_zfa_additional_oop::where('doc_id', $doc_id)->first(['id']);
-            redts_zfa_additional_oop::where('doc_id', $doc_id)->update([
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'purpose' => $payment_for,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-            ]);
-
-
-            //record log
-            $this->recordAction('Order of payment has been updated for doc_id ' . $doc_id);
-
-            // replace the cost breakdown
-            redts_zga_other_pymnt_cost_brkdwn::where('doc_id', $doc_id)->delete();
-            if ($cost_break_down_item != null) {
-                foreach ($cost_break_down_item as $key => $dt) {
-                    redts_zga_other_pymnt_cost_brkdwn::create([
-                        'doc_id' => $doc_id,
-                        'ofp_id' => $ofp->id,
-                        'cost_breakdown_amount' => $cost_break_down_item[$key],
-                        'cost_breakdown' => $cost_break_down_item_name[$key],
-                    ]);
-                }
-            }
-
-            $upt_ofp = true;
-        } else {
-            $ofp = redts_zfa_additional_oop::create([
-                'doc_id' => $doc_id,
-                'creator_id' => $creator_id,
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'purpose' => $payment_for,
-                'clerk_fullname' => $clerk_fullname,
-                'prepared_by_position' => $prepared_by_position,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-            ]);
-
-            //record log
-            $this->recordAction('Order of payment has been created for doc_id ' . $doc_id);
-
-            if ($cost_break_down_item != null) {
-                foreach ($cost_break_down_item as $key => $dt) {
-                    redts_zga_other_pymnt_cost_brkdwn::create([
-                        'doc_id' => $doc_id,
-                        'ofp_id' => $ofp->id,
-                        'cost_breakdown_amount' => $cost_break_down_item[$key],
-                        'cost_breakdown' => $cost_break_down_item_name[$key],
-                    ]);
-                }
-            }
-
-            $save_ofp = true;
-        }
-
-        // check approvee name and save if it is avilable or saved before for an specific user
-        $user_id = Auth::user()->id;
-        if (redts_zj_user_oop_approvee::where('user_id', $user_id)->exists()) {
-            $user_oop_approvee = redts_zj_user_oop_approvee::where('user_id', $user_id)->first();
-            if ($user_oop_approvee->approvee_fullname ==  $approving_fullname && $user_oop_approvee->approvee_position == $approving_position) {
-                //do nothing
-            } else {
-                redts_zj_user_oop_approvee::where('user_id', $user_id)->update([
-                    'approvee_fullname' => $approving_fullname,
-                    'approvee_position' => $approving_position,
-                ]);
-            }
-        } else {
-            redts_zj_user_oop_approvee::create([
-                'user_id' => $user_id,
-                'approvee_fullname' => $approving_fullname,
-                'approvee_position' => $approving_position,
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => array([
-                'doc_id' => $doc_id,
-                'creator_id' => $creator_id,
-                'header_title' => $header_title,
-                'header_address' => $header_address,
-                'or_no' => $or_no,
-                'or_no_dated' => $or_no_dated,
-                'pay_amount' => $pay_amount,
-                'pay_amount_total' => $pay_amount_total,
-                'clerk_fullname' => $clerk_fullname,
-                'prepared_by_position' => $prepared_by_position,
-                'approving_remarks' => $approving_remarks,
-                'approving_fullname' => $approving_fullname,
-                'approving_position' => $approving_position,
-                'per_bill_no' => $per_bill_no,
-                'per_bill_no_dated' => $per_bill_no_dated,
-                'cost_break_down_item' => $cost_break_down_item,
-                'cost_break_down_item_name' => $cost_break_down_item_name,
-            ]),
-            'save_ofp' => $save_ofp,
-            'upt_ofp' => $upt_ofp,
-        ]);
-    }
-    #endregion addition order of payment
-
     #region manage client requests
     public function indexadmindashmngclireq()
     {
@@ -3282,7 +2224,6 @@ class generalController extends Controller
         $response = $this->fetchotheruserinfo();
         $data = json_decode($response->getContent(), true); // Decoding the JSON response to an associative array
         $user_offices_id = $data['user_offices_id'];
-        $user_id = Auth::user()->id;
 
         $data = redts_zd_client_doc_info::select(
             #region document info
@@ -3476,8 +2417,6 @@ class generalController extends Controller
         if (Auth::user()->access_id != null) { //protect the data from leaking if someone remove the access code restriction in on the display
             $response = $this->fetchotheruserinfo();
             $data = json_decode($response->getContent(), true); // Decoding the JSON response to an associative array
-            $user_offices_id = $data['user_offices_id'];
-            $user_id = Auth::user()->id;
 
             $data = redts_zd_client_doc_info::select(
                 #region document info
@@ -4371,6 +3310,8 @@ class generalController extends Controller
 
         // local count here
         $classCountedLocal = redts_ee_classification::whereNull('deleted_at')->count();
+        $applicantTypeCountedLocal = redts_z_applicant_type::whereNull('deleted_at')->count();
+        $transactionTypeCountedLocal = redts_za_transaction_type::whereNull('deleted_at')->count();
 
         // check update classifications
         $classUptMsg = false;
@@ -4390,15 +3331,51 @@ class generalController extends Controller
                     'slug' => $class['slug'],
                 ]);
             }
-
-            
             $classUptMsg = true;
         }
-        
-        // check app types
 
+        // check app types
+        $appTypeUptMsg = false;
+        if ($applicantTypeCounted == $applicantTypeCountedLocal) {
+            //do nothing
+        } else {
+            //get api app type data and insert to local
+            $apiAppTypes = http::get($baseUrl . '71ac292f-c6e0-4af1-ac3d-6c756fc50c71');
+            $apiAppTypesArr = $apiAppTypes->ok() ? $apiAppTypes->json() : [];
+            $apiAppTypesData = $apiAppTypesArr['appTypes'] ?? [];
+
+            foreach ($apiAppTypesData as $key => $appType) {
+                redts_z_applicant_type::create([
+                    'uuid' => $appType['uuid'],
+                    'transaction_uuid' => $appType['transaction_uuid'],
+                    'applicant' => $appType['applicant'],
+                ]);
+            }
+
+            $appTypeUptMsg = true;
+        }
 
         // check transaction types
+
+        $transactTypeUptMsg = false;
+        if ($transactionTypeCounted == $transactionTypeCountedLocal) {
+            //do nothing
+        } else {
+            //get api app type data and insert to local
+            $apiTransactType = http::get($baseUrl . '7c63a6de-c592-409b-a6cc-50af1b85a0db');
+            $apiTransactTypeArr = $apiTransactType->ok() ? $apiTransactType->json() : [];
+            $apiTransactTypeData = $apiTransactTypeArr['transacTypes'] ?? [];
+
+            foreach ($apiTransactTypeData as $key => $transactType) {
+                redts_za_transaction_type::create([
+                    'uuid' => $transactType['uuid'],
+                    'transaction' => $transactType['transaction'],
+                    'slug' => $transactType['slug'],
+                ]);
+            }
+
+            $transactTypeUptMsg = true;
+        }
 
         return response()->json([
             'success' => true,

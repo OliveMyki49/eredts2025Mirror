@@ -10,7 +10,8 @@ class redts_z_applicant_type extends Model
     use HasFactory;
 
     protected $fillable = [
-        'transaction_id',
+        'uuid',
+        'transaction_uuid',
         'applicant',
         'deleted_at'
     ];

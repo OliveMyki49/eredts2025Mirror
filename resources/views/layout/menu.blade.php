@@ -859,7 +859,8 @@
                         $('.loader-container').empty();
                     } else {
                         console.log('Server responded but returned error')
-                        $('.loader-container').empty().append(`<span class="badge bg-danger text-white badge-status-overdue" style="cursor: pointer">SERVER RESPONDED WITH AN ERROR<span>`);
+                        console.log(r);
+                        $('.loader-container').empty().append(`<span class="badge bg-danger text-white badge-status-overdue" style="cursor: pointer">MAIN SERVER IS OFFLINE<span>`);
                     }
                 },
                 error: function(err) {

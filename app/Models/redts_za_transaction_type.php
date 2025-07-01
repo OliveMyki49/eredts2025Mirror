@@ -10,6 +10,7 @@ class redts_za_transaction_type extends Model
     use HasFactory;
 
     protected $fillable = [
+        'uuid',
         'transaction',
         'slug',
         'deleted_at',
