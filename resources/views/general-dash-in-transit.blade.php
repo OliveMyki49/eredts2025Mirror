@@ -82,7 +82,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #497ac1">
-                <h1 class="modal-title fs-5 text-white" id="vDIITLabel">Document Information</h1>
+                <h1 class="modal-title fs-5 text-white" id="vDIITLabel">DOCUMENT INFORMATION</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -110,11 +110,11 @@
                         </div>
                     </div>
 
-                    {{-- Document Remarks and Attachments --}}
+                    {{-- DOCUMENT REMARKS AND ATTACHMENTS --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_req_info" aria-expanded="false" aria-controls="vDIIT_collapsible_req_info">
-                                Document Remarks and Attachments
+                                DOCUMENT REMARKS AND ATTACHMENTS
                             </button>
                         </h2>
                         <div id="vDIIT_collapsible_req_info" class="accordion-collapse collapse" data-bs-parent="#vDIIT_accordian">

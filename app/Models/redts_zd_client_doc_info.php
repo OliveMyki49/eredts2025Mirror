@@ -30,6 +30,10 @@ class redts_zd_client_doc_info extends Model
         'validated',
         'doc_date',
         'compliance_deadline',
+        'uploaded',
+        'downloaded',
         'deleted_at',
+        'updated_at',
+        'created_at',
     ];
 }

@@ -16,6 +16,10 @@ class redts_zi_origin_office extends Model
         'doc_uuid',
         'origin_office_id',
         'origin_office_uuid',
+        'uploaded',
+        'downloaded',
         'deleted_at',
+        'created_at',
+        'updated_at',
     ];
 }

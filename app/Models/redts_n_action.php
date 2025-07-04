@@ -37,6 +37,7 @@ class redts_n_action extends Model
         'action_remarks',
         'attachment_remarks',
         'uploaded_act',
+        'downloaded',
         'deleted_at',
         'created_at',
         'updated_at',

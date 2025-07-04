@@ -2,41 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
-use App\Models\user;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Models\redts_a_access;
-use App\Models\redts_n_action;
-use App\Models\redts_d_profile;
-use App\Models\redts_f_offices;
-use App\Models\redts_l_sub_class;
-use App\Models\redts_nc_act_seen;
-use App\Models\redts_j_user_offices;
-use App\Models\redts_zc_client_info;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Crypt;
-use App\Models\redts_le_subclass_fees;
-use App\Models\redts_z_applicant_type;
-use App\Models\redts_zi_origin_office;
 use App\Models\redts_ba_view_reqs_spec;
+use App\Models\redts_d_profile;
 use App\Models\redts_ee_classification;
+use App\Models\redts_f_offices;
+use App\Models\redts_j_user_offices;
+use App\Models\redts_l_sub_class;
 use App\Models\redts_la_process_length;
-use Illuminate\Support\Facades\Storage;
-use App\Models\redts_nb_releasing_route;
-use App\Models\redts_zd_client_doc_info;
-use App\Models\redts_zfa_additional_oop;
-use App\Models\redts_w_upload_size_limit;
-use App\Models\redts_zf_order_of_payment;
-use App\Models\redts_zh_cert_perm_routes;
-use App\Models\redts_zj_user_oop_approvee;
+use App\Models\redts_le_subclass_fees;
+use App\Models\redts_n_action;
 use App\Models\redts_na_action_attachments;
+use App\Models\redts_nb_releasing_route;
+use App\Models\redts_nc_act_seen;
+use App\Models\redts_w_upload_size_limit;
+use App\Models\redts_z_applicant_type;
 use App\Models\redts_za_transaction_type;
+use App\Models\redts_zc_client_info;
+use App\Models\redts_zd_client_doc_info;
 use App\Models\redts_ze_client_doc_attachments;
+use App\Models\redts_zf_order_of_payment;
+use App\Models\redts_zfa_additional_oop;
 use App\Models\redts_zg_payment_cost_breakdown;
 use App\Models\redts_zga_other_pymnt_cost_brkdwn;
+use App\Models\redts_zh_cert_perm_routes;
+use App\Models\redts_zi_origin_office;
+use App\Models\redts_zj_user_oop_approvee;
+use App\Models\user;
+use DateTime;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class generalController extends Controller
 {
@@ -283,6 +284,7 @@ class generalController extends Controller
             'redts_n_actions.action_remarks',
             'redts_n_actions.attachment_remarks',
             'redts_n_actions.uploaded_act',
+            'redts_n_actions.downloaded',
             'redts_n_actions.deleted_at',
             'redts_n_actions.created_at',
             'redts_n_actions.updated_at',
@@ -418,6 +420,8 @@ class generalController extends Controller
             'redts_n_actions.document_remarks',
             'redts_n_actions.action_remarks',
             'redts_n_actions.attachment_remarks',
+            'redts_n_actions.uploaded_act',
+            'redts_n_actions.downloaded',
             'redts_n_actions.deleted_at',
             'redts_n_actions.created_at',
             'redts_n_actions.updated_at',
@@ -992,6 +996,8 @@ class generalController extends Controller
             'redts_n_actions.document_remarks',
             'redts_n_actions.action_remarks',
             'redts_n_actions.attachment_remarks',
+            'redts_n_actions.uploaded_act',
+            'redts_n_actions.downloaded',
             'redts_n_actions.deleted_at',
             'redts_n_actions.created_at',
             'redts_n_actions.updated_at',
@@ -1158,6 +1164,8 @@ class generalController extends Controller
             'redts_n_actions.document_remarks',
             'redts_n_actions.action_remarks',
             'redts_n_actions.attachment_remarks',
+            'redts_n_actions.uploaded_act',
+            'redts_n_actions.downloaded',
             'redts_n_actions.deleted_at',
             'redts_n_actions.created_at',
             'redts_n_actions.updated_at',
@@ -1592,7 +1600,10 @@ class generalController extends Controller
                 //attachment remarks here
                 if ($AttchRemarks != '' && $AttchRemarks != null) {
                     //update attachment remarks details
+
+                    $newAttachment_uuid = $this->generateUuid(); //new uuid
                     $newAttachment = redts_ze_client_doc_attachments::create([
+                        'uuid' => $newAttachment_uuid,
                         'doc_info_id' => $create_doc->id,
                         'doc_info_uuid' => $create_doc->uuid,
                         'req_id' => null,
@@ -1631,7 +1642,9 @@ class generalController extends Controller
                                     $file_path = 'doc_req_files/' . $fileName;
 
                                     //update file details
+                                    $newAttachment_uuid = $this->generateUuid(); //new uuid
                                     $newAttachment = redts_ze_client_doc_attachments::create([
+                                        'uuid' => $newAttachment_uuid,
                                         'doc_info_id' => $create_doc->id,
                                         'doc_info_uuid' => $create_doc->uuid,
                                         'req_id' => null,
@@ -3307,7 +3320,6 @@ class generalController extends Controller
             $applicantTypeCounted = $apiCallData['applicantTypeCounted'] ?? 0;
             $transactionTypeCounted = $apiCallData['transactionTypeCounted'] ?? 0;
         }
-
         // local count here
         $classCountedLocal = redts_ee_classification::whereNull('deleted_at')->count();
         $applicantTypeCountedLocal = redts_z_applicant_type::whereNull('deleted_at')->count();
@@ -3324,12 +3336,15 @@ class generalController extends Controller
             $apiClassesData = $apiClassesArr['classes'] ?? [];
 
             foreach ($apiClassesData as $key => $class) {
-                redts_ee_classification::create([
-                    'uuid' => $class['uuid'],
-                    'description' => $class['description'],
-                    'classification_type' => $class['classification_type'],
-                    'slug' => $class['slug'],
-                ]);
+
+                if (!redts_ee_classification::where('uuid', $class['uuid'])->exists()) {
+                    redts_ee_classification::create([
+                        'uuid' => $class['uuid'],
+                        'description' => $class['description'],
+                        'classification_type' => $class['classification_type'],
+                        'slug' => $class['slug'],
+                    ]);
+                }
             }
             $classUptMsg = true;
         }
@@ -3345,11 +3360,13 @@ class generalController extends Controller
             $apiAppTypesData = $apiAppTypesArr['appTypes'] ?? [];
 
             foreach ($apiAppTypesData as $key => $appType) {
-                redts_z_applicant_type::create([
-                    'uuid' => $appType['uuid'],
-                    'transaction_uuid' => $appType['transaction_uuid'],
-                    'applicant' => $appType['applicant'],
-                ]);
+                if (!redts_z_applicant_type::where('uuid', $appType['uuid'])->exists()) {
+                    redts_z_applicant_type::create([
+                        'uuid' => $appType['uuid'],
+                        'transaction_uuid' => $appType['transaction_uuid'],
+                        'applicant' => $appType['applicant'],
+                    ]);
+                }
             }
 
             $appTypeUptMsg = true;
@@ -3367,21 +3384,225 @@ class generalController extends Controller
             $apiTransactTypeData = $apiTransactTypeArr['transacTypes'] ?? [];
 
             foreach ($apiTransactTypeData as $key => $transactType) {
-                redts_za_transaction_type::create([
-                    'uuid' => $transactType['uuid'],
-                    'transaction' => $transactType['transaction'],
-                    'slug' => $transactType['slug'],
-                ]);
+                if (!redts_za_transaction_type::where('uuid', $transactType['uuid'])->exists()) {
+                    redts_za_transaction_type::create([
+                        'uuid' => $transactType['uuid'],
+                        'transaction' => $transactType['transaction'],
+                        'slug' => $transactType['slug'],
+                    ]);
+                }
             }
 
             $transactTypeUptMsg = true;
         }
 
         //SYNC DATA AND REQUESTS
+        /* 
+        redts_zd_client_doc_info
+        redts_n_action
+
+        redts_ze_client_doc_attachments
+        redts_na_action_attachments
+
+        redts_zi_origin_office
+        */
+        $docCounted = 0;
+        $actCounted = 0;
+        $docAtchCounted = 0;
+        $actAtchCounted = 0;
+        $docOfficeCounted = 0;
+        if ($apiCallData != []) {
+            $docCounted = $apiCallData['docCounted'] ?? 0;
+            $actCounted = $apiCallData['actCounted'] ?? 0;
+            $docAtchCounted = $apiCallData['docAtchCounted'] ?? 0;
+            $actAtchCounted = $apiCallData['actAtchCounted'] ?? 0;
+            $docOfficeCounted = $apiCallData['docOffice'] ?? 0;
+        }
+        $docCountedLocal = redts_zd_client_doc_info::whereNotNull('downloaded')->whereNull('deleted_at')->count();
+        $actCountedLocal = redts_n_action::whereNull('received') //count the in-transit actions
+            ->whereNull('final_action')
+            ->whereNull('rejected')
+            ->whereNull('deleted_at')
+            ->count();
+        $docAtchCountedLocal = redts_ze_client_doc_attachments::whereNotNull('downloaded')->whereNull('deleted_at')->count();
+        $actAtchCountedLocal = redts_na_action_attachments::whereNotNull('downloaded')->whereNull('deleted_at')->count();
+        $docOfficeCountedLocal = redts_zi_origin_office::whereNotNull('downloaded')->whereNull('deleted_at')->count();
+
+        // check count data per table
+        if ($docCounted == $docCountedLocal) {
+            //do nothing
+        } else {
+            //get api app type data and insert to local
+            $apidocs = http::get($baseUrl . '2c2dc7df-a8a7-472a-9a84-a372486ea584');
+            $apidocsArr = $apidocs->ok() ? $apidocs->json() : [];
+            $apidocsData = $apidocsArr['docs'] ?? [];
+
+            foreach ($apidocsData as $key => $doc) {
+                if (!redts_zd_client_doc_info::where('uuid', $doc['uuid'])->exists()) {
+                    redts_zd_client_doc_info::create([
+                        'uuid' => $doc['uuid'],
+                        'doc_no' => $doc['doc_no'],
+                        'application_type_id' => $doc['application_type_id'],
+                        'application_type_uuid' => $doc['application_type_uuid'],
+                        'transaction_type_id' => $doc['transaction_type_id'],
+                        'transaction_type_uuid' => $doc['transaction_type_uuid'],
+                        'agency' => $doc['agency'],
+                        'client_id' => $doc['client_id'],
+                        'class_id' => $doc['class_id'],
+                        'class_uuid' => $doc['class_uuid'],
+                        'class_slug' => $doc['class_slug'],
+                        'subclass_id' => $doc['subclass_id'],
+                        'subclass_slug' => $doc['subclass_slug'],
+                        'remarks' => $doc['remarks'],
+                        'validated' => $doc['validated'],
+                        'confidential' => $doc['confidential'],
+                        'doc_date' => $doc['doc_date'],
+                        'compliance_deadline' => $doc['compliance_deadline'],
+                        'downloaded' => now(),
+                        'updated_at' => $doc['updated_at'],
+                        'created_at' => $doc['created_at'],
+                    ]);
+                }
+            }
+        }
+
+        if ($actCounted == $actCountedLocal) {
+            //do nothing
+        } else {
+            $apiacts = http::get($baseUrl . '3a7976e1-2b9a-47e6-be7e-d6b17938ff38');
+            $apiactsArr = $apiacts->ok() ? $apiacts->json() : [];
+            $apiactsData = $apiactsArr['acts'] ?? [];
+
+            foreach ($apiactsData as $key => $act) {
+                if (!redts_n_action::where('uuid', $act['uuid'])->exists()) {
+                    redts_n_action::create([
+                        'uuid' => $act['uuid'],
+                        'subject' => $act['subject'],
+                        'doc_id' => $act['doc_id'],
+                        'doc_uuid' => $act['doc_uuid'],
+                        'doc_no' => $act['doc_no'],
+                        'sender_client_id' => $act['sender_client_id'],
+                        'sender_user_id' => $act['sender_user_id'],
+                        'sender_user_uuid' => $act['sender_user_uuid'],
+                        'sender_type' => $act['sender_type'],
+                        'referred_by_office' => $act['referred_by_office'],
+                        'referred_by_office_uuid' => $act['referred_by_office_uuid'],
+                        'action_taken' => $act['action_taken'],
+                        'send_to_office' => $act['send_to_office'],
+                        'send_to_office_uuid' => $act['send_to_office_uuid'],
+                        'validated' => $act['validated'],
+                        'received_id' => $act['received_id'],
+                        'received_uuid' => $act['received_uuid'],
+                        'received' => $act['received'],
+                        'released' => $act['released'],
+                        'final_action' => $act['final_action'],
+                        'rejected' => $act['rejected'],
+                        'verification_date' => $act['verification_date'],
+                        'in_transit_remarks' => $act['in_transit_remarks'],
+                        'document_remarks' => $act['document_remarks'],
+                        'action_remarks' => $act['action_remarks'],
+                        'attachment_remarks' => $act['attachment_remarks'],
+                        'downloaded' => now(),
+                        'created_at' => $act['created_at'],
+                        'updated_at' => $act['updated_at'],
+                    ]);
+                } else { //check update_at if different
+                    $ExistingAct = redts_n_action::where('uuid', $act['uuid'])->first();
+                    if ($ExistingAct->updated_at != $act['updated_at']) {
+                        //update format of date
+                        $act['created_at'] = date('Y-m-d H:i:s', strtotime($act['created_at']));
+                        $act['updated_at'] = date('Y-m-d H:i:s', strtotime($act['updated_at']));
+
+
+                        redts_n_action::where('uuid', $act['uuid'])->update([
+                            'subject' => $act['subject'],
+                            'doc_id' => $act['doc_id'],
+                            'doc_uuid' => $act['doc_uuid'],
+                            'doc_no' => $act['doc_no'],
+                            'sender_client_id' => $act['sender_client_id'],
+                            'sender_user_id' => $act['sender_user_id'],
+                            'sender_user_uuid' => $act['sender_user_uuid'],
+                            'sender_type' => $act['sender_type'],
+                            'referred_by_office' => $act['referred_by_office'],
+                            'referred_by_office_uuid' => $act['referred_by_office_uuid'],
+                            'action_taken' => $act['action_taken'],
+                            'send_to_office' => $act['send_to_office'],
+                            'send_to_office_uuid' => $act['send_to_office_uuid'],
+                            'validated' => $act['validated'],
+                            'received_id' => $act['received_id'],
+                            'received_uuid' => $act['received_uuid'],
+                            'received' => $act['received'],
+                            'released' => $act['released'],
+                            'final_action' => $act['final_action'],
+                            'rejected' => $act['rejected'],
+                            'verification_date' => $act['verification_date'],
+                            'in_transit_remarks' => $act['in_transit_remarks'],
+                            'document_remarks' => $act['document_remarks'],
+                            'action_remarks' => $act['action_remarks'],
+                            'attachment_remarks' => $act['attachment_remarks'],
+                            'downloaded' => now(),
+                            'created_at' => $act['created_at'],
+                            'updated_at' => $act['updated_at'],
+                        ]);
+                    }
+                }
+            }
+        }
+
+        if ($docAtchCounted == $docAtchCountedLocal) {
+            //do nothing
+        } else {
+            $apidocAtchs = http::get($baseUrl . 'dbbb28c2-1c77-4089-8252-c7d3e69925a8');
+            $apidocAtchsArr = $apidocAtchs->ok() ? $apidocAtchs->json() : [];
+            $apidocAtchsData = $apidocAtchsArr['docAtchs'] ?? [];
+
+            /* foreach ($apidocAtchsData as $key => $docAtch) {
+                if (!redts_ze_client_doc_attachments::where('uuid', $docAtch['uuid'])->exists()) {
+                    redts_ze_client_doc_attachments::create([
+                        'uuid' => $docAtch['uuid'],
+                    ]);
+                }
+            } */
+        }
+
+        if ($actAtchCounted == $actAtchCountedLocal) {
+            //do nothing
+        } else {
+            $apiactAtchs = http::get($baseUrl . 'df861ca3-ca48-4519-8567-c9a2e2e97cae');
+            $apiactAtchsArr = $apiactAtchs->ok() ? $apiactAtchs->json() : [];
+            $apiactAtchsData = $apiactAtchsArr['actAtchs'] ?? [];
+
+            /* foreach ($apiactAtchsData as $key => $actAtch) {
+                redts_na_action_attachments::create([
+                    'uuid' => $actAtch['uuid'],
+                ]);
+            } */
+        }
+
+        if ($docOfficeCounted == $docOfficeCountedLocal) {
+            //do nothing
+        } else {
+            $apidocOffices = http::get($baseUrl . 'add4a35b-c46b-4e16-bcfa-4abe8cb6741d');
+            $apidocOfficesArr = $apidocOffices->ok() ? $apidocOffices->json() : [];
+            $apidocOfficesData = $apidocOfficesArr['docOffices'] ?? [];
+
+
+            /* foreach ($apidocOfficesData as $key => $docOffice) {
+                redts_zi_origin_office::create([
+                    'uuid' => $docOffice['uuid'],
+                ]);
+            } */
+        }
 
         return response()->json([
             'success' => true,
             'apiCallData' => $apiCallData,
+
+            'd0_docCountedLocal' => $docCountedLocal,
+            'd1_actCountedLocal' => $actCountedLocal,
+            'd2_docAtchCountedLocal' => $docAtchCountedLocal,
+            'd3_actAtchCountedLocal' => $actAtchCountedLocal,
+            'd4_docOfficeCountedLocal' => $docOfficeCountedLocal,
         ]);
     }
     #endregion eredts server hand-shake

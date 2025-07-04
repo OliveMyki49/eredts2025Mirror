@@ -17,6 +17,10 @@ class redts_na_action_attachments extends Model
         'file_name',
         'file_link',
         'public',
+        'uploaded',
+        'downloaded',
         'deleted_at',
+        'created_at',
+        'updated_at',
     ];
 }
