@@ -85,11 +85,11 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h1 class="modal-title fs-5 text-white" id="vDIITLabel">Request Information</h1>
+                <h1 class="modal-title fs-5 text-white" id="vDIITLabel">REQUEST INFORMATION</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="text-center fs-3 border border-3 vDIITheader-status">Requestee Inputs and Attachments
+            <div class="text-center fs-3 border border-3 vDIITheader-status">REQUESTEE INPUTS AND ATTACHMENTS
                 STATUS UNKNOWN
             </div>
 
@@ -97,11 +97,11 @@
 
                 {{-- region accordian --}}
                 <div class="accordion" id="vDIIT_accordian">
-                    {{-- General Information --}}
+                    {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_gen_info" aria-expanded="true" aria-controls="vDIIT_collapsible_gen_info">
-                                General Information
+                                GENERAL INFORMATION
                             </button>
                         </h2>
                         <div id="vDIIT_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDIIT_accordian">
@@ -113,11 +113,11 @@
                         </div>
                     </div>
 
-                    {{-- Requestee Inputs and Attachments --}}
+                    {{-- REQUESTEE INPUTS AND ATTACHMENTS --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_req_info" aria-expanded="false" aria-controls="vDIIT_collapsible_req_info">
-                                Requestee Inputs and Attachments
+                                REQUESTEE INPUTS AND ATTACHMENTS
                             </button>
                         </h2>
                         <div id="vDIIT_collapsible_req_info" class="accordion-collapse collapse" data-bs-parent="#vDIIT_accordian">
@@ -132,11 +132,11 @@
 
                     {{-- region form inputs --}}
                     <form class="p-0" id="addvDIITForm">
-                        {{-- Payment Status ===================================================================================================> HIDE --}}
+                        {{-- PAYMENT STATUS ===================================================================================================> HIDE --}}
                         <div class="accordion-item" style="display: none;">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_pymnt_stat" aria-expanded="false" aria-controls="vDIIT_collapsible_pymnt_stat">
-                                    Payment Status
+                                    PAYMENT STATUS
                                 </button>
                             </h2>
                             <div id="vDIIT_collapsible_pymnt_stat" class="accordion-collapse collapse" data-bs-parent="#vDIIT_accordian">
@@ -205,7 +205,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_doc_act" aria-expanded="false" aria-controls="vDIIT_collapsible_doc_act">
-                                    In-Transit Action
+                                    IN-TRANSIT ACTION
                                 </button>
                             </h2>
                             <div id="vDIIT_collapsible_doc_act" class="accordion-collapse show" data-bs-parent="#vDIIT_accordian">
@@ -242,7 +242,7 @@
                 {{-- region document status --}}
                 <div class="row mt-3 mx-3 px-3">
                     <div class="col p-3 rounded border shadow">
-                        <span class="fs-6 fw-bold">Document Status</span>
+                        <span class="fs-6 fw-bold">DOCUMENT STATUS</span>
                         <hr>
                         <div style="overflow: auto">
                             <table class="table table-striped table-bordered table-sm">
@@ -420,7 +420,7 @@
                             let action_taken = row['action_taken'];
                             disp = '';
                             if (action_taken == null) {
-                                disp = '<span class="text-danger">No action taken yet</span>';
+                                disp = '<span class="text-danger">NO ACTION TAKEN YET</span>';
                             } else {
                                 disp = action_taken;
                             }
@@ -438,7 +438,7 @@
                             if (ofplen < 1) {
                                 disp = "" +
                                     "<span class='link-danger text-center'>" +
-                                    "   <No href='' target='_blank' >No order of payment yet</a>" +
+                                    "   <No href='' target='_blank' >NO ORDER OF PAYMENT YET</a>" +
                                     "</span>";
                             } else {
                                 if (ofp[0].order_of_payment != null) {

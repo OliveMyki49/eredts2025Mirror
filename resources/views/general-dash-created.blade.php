@@ -72,11 +72,11 @@
 
                 {{-- region accordian --}}
                 <div class="accordion" id="vDCrtd_accordian">
-                    {{-- General Information --}}
+                    {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#vDCrtd_collapsible_gen_info" aria-expanded="true" aria-controls="vDCrtd_collapsible_gen_info">
-                                General Information
+                                GENERAL INFORMATION
                             </button>
                         </h2>
                         <div id="vDCrtd_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDCrtd_accordian">
@@ -115,7 +115,7 @@
                 {{-- region document status --}}
                 <div class="row mt-3 mx-3 px-3">
                     <div class="col p-3 rounded border shadow">
-                        <span class="fs-6 fw-bold">Document Status</span>
+                        <span class="fs-6 fw-bold">DOCUMENT STATUS</span>
                         <hr>
                         <div style="overflow: auto">
                             <table class="table table-striped table-bordered table-sm">

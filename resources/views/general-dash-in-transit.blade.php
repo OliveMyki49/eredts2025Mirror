@@ -94,11 +94,11 @@
 
                 {{-- region accordian --}}
                 <div class="accordion" id="vDIIT_accordian">
-                    {{-- General Information --}}
+                    {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_gen_info" aria-expanded="true" aria-controls="vDIIT_collapsible_gen_info">
-                                General Information
+                                GENERAL INFORMATION
                             </button>
                         </h2>
                         <div id="vDIIT_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDIIT_accordian">
@@ -133,7 +133,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#vDIIT_collapsible_doc_act" aria-expanded="false" aria-controls="vDIIT_collapsible_doc_act">
-                                    In-Transit Action
+                                    IN-TRANSIT ACTION
                                 </button>
                             </h2>
                             <div id="vDIIT_collapsible_doc_act" class="accordion-collapse show" data-bs-parent="#vDIIT_accordian">
@@ -178,7 +178,7 @@
                 {{-- region document status --}}
                 <div class="row mt-3 mx-3 px-3">
                     <div class="col p-3 rounded border shadow">
-                        <span class="fs-6 fw-bold">Document Status</span>
+                        <span class="fs-6 fw-bold">DOCUMENT STATUS</span>
                         <hr>
                         <div style="overflow: auto">
                             <table class="table table-striped table-bordered table-sm">

@@ -74,11 +74,11 @@
 
                 {{-- region accordian --}}
                 <div class="accordion" id="vDIA_accordian">
-                    {{-- General Information --}}
+                    {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#vDIA_collapsible_gen_info" aria-expanded="true" aria-controls="vDIA_collapsible_gen_info">
-                                General Information
+                                GENERAL INFORMATION
                             </button>
                         </h2>
                         <div id="vDIA_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDIA_accordian">
@@ -111,7 +111,7 @@
                 {{-- region document status --}}
                 <div class="row mt-3 mx-3 px-3">
                     <div class="col p-3 rounded border shadow">
-                        <span class="fs-6 fw-bold">Document Status</span>
+                        <span class="fs-6 fw-bold">DOCUMENT STATUS</span>
                         <hr>
                         <div style="overflow: auto">
                             <table class="table table-striped table-bordered table-sm">
@@ -240,7 +240,7 @@
                             let action_taken = row['action_taken'];
                             disp = '';
                             if (action_taken == null) {
-                                disp = '<span class="text-danger text-uppercase">No action taken yet</span>';
+                                disp = '<span class="text-danger text-uppercase">NO ACTION TAKEN YET</span>';
                             } else {
                                 disp = action_taken.toUpperCase();
                             }

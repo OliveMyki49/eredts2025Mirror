@@ -3377,6 +3377,8 @@ class generalController extends Controller
             $transactTypeUptMsg = true;
         }
 
+        //SYNC DATA AND REQUESTS
+
         return response()->json([
             'success' => true,
             'apiCallData' => $apiCallData,

@@ -94,7 +94,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h1 class="modal-title fs-5 text-white" id="CliReqRecOASpecificLabel">Request Information</h1>
+                <h1 class="modal-title fs-5 text-white" id="CliReqRecOASpecificLabel">REQUEST INFORMATION</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -106,11 +106,11 @@
 
                 {{-- region accordian --}}
                 <div class="accordion" id="CliReqRecOASpecific_accordian">
-                    {{-- General Information --}}
+                    {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#CliReqRecOASpecific_collapsible_gen_info" aria-expanded="true" aria-controls="CliReqRecOASpecific_collapsible_gen_info">
-                                General Information
+                                GENERAL INFORMATION
                             </button>
                         </h2>
                         <div id="CliReqRecOASpecific_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#CliReqRecOASpecific_accordian">
@@ -122,11 +122,11 @@
                         </div>
                     </div>
 
-                    {{-- Requestee Inputs and Attachments --}}
+                    {{-- REQUESTEE INPUTS AND ATTACHMENTS --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#CliReqRecOASpecific_collapsible_req_info" aria-expanded="false" aria-controls="CliReqRecOASpecific_collapsible_req_info">
-                                Requestee Inputs and Attachments
+                                REQUESTEE INPUTS AND ATTACHMENTS
                             </button>
                         </h2>
                         <div id="CliReqRecOASpecific_collapsible_req_info" class="accordion-collapse collapse" data-bs-parent="#CliReqRecOASpecific_accordian">
@@ -140,11 +140,11 @@
 
                     {{-- region form inputs --}}
                     <form class="p-0" id="addCliReqRecOASpecificForm">
-                        {{-- Payment Status --}}
+                        {{-- PAYMENT STATUS --}}
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#CliReqRecOASpecific_collapsible_pymnt_stat" aria-expanded="false" aria-controls="CliReqRecOASpecific_collapsible_pymnt_stat">
-                                    Payment Status
+                                    PAYMENT STATUS
                                 </button>
                             </h2>
                             <div id="CliReqRecOASpecific_collapsible_pymnt_stat" class="accordion-collapse collapse" data-bs-parent="#CliReqRecOASpecific_accordian">
@@ -152,7 +152,7 @@
                                     {{-- region order of payment --}}
                                     <div class="row">
                                         <div class="col">
-                                            <span class="fs-6 fw-bold">Payment Status</span>
+                                            <span class="fs-6 fw-bold">PAYMENT STATUS</span>
                                             <hr>
                                             <a class="btn btn-outline-primary btn-sm btn-view-order-of-payment" href="" target="_blank" tooltip="View order of payment" flow="right">
                                                 View order of payment
@@ -201,7 +201,7 @@
                 {{-- region document status --}}
                 <div class="row mt-3 mx-3 px-3">
                     <div class="col p-3 rounded border shadow">
-                        <span class="fs-6 fw-bold">Document Status</span>
+                        <span class="fs-6 fw-bold">DOCUMENT STATUS</span>
                         <hr>
                         <div style="overflow: auto">
                             <table class="table table-striped table-bordered table-sm">
