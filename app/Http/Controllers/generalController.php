@@ -3407,19 +3407,26 @@ class generalController extends Controller
         redts_zi_origin_office
         */
         $docCounted = 0;
-        $actCounted = 0;
+        $actIntransitCounted = 0;
+        $actReceivedCounted = 0;
         $docAtchCounted = 0;
         $actAtchCounted = 0;
         $docOfficeCounted = 0;
         if ($apiCallData != []) {
             $docCounted = $apiCallData['docCounted'] ?? 0;
-            $actCounted = $apiCallData['actCounted'] ?? 0;
+            $actIntransitCounted = $apiCallData['actIntransitCounted'] ?? 0;
+            $actReceivedCounted = $apiCallData['actReceivedCounted'] ?? 0;
             $docAtchCounted = $apiCallData['docAtchCounted'] ?? 0;
             $actAtchCounted = $apiCallData['actAtchCounted'] ?? 0;
             $docOfficeCounted = $apiCallData['docOffice'] ?? 0;
         }
         $docCountedLocal = redts_zd_client_doc_info::whereNotNull('downloaded')->whereNull('deleted_at')->count();
-        $actCountedLocal = redts_n_action::whereNull('received') //count the in-transit actions
+        $actIntransitCountedLocal = redts_n_action::whereNull('received') //count the in-transit actions
+            ->whereNull('final_action')
+            ->whereNull('rejected')
+            ->whereNull('deleted_at')
+            ->count();
+        $actReceivedCountedLocal = redts_n_action::whereNull('released') //count the received actions
             ->whereNull('final_action')
             ->whereNull('rejected')
             ->whereNull('deleted_at')
@@ -3427,6 +3434,10 @@ class generalController extends Controller
         $docAtchCountedLocal = redts_ze_client_doc_attachments::whereNotNull('downloaded')->whereNull('deleted_at')->count();
         $actAtchCountedLocal = redts_na_action_attachments::whereNotNull('downloaded')->whereNull('deleted_at')->count();
         $docOfficeCountedLocal = redts_zi_origin_office::whereNotNull('downloaded')->whereNull('deleted_at')->count();
+
+        // count unsynced documents and actions
+        $docCountUnsynced = redts_zd_client_doc_info::whereNull('uploaded')->whereNull('downloaded')->whereNull('deleted_at')->count();
+        $actCountUnsynced = redts_n_action::whereNull('uploaded_act')->whereNull('downloaded')->whereNull('deleted_at')->count();
 
         // check count data per table
         if ($docCounted == $docCountedLocal) {
@@ -3465,8 +3476,10 @@ class generalController extends Controller
                 }
             }
         }
+        //upload unsynced documents
 
-        if ($actCounted == $actCountedLocal) {
+
+        if ($actIntransitCounted == $actIntransitCountedLocal && $actReceivedCounted ==  $actReceivedCountedLocal) {
             //do nothing
         } else {
             $apiacts = http::get($baseUrl . '3a7976e1-2b9a-47e6-be7e-d6b17938ff38');
@@ -3513,10 +3526,17 @@ class generalController extends Controller
                         $act['created_at'] = date('Y-m-d H:i:s', strtotime($act['created_at']));
                         $act['updated_at'] = date('Y-m-d H:i:s', strtotime($act['updated_at']));
 
+                        /* 
+                            ISSUES TO ADDRESS:
+                            RECORDS UPDATED AS REJECTED AND ARCHIVED IS NOT SYNCED BECAUSE ONLY INTRANSIT IS CHECKED IN CHANGES
+                            ->ALSO CHECK CHANGES IN RECEIVED ACTIONS
+
+                            ADD UUID TO ACTIONS ATTACHMENTS -> CONFIGURE IN BOTH API AND LOCAL SERVER
+
+                        */
 
                         redts_n_action::where('uuid', $act['uuid'])->update([
                             'subject' => $act['subject'],
-                            'doc_id' => $act['doc_id'],
                             'doc_uuid' => $act['doc_uuid'],
                             'doc_no' => $act['doc_no'],
                             'sender_client_id' => $act['sender_client_id'],
@@ -3548,6 +3568,7 @@ class generalController extends Controller
                 }
             }
         }
+        //upload unsynced actions
 
         if ($docAtchCounted == $docAtchCountedLocal) {
             //do nothing
@@ -3596,13 +3617,9 @@ class generalController extends Controller
 
         return response()->json([
             'success' => true,
-            'apiCallData' => $apiCallData,
-
-            'd0_docCountedLocal' => $docCountedLocal,
-            'd1_actCountedLocal' => $actCountedLocal,
-            'd2_docAtchCountedLocal' => $docAtchCountedLocal,
-            'd3_actAtchCountedLocal' => $actAtchCountedLocal,
-            'd4_docOfficeCountedLocal' => $docOfficeCountedLocal,
+            
+            'docCountUnsynced' => $docCountUnsynced,
+            'actCountUnsynced' => $actCountUnsynced,
         ]);
     }
     #endregion eredts server hand-shake

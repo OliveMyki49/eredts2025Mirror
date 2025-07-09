@@ -553,8 +553,11 @@
                                 past_deadline = '<span class="badge bg-danger text-white text-uppercase mb-1 me-2 badge-status-overdue">OVERDUE (' + diffdaysdeadline + ' DAY/S)</span>';
                             }
 
+                            //check if synced
+                            let synced = row['downloaded'] != null ? ' <spanc class="badge bg-success text-white  mb-1 me-2" >SYNCED</spanc> ' : ' <spanc class="badge bg-danger text-white  mb-1 me-2" >NOT YET SYNCED</spanc> ';
+
                             let dropdownMenu = '' +
-                                '<div>' + disp_new + disp_overdue + past_deadline + '</div>' +
+                                '<div>' + disp_new + synced + disp_overdue + past_deadline + '</div>' +
                                 '<div class="dropdown">' +
                                 '    <div ' +
                                 '       data-bs-toggle="dropdown" ' +

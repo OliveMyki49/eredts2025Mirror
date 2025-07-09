@@ -602,8 +602,11 @@
                                 // showPubDocs = '<li><a class="dropdown-item bg-secondary-subtle"><i class="fa fa-eye-slash" aria-hidden="true"></i> Published document not available<br><sup>(Request not yet approved)</sup></a></li>';
                             }
 
+                            //check if synced
+                            let synced = row['downloaded'] != null ? ' <spanc class="badge bg-success text-white  mb-1 me-2" >SYNCED</spanc> ' : ' <spanc class="badge bg-danger text-white  mb-1 me-2" >NOT YET SYNCED</spanc> ';
+
                             let dropdownMenu = '' +
-                                '<div>' + lbl_seen + '</div>' +
+                                '<div>' + lbl_seen + synced + '</div>' +
                                 '<div class="dropdown" id="rcvd_act_' + id + '">' +
                                 '    <div ' +
                                 '       data-bs-toggle="dropdown" ' +
