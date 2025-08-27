@@ -603,7 +603,7 @@
                             }
 
                             //check if synced
-                            let synced = row['downloaded'] != null ? ' <spanc class="badge bg-success text-white  mb-1 me-2" >SYNCED</spanc> ' : ' <spanc class="badge bg-danger text-white  mb-1 me-2" >NOT YET SYNCED</spanc> ';
+                            let synced = row['downloaded'] != null ? ' <spanc class="badge bg-success text-white  mb-1 me-2" >SYNCED</spanc> ' : ' <spanc class="badge bg-danger text-white  mb-1 me-2 badge-status-overdue" >NOT YET SYNCED</spanc> ';
 
                             let dropdownMenu = '' +
                                 '<div>' + lbl_seen + synced + '</div>' +

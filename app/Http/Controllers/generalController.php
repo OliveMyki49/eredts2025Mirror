@@ -1265,6 +1265,7 @@ class generalController extends Controller
                 'redts_zd_client_doc_infos.validated',
                 'redts_zd_client_doc_infos.doc_date',
                 'redts_zd_client_doc_infos.compliance_deadline',
+                'redts_zd_client_doc_infos.downloaded as doc_downloaded',
                 'redts_zd_client_doc_infos.created_at',
                 #endregion document info
 

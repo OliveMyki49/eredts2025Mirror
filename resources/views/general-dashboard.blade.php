@@ -346,7 +346,7 @@
                                 <div class="tab">
                                     <span style="cursor: pointer; font-size: 13px;" class="badge text-wrap bg-warning text-black mb-2 in-transit-msg-1" title="❌ click to close ">All users in the same office can see all in-transit documents within the same office.</span>
                                     {{-- Call in separate file --}}
-                                    @include('general-dash-in-transit')
+                                    @include('gen1-in-transit')
                                 </div>
                                 {{-- endregion In-Transit --}}
 
@@ -357,7 +357,7 @@
                                 </label>
                                 <div class="tab">
                                     {{-- Call in separate file --}}
-                                    @include('general-dash-received')
+                                    @include('gen2-received')
                                 </div>
                                 {{-- endregion Received --}}
 
@@ -368,7 +368,7 @@
                                 </label>
                                 <div class="tab">
                                     {{-- Call in separate file --}}
-                                    @include('general-dash-released')
+                                    @include('gen3-released')
                                 </div>
                                 {{-- endregion Released --}}
 
@@ -379,7 +379,7 @@
                                 </label>
                                 <div class="tab">
                                     {{-- Call in separate file --}}
-                                    @include('general-dash-archive')
+                                    @include('gen4-archive')
                                 </div>
                                 {{-- endregion Archived --}}
 
@@ -390,7 +390,7 @@
                                 </label>
                                 <div class="tab">
                                     {{-- Call in separate file --}}
-                                    @include('general-dash-created') {{-- this is not yet implemented --}}
+                                    @include('gen5-created') {{-- this is not yet implemented --}}
                                 </div>
                                 {{-- endregion Created Documents --}}
                             </div>

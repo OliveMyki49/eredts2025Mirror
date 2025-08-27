@@ -1,33 +1,31 @@
 {{-- region display table --}}
-<table class="table table-striped table-bordered dataTable " id="dTArchived" role="grid" aria-describedby="Table" style="width: 100%;" cellspacing="0" width="100%">
+<table class="table table-striped table-bordered dataTable " id="dtCreated" role="grid" aria-describedby="Table" style="width: 100%;" cellspacing="0" width="100%">
     <thead style="border-bottom: 1px solid #000;">
         <tr>
             <th>ID</th>
-            <th>Document No.</th>
+            <th>Document No</th>
             <th>Subject</th>
-            <th>Action Taken</th>
+            <th>Application Type</th>
+            <th>Classification</th>
             <th>Document Attachments</th>
             <th>Action Attachments</th>
-            <th>Application Type</th>
-            <th>Sent By</th>
-            <th>Date & Time Released</th>
-            <th>TimeStamp Update</th>
-            <th>Action</th>
+            <th>Compliance Deadline</th>
+            <th>Date Created</th>
+            <th>Status & Action</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
             <th>ID</th>
-            <th>Document No.</th>
+            <th>Document No</th>
             <th>Subject</th>
-            <th>Action Taken</th>
+            <th>Application Type</th>
+            <th>Classification</th>
             <th>Document Attachments</th>
             <th>Action Attachments</th>
-            <th>Application Type</th>
-            <th>Sent By</th>
-            <th>Date & Time Released</th>
-            <th>TimeStamp Update</th>
-            <th>Action</th>
+            <th>Compliance Deadline</th>
+            <th>Date Created</th>
+            <th>Status & Action</th>
         </tr>
     </tfoot>
     <tbody style="height: 200px">
@@ -37,17 +35,17 @@
 {{-- endregion display table --}}
 
 {{-- region view doc attachment modal --}}
-<div class="modal fade" id="vDIAvDocAtchRcvModal" tabindex="-1" aria-labelledby="viewDocAtchTransitLabel" aria-hidden="true">
+<div class="modal fade" id="vDCrtdvDocAtchRcvModal" tabindex="-1" aria-labelledby="vDCrtd_viewDocAtchTransitLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #497ac1">
-                <h1 class="modal-title fs-5 text-white" id="viewDocAtchTransitLabel">Document Attachment: <b><u><span class="vDIADocAtchName fs-6"></span></u></b></h1>
+            <div class="modal-header bg-success">
+                <h1 class="modal-title fs-5 text-white" id="vDCrtd_viewDocAtchTransitLabel">Document Attachement: <b><u><span class="vDCrtdDocAtchName fs-6"></span></u></b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="height: 800px; overflow-y: scroll;">
-                <div class="vDocAtchArchCollection"></div>
-                <embed id="vDocAtchArchIframe" name="vDocAtchArchIframe" width="100%" height="80%" style="background:url(../assets/img/denrloadsmaller.webp) center center no-repeat;">
-                <div class="vDocAtchArch_other_req_inputs"></div>
+                <div class="vDCrtd_vDocAtchArchCollection"></div>
+                <embed id="vDCrtd_vDocAtchArchIframe" name="vDCrtd_vDocAtchArchIframe" width="100%" height="80%" style="background:url(../assets/img/denrloadsmaller.webp) center center no-repeat;">
+                <div class="vDCrtd_other_req_inputs"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -58,32 +56,32 @@
 {{-- endregion view doc attachment modal --}}
 
 {{-- region view Document Info View --}}
-<div class="modal fade" id="vDIAModal" tabindex="-1" aria-labelledby="vDIALabel" aria-hidden="true">
+<div class="modal fade" id="vDCrtdModal" tabindex="-1" aria-labelledby="vDCrtdLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #497ac1">
-                <h1 class="modal-title fs-5 text-white" id="vDIALabel">DOCUMENT INFORMATION</h1>
+            <div class="modal-header bg-success">
+                <h1 class="modal-title fs-5 text-white" id="vDCrtdLabel">DOCUMENT INFORMATION</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="text-center fs-3 border border-3 vDIAheader-status">
+            <div class="text-center fs-3 border border-3 vDCrtdheader-status">
                 STATUS UNKNOWN
             </div>
 
             <div class="modal-body p-0">
 
                 {{-- region accordian --}}
-                <div class="accordion" id="vDIA_accordian">
+                <div class="accordion" id="vDCrtd_accordian">
                     {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#vDIA_collapsible_gen_info" aria-expanded="true" aria-controls="vDIA_collapsible_gen_info">
+                            <button class="accordion-button collapsed border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#vDCrtd_collapsible_gen_info" aria-expanded="true" aria-controls="vDCrtd_collapsible_gen_info">
                                 GENERAL INFORMATION
                             </button>
                         </h2>
-                        <div id="vDIA_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDIA_accordian">
+                        <div id="vDCrtd_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDCrtd_accordian">
                             <div class="accordion-body">
-                                <div class="row vDIA-content">
+                                <div class="row vDCrtd-content">
                                     {{-- Document Info Contents generated here --}}
                                 </div>
                             </div>
@@ -93,18 +91,24 @@
                     {{-- DOCUMENT REMARKS AND ATTACHMENTS --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIA_collapsible_req_info" aria-expanded="false" aria-controls="vDIA_collapsible_req_info">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDCrtd_collapsible_req_info" aria-expanded="false" aria-controls="vDCrtd_collapsible_req_info">
                                 DOCUMENT REMARKS AND ATTACHMENTS
                             </button>
                         </h2>
-                        <div id="vDIA_collapsible_req_info" class="accordion-collapse collapse" data-bs-parent="#vDIA_accordian">
+                        <div id="vDCrtd_collapsible_req_info" class="accordion-collapse collapse" data-bs-parent="#vDCrtd_accordian">
                             <div class="accordion-body">
-                                <div class="row vDIA_doc_inpts">
+                                <div class="row vDCrtd_doc_inpts">
                                     --- no other information ---
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    {{-- region form inputs --}}
+                    <form class="p-0" id="addvDCrtdForm">
+                        {{-- order of payment removed so this is empty --}}
+                    </form>
+                    {{-- endregion form inputs --}}
                 </div>
                 {{-- endregion accordian --}}
 
@@ -115,7 +119,7 @@
                         <hr>
                         <div style="overflow: auto">
                             <table class="table table-striped table-bordered table-sm">
-                                <tbody class="tbody-viewDocInfoArchived-doc_status">
+                                <tbody class="tbody-viewDocInfoRejected-doc_status">
                                 </tbody>
                             </table>
                         </div>
@@ -129,16 +133,16 @@
                         <div>
                             <div class="row">
                                 <div class="col-md-3 text-center">
-                                    <span class="fs-6 vDIA_ttlDays_ttl_tat btn btn-primary"></span>
+                                    <span class="fs-6 vDCrtd_ttlDays_ttl_tat btn btn-primary"></span>
                                 </div>
                                 <div class="col-md-3 text-center">
-                                    <span class="fs-6 vDIA_ttlHours_ttl_tat btn btn-primary"></span>
+                                    <span class="fs-6 vDCrtd_ttlHours_ttl_tat btn btn-primary"></span>
                                 </div>
                                 <div class="col-md-3 text-center">
-                                    <span class="fs-6 vDIA_ttlMinutes_ttl_tat btn btn-primary"></span>
+                                    <span class="fs-6 vDCrtd_ttlMinutes_ttl_tat btn btn-primary"></span>
                                 </div>
                                 <div class="col-md-3 text-center">
-                                    <span class="fs-6 vDIA_ttlSeconds_ttl_tat btn btn-primary"></span>
+                                    <span class="fs-6 vDCrtd_ttlSeconds_ttl_tat btn btn-primary"></span>
                                 </div>
                             </div>
                         </div>
@@ -147,11 +151,11 @@
                 {{-- endregion document status --}}
 
                 <div class="row m-3 text-center">
-                    <button class="btn btn-outline-primary border-0 vDIAscrollToTop">Return to top</button>
+                    <button class="btn btn-outline-primary border-0 vDCrtdscrollToTop">Return to top</button>
                     <script>
                         $(document).ready(function() {
-                            $('.vDIAscrollToTop').click(function() {
-                                $('#vDIAModal').scrollTop(0);
+                            $('.vDCrtdscrollToTop').click(function() {
+                                $('#vDCrtdModal').scrollTop(0);
                             });
                         });
                     </script>
@@ -170,7 +174,7 @@
     @php
         $active_tab = request()->input('active_tab');
     @endphp
-    <input type="hidden" id="dTArchived_loader" @if ($active_tab == 'tabArchived') value="load" @endif>
+    <input type="hidden" id="dtCreated_loader" @if ($active_tab == 'tabCreated') value="load" @endif>
 @endif
 {{-- endregion table data loadder --}}
 
@@ -178,17 +182,17 @@
 <script>
     $(function() {
         // region populate table
-        function dTArchived_func() {
+        function dtCreated_func() {
             // Setup - add a text input to each footer cell
-            $('#dTArchived tfoot th').each(function() {
+            $('#dtCreated tfoot th').each(function() {
                 let title = $(this).text();
                 $(this).html('<input type="text" style="width: 100%;" placeholder="Search ' + title + '" />');
             });
-            $('#dTArchived').dataTable({
+            $('#dtCreated').dataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    "url": "get-clientReqAchived",
+                    "url": "get-clientReqCreated",
                     "type": "POST",
                     "headers": {
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
@@ -216,39 +220,44 @@
                                 '   style="cursor: pointer" ' +
                                 '   onMouseOut="this.style.color=`#000`" ' +
                                 '   onMouseOver="this.style.color=`#0d6efd`" ' +
-                                '   class="btn-fetchdocInfo_vDIA dropdown-item" ' +
+                                '   class="btn-fetchdocInfo_vDCrtd dropdown-item" ' +
                                 '   data-bs-toggle="modal" ' +
-                                '   data-bs-target="#vDIAModal"' +
-                                '   data-action_id="' + row['id'] + '"' +
-                                '   data-action_uuid="' + row['uuid'] + '"' +
-                                '   data-doc_id="' + row['doc_id'] + '"' +
-                                '   data-doc_uuid="' + row['doc_uuid'] + '"' +
+                                '   data-bs-target="#vDCrtdModal"' +
+                                // '   data-action_id="' + row['id'] + '"' + // the action id is fetched all per document
+                                // '   data-action_uuid="' + row['uuid'] + '"' + // the action id is fetched all per document
+                                '   data-doc_id="' + row['id'] + '"' +
+                                '   data-doc_uuid="' + row['uuid'] + '"' +
                                 '>' + row['doc_no'] + '</a>';
                         }
                     },
-                    /* column 2 : subject */
+                    /* column 2 : subject / remarks */
                     {
-                        data: 'subject',
+                        data: 'remarks',
                         render: function(data, type, row) {
-                            return '<span class="text-primary text-uppercase">' + row['class_slug'] + '</span>: ' + (row['subject']).toUpperCase();
-                        }
-                    },
-                    /* column 3 : action_taken */
-                    {
-                        data: 'action_taken',
-                        render: function(data, type, row) {
-                            let action_taken = row['action_taken'];
-                            disp = '';
-                            if (action_taken == null) {
-                                disp = '<span class="text-danger text-uppercase">NO ACTION TAKEN YET</span>';
-                            } else {
-                                disp = action_taken.toUpperCase();
-                            }
+                            let remarks = row['remarks'];
 
-                            return disp;
+                            if (remarks !== null) {
+                                return remarks;
+                            } else {
+                                return '<div class="text-secondary">NONE</div>';
+                            }
                         }
                     },
-                    /* column 4 : Doc Attachments */
+                    /* column 3 : application_type_id */
+                    {
+                        data: 'app_type',
+                        render: function(data, type, row) {
+                            return row['app_type'] + ' (<span class="fw-bold">' + row['transact_slug'] + '</span>)';
+                        }
+                    },
+                    /* column 4 : class_id */
+                    {
+                        data: 'class_title',
+                        render: function(data, type, row) {
+                            return row['class_title'] + ' (<span class="fw-bold">' + row['class_slug'] + '</span>)';
+                        }
+                    },
+                    /* column 5 : document attachments */
                     {
                         data: 'req_attachments',
                         render: function(data, type, row) {
@@ -260,17 +269,15 @@
                             req_attachments.forEach(dt => {
                                 disp += '' +
                                     '<span ' +
-                                    '   class="btnvDIA-viewDocAtch mb-1" ' +
+                                    '   class="btnvDCrtd-viewDocAtch mb-1" ' +
                                     '   style="cursor: pointer;" ' +
                                     '   onMouseOut="this.style.color=`#000`" ' +
                                     '   onMouseOver="this.style.color=`#0d6efd`" ' +
                                     '   data-bs-toggle="modal" ' +
-                                    '   data-bs-target="#vDIAvDocAtchRcvModal"' +
+                                    '   data-bs-target="#vDCrtdvDocAtchRcvModal"' +
                                     '   data-file_type="doc" ' +
-                                    '   data-doc_id="' + row['id'] + '" ' + // this is the id of action but named doc id because there is action id for attachment below
-                                    '   data-doc_uuid="' + row['uuid'] + '" ' + // this is the id of action but named doc id because there is action id for attachment below
-                                    '   data-real_doc_id="' + row['doc_id'] + '" ' + // real document id
-                                    '   data-real_doc_uuid="' + row['doc_uuid'] + '" ' + // real document id
+                                    '   data-doc_id="' + row['id'] + '" ' +
+                                    '   data-doc_uuid="' + row['uuid'] + '" ' +
                                     '   data-doc_file_path="' + dt.file_path + '" ' +
                                     '   data-doc_file_name="' + dt.file_name + '" ' +
                                     '   tooltip="' + dt.file_name + '" ' +
@@ -285,17 +292,17 @@
                             if (req_attachments.length == 0) {
                                 disp += '' +
                                     '<span class="text-danger">' +
-                                    '   No Attachments Found' +
+                                    '   No Attachements Found' +
                                     '</span>';
                             }
 
                             let req_atchs_collapsible = '' +
                                 '<p class="d-inline-flex gap-1">' +
-                                '    <a class="fs-6" data-bs-toggle="collapse" href="#doc_clps_atch_vDIA' + row['id'] + '" role="button" aria-expanded="false" aria-controls="doc_clps_atch_vDIA' + row['id'] + '">' +
+                                '    <a class="fs-6" data-bs-toggle="collapse" href="#doc_clps_atch_btnvDCrtd' + row['id'] + '" role="button" aria-expanded="false" aria-controls="doc_clps_atch_btnvDCrtd' + row['id'] + '">' +
                                 '        SHOW FILES' +
                                 '    </a>' +
                                 '</p>' +
-                                '<div class="collapse" id="doc_clps_atch_vDIA' + row['id'] + '">' +
+                                '<div class="collapse" id="doc_clps_atch_btnvDCrtd' + row['id'] + '">' +
                                 '    <div class="card card-body">' +
                                 '       ' + disp +
                                 '    </div>' +
@@ -313,13 +320,13 @@
                                 '<div class="row ps-1">' +
                                 '   <div class="col">' +
                                 '       ' + req_atchs_collapsible +
-                                '       <input type="hidden" id="vDIAdoc_fileCollection' + row['id'] + '" value="' + file_names + '">' +
+                                '       <input type="hidden" id="vDCrtddoc_fileCollection' + row['id'] + '" value="' + file_names + '">' +
                                 '   </div>' +
                                 '</div>' +
                                 '';
                         }
                     },
-                    /* column 5 : Action Attachments */
+                    /* column 6 : action Attachments */
                     {
                         data: 'act_attachments',
                         render: function(data, type, row) {
@@ -332,14 +339,14 @@
                             act_attachments.forEach(dt => {
                                 disp += '' +
                                     '<span ' +
-                                    '   class="btnvDIA-viewDocAtch" ' +
+                                    '   class="btnvDCrtd-viewDocAtch" ' +
                                     '   style="cursor: pointer;" ' +
                                     '   onMouseOut="this.style.color=`#000`" ' +
                                     '   onMouseOver="this.style.color=`#0d6efd`" ' +
                                     '   data-bs-toggle="modal" ' +
-                                    '   data-bs-target="#vDIAvDocAtchRcvModal"' +
+                                    '   data-bs-target="#vDCrtdvDocAtchRcvModal"' +
                                     '   data-file_type="act" ' +
-                                    '   data-act_id="' + row['id'] + '" ' + //this is the action attachment id
+                                    '   data-act_id="' + row['id'] + '" ' +
                                     '   data-act_file_path="' + dt.file_path + '" ' +
                                     '   data-act_file_name="' + dt.file_name + '" ' +
                                     '>' +
@@ -351,16 +358,17 @@
 
                             let req_atchs_collapsible = '' +
                                 '<p class="d-inline-flex gap-1">' +
-                                '    <a class="fs-6" data-bs-toggle="collapse" href="#act_clps_atch_vDIA' + row['id'] + '" role="button" aria-expanded="false" aria-controls="act_clps_atch_vDIA' + row['id'] + '">' +
+                                '    <a class="fs-6" data-bs-toggle="collapse" href="#act_clps_atch_btnvDCrtd' + row['id'] + '" role="button" aria-expanded="false" aria-controls="act_clps_atch_btnvDCrtd' + row['id'] + '">' +
                                 '        SHOW FILES' +
                                 '    </a>' +
                                 '</p>' +
-                                '<div class="collapse" id="act_clps_atch_vDIA' + row['id'] + '">' +
+                                '<div class="collapse" id="act_clps_atch_btnvDCrtd' + row['id'] + '">' +
                                 '    <div class="card card-body">' +
                                 '       ' + disp +
                                 '    </div>' +
                                 '</div>' +
                                 '';
+
 
                             if (act_attachments.length == 0) {
                                 if (attachment_remarks == '') {
@@ -381,63 +389,109 @@
                                 '   <div class="col">' +
                                 '       ' + attachment_remarks +
                                 '       ' + req_atchs_collapsible +
-                                '       <input type="hidden" id="vDIAact_fileCollection' + row['id'] + '" value="' + file_names + '">' +
+                                '       <input type="hidden" id="vDCrtdact_fileCollection' + row['id'] + '" value="' + file_names + '">' +
                                 '   </div>' +
                                 '</div>' +
                                 '';
                         }
                     },
-                    /* column 6 : application_type */
+                    /* column 7 : compliance_deadline */
                     {
-                        data: 'applicant',
+                        data: 'compliance_deadline',
                         render: function(data, type, row) {
-                            return (row['applicant']).toUpperCase();
+                            let comp_date = row['compliance_deadline'];
+
+                            if (comp_date !== null) {
+                                // change date format
+                                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                const d = new Date(comp_date);
+                                let month = months[d.getMonth()];
+
+                                // Calculate the difference
+                                const now = new Date();
+                                let dispTimeLaps = '';
+                                if (row['stat_msg_stat'] == 'completed') {
+                                    dispTimeLaps = '<br><sup class="text-success">Approved</sup>';
+                                } else {
+                                    let timeDiff = d - now;
+                                    let daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                                    let hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+                                    //check if days has been passed
+                                    if (Math.sign(daysLeft) == -1) {
+                                        dispTimeLaps = '<br><sup class="text-danger">' + Math.abs(daysLeft) + ' day/s and ' + Math.abs(hoursLeft) + ' hour/s ago</sup>';
+                                    } else {
+                                        dispTimeLaps = '<br><sup class="text-secondary">' + daysLeft + ' day/s and ' + hoursLeft + ' hour/s left</sup>';
+                                    }
+
+                                }
+
+                                return '' +
+                                    '' + month.toUpperCase() + ' ' + d.getDate() + ', ' + d.getFullYear() +
+                                    dispTimeLaps;
+                            } else {
+                                return '<div class="text-danger">N.A.</div>';
+                            }
                         }
                     },
-                    /* column 7 : sender */
-                    {
-                        data: 'sender_type',
-                        render: function(data, type, row) {
-                            let sender = row['sender_username'];
-                            let sender_type = row['sender_type'];
-
-                            sender_UpC = (sender != null ? sender.toUpperCase() + '<br>' : '');
-                            sender_type_UpC = (row['sender_type']).toUpperCase();
-
-                            return sender_UpC + '(' + sender_type_UpC + ')';
-                        }
-                    },
-                    /* column 8 : created at */
+                    /* column 8 : Request Date */
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
-                            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                            const d = new Date(row['created_at']);
-                            let month = months[d.getMonth()];
-                            return '' +
-                                '' + month.toUpperCase() + ' ' + d.getDate() + ', ' + d.getFullYear() +
-                                '<br>' + d.getHours() + ':' + (d.getMinutes() >= 10 ? d.getMinutes() : '0' + d.getMinutes()) +
+                            if (row['created_at'] != null) {
+                                let created_at = row['created_at'];
+
+                                // Convert to Month, Day, Year format
+                                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                const d = new Date(created_at);
+                                let month = months[d.getMonth()];
+
+                                // count how many days from today
+                                const today = new Date();
+                                // Calculate the time difference in milliseconds
+                                const timeDifference = today - d;
+                                // Convert time difference from milliseconds to days
+                                const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+                                return '' +
+                                    '' + month.toUpperCase() + ' ' + d.getDate() + ', ' + d.getFullYear() +
+                                    ' ' + d.getHours() + ':' + (d.getMinutes() >= 10 ? d.getMinutes() : '0' + d.getMinutes()) + '<br>' +
+                                    ' <sup class="text-secondary">' + daysDifference + ' day/s ago</sup>'
                                 '';
+                            } else {
+                                return '<span class="text-danger">No date found</span>';
+                            }
                         }
                     },
-                    /* column 9 : updated at */
+                    /* column 9 : status & action */
                     {
-                        data: 'updated_at',
-                    },
-                    /* column 10 : status & action */
-                    {
-                        data: 'doc_no',
+                        data: 'stat_msg',
                         render: function(data, type, row) {
+                            status_msg = '';
+                            stat_msg_arr = row['stat_msg'].split(','); //index 0 is the status and 1 is the office
+                            if (row['stat_msg_stat'] == 'completed') {
+                                status_msg = stat_msg_arr[1] + ' <span class="text-secondary"><i class="fa fa-archive" aria-hidden="true"></i> ' + stat_msg_arr[0] + '</span>';
+                            } else if (row['stat_msg_stat'] == 'received') {
+                                status_msg = stat_msg_arr[1] + ' <span class="text-success"><i class="fa fa-envelope" aria-hidden="true"></i> ' + stat_msg_arr[0] + '</span>';
+                            } else if (row['stat_msg_stat'] == 'intransit') {
+                                status_msg = stat_msg_arr[1] + ' <span class="text-warning" style="text-shadow: -1px -1px 0 #8b6800, 1px -1px 0 #8b6800, -1px 1px 0 #8b6800, 1px 1px 0 #8b6800;"><i class="fa fa-plane" aria-hidden="true"></i> ' + stat_msg_arr[0] + '</span>';
+                            } else {
+                                status_msg = stat_msg_arr[0];
+                            }
+
+
+                            let doc_no = row['doc_no'];
+
                             let more_info = '' +
                                 '<a' +
                                 '   style="cursor: pointer" ' +
-                                '   class="btn-fetchdocInfo_vDIA dropdown-item" ' +
+                                '   class="btn-fetchdocInfo_vDCrtd dropdown-item" ' +
                                 '   data-bs-toggle="modal" ' +
-                                '   data-bs-target="#vDIAModal"' +
-                                '   data-action_id="' + row['id'] + '"' +
-                                '   data-action_uuid="' + row['uuid'] + '"' +
-                                '   data-doc_id="' + row['doc_id'] + '"' +
-                                '   data-doc_uuid="' + row['doc_uuid'] + '"' +
+                                '   data-bs-target="#vDCrtdModal"' +
+                                // '   data-action_id="' + row['id'] + '"' + // the action id is fetched all per document
+                                // '   data-action_uuid="' + row['uuid'] + '"' + // the action id is fetched all per document
+                                '   data-doc_id="' + row['id'] + '"' +
+                                '   data-doc_uuid="' + row['uuid'] + '"' +
                                 '>' +
                                 '   <i class="fa fa-info-circle" aria-hidden="true"></i> Show more details' +
                                 '</a>' +
@@ -445,13 +499,19 @@
 
                             let showRoutingSlip = ''; //show or allow users view public documents when the request is already approved
                             let showPubDocs = ''; //show or allow users view public documents when the request is already approved
+                            let copyToClipBoard = ''; //copy to clipboard when the request is already approved
                             if (row['doc_no'] != 'unset') {
-                                showRoutingSlip = '<li><a class="dropdown-item" href="/grsid/' + row['doc_uuid'] + '" target="_blank" ><i class="fa fa-map-marker" aria-hidden="true"></i> Show routing slip</a></li>';
+                                showRoutingSlip = '<li><a class="dropdown-item" href="/grsid/' + row['uuid'] + '" target="_blank" ><i class="fa fa-map-marker" aria-hidden="true"></i> Show routing slip</a></li>';
+                                copyToClipBoard = '<li><a class="dropdown-item doc-no-copy-to-clipboard" style="cursor: pointer" data-val="' + row['doc_no'] + '" title="'+ row['doc_no'] +'"><i class="fa fa-clipboard" aria-hidden="true"></i> Copy to clipboard</a></li>'; //function in parent blade
                             } else {
                                 showRoutingSlip = '<li><a class="dropdown-item bg-secondary-subtle"><i class="fa fa-map-marker" aria-hidden="true"></i> Routing slip not Available<br><sup>(Request not yet approved)</sup></a></li>';
                             }
+                            
+                            //check if synced for document request not action
+                            let synced = row['doc_downloaded'] != null ? ' <spanc class="badge bg-success text-white  mb-1 me-2" >SYNCED</spanc> ' : ' <spanc class="badge bg-danger text-white  mb-1 me-2 badge-status-overdue" >NOT YET SYNCED</spanc> ';
 
                             let dropdownMenu = '' +
+                                '<div class="mb-1">' + synced + '<br>' + status_msg + '</div>' + 
                                 '<div class="dropdown">' +
                                 '    <div ' +
                                 '       data-bs-toggle="dropdown" ' +
@@ -466,11 +526,16 @@
                                 '        <li>' + more_info + '</li>' +
                                 '       ' + showRoutingSlip +
                                 '       ' + showPubDocs +
+                                '       ' + copyToClipBoard +
                                 '    </ul>' +
                                 '</div>' +
                                 '';
 
-                            return dropdownMenu;
+                            if (doc_no == 'unset') {
+                                return more_info + ' | <span class="text-danger">not yet validated</span><br>';
+                            } else {
+                                return dropdownMenu;
+                            }
                         }
                     },
                 ],
@@ -484,16 +549,20 @@
                         visible: false,
                     },
                     {
-                        targets: [6, 7, 8, 9],
+                        width: '20%',
+                        targets: [1],
+                        visible: true,
+                    },
+                    {
+                        targets: [3, 4],
                         visible: false,
                     }
                 ],
-                /* reason for disabling: Causes error for dropdown will overlap */
-                /* fixedColumns: { 
-                    left: 1
-                }, */
+                // fixedColumns: {
+                //     left: 1
+                // },
                 order: [
-                    [9, 'desc'] /* update by last updated action */
+                    [8, 'desc']
                 ],
                 lengthChange: true,
                 "pageLength": 10,
@@ -507,7 +576,7 @@
                     {
                         extend: 'excel',
                         text: 'Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i>',
-                        title: `COMPLETED CLIENT REQUESTS ${new Date().toLocaleDateString()}`,
+                        title: `CREATED DOCUMENTS ${new Date().toLocaleDateString()}`,
                         exportOptions: {
                             columns: ':visible'
                         }
@@ -561,15 +630,18 @@
                                 '      Republic of The Philippines<br> ' +
                                 '      <b>DEPARTMENT OF ENVIRONMENT AND NATURAL RESOURCES</b><br> ' +
                                 '      Regional Center Site, Rawis, Legazpi City<br> ' + formattedDate + ' <br><br>' +
-                                '      <h2>COMPLETED CLIENT REQUESTS</h2>' +
-                                '      <sup>User: ' + auth_username + '</sup><br>' +
                                 '   </span>' +
                                 '   <img style="display: inline-block;  vertical-align:top; width: 100px; height: 100px;" src="{{ asset('assets/img/Bagong_Pilipinas_logo.webp') }}" > ' +
-                                '</div>');
+                                '</div>' +
+                                '<div style="text-align: center; font-size: 15pt;">' +
+                                '   <h2>CREATED DOCUMENTS</h2>' +
+                                '   <sup>User: ' + auth_username + '</sup><br>' +
+                                '</div>'
+                            );
                             // $(win.document.body).find('table thead').remove();
-                            // $(win.document.body).find('table').prepend($('#dTArchived thead').clone());
+                            // $(win.document.body).find('table').prepend($('#dtCreated thead').clone());
                             $(win.document.body).find('table tbody').remove();
-                            $(win.document.body).find('table').append($('#dTArchived tbody').clone());
+                            $(win.document.body).find('table').append($('#dtCreated tbody').clone());
                         }
                     },
                     {
@@ -582,9 +654,9 @@
                     'colvis',
                     {
                         // Custom Search Button
-                        text: '<input class="form-control form-control-sm border-0 dTArchived_search" type="text" placeholder="Search (Click to refresh)">',
+                        text: '<input class="form-control form-control-sm border-0 dtCreated_search" type="text" placeholder="Search">',
                         action: function(e, dt, node, config) {
-                            let searchValue = $(node).find('.dTArchived_search').val();
+                            let searchValue = $(node).find('.dtCreated_search').val();
                             dt.search(searchValue).draw();
                         }
                     }
@@ -608,23 +680,23 @@
         // endregion populate table
 
         /* region Call tab on click */
-        let tabArchived = false;
-        $('label[for=tabArchived]').click(function() {
-            if (tabArchived == false) {
-                dTArchived_func();
-                tabArchived = true;
+        let tabCreated = false;
+        $('label[for=tabCreated]').click(function() {
+            if (tabCreated == false) {
+                dtCreated_func();
+                tabCreated = true;
             }
         });
 
-        if ($('#dTArchived_loader').val() == 'load') {
-            if (tabArchived == false) {
-                dTArchived_func();
-                tabArchived = true;
+        if ($('#dtCreated_loader').val() == 'load') {
+            if (tabCreated == false) {
+                dtCreated_func();
+                tabCreated = true;
             }
         }
         /* endregion Call tab on click */
 
-        $('#dTArchived_wrapper .btn-group button').removeClass('btn-secondary').addClass('btn-outline-success');
+        $('#dtCreated_wrapper .btn-group button').removeClass('btn-secondary').addClass('btn-outline-success');
     });
 </script>
 {{-- endregion populate table --}}
@@ -632,71 +704,58 @@
 {{-- region queries --}}
 <script>
     $(function() {
-        // region view client id
-        $('#dTArchived').on('click', '.btnvDIA-viewClientId', function() {
-            let username = $('#auth_username').val();
-            let client_id = $(this).data('client_id');
-
-            let iframeHref = '/get-clientId-view/' + username + '/' + client_id + '/';
-            $('#vDIAviewClientIdIframe').attr('src', iframeHref);
-            $('#vDIAreencryptId').val(client_id);
-        });
-        // endregion view client id
-
         // region view document attachment
-        $('#dTArchived').on('click', '.btnvDIA-viewDocAtch', function() {
+        $('#dtCreated').on('click', '.btnvDCrtd-viewDocAtch', function() {
             let username = $('#auth_username').val();
             let file_type = $(this).data('file_type');
 
             if (file_type == 'doc') {
-                let id = $(this).data('doc_id'); // this is the id of action but named doc id because there is action id for attachment below
-                let uuid = $(this).data('doc_uuid'); // this is the id of action but named doc id because there is action id for attachment below
-                let real_doc_id = $(this).data('real_doc_id'); // real document id
-                let real_doc_uuid = $(this).data('real_doc_uuid'); // real document id
+                let id = $(this).data('doc_id');
+                let uuid = $(this).data('doc_uuid');
                 let file_path = $(this).data('doc_file_path');
                 let file_name = $(this).data('doc_file_name');
-                let fileCollection = $('#dTArchived #vDIAdoc_fileCollection' + id).val();
+                let fileCollection = $('#dtCreated #vDCrtddoc_fileCollection' + id).val();
 
                 // Split the text into an array using commas as the delimiter
                 const fileCollection_arr = fileCollection.split(',');
 
                 // Filter out empty strings from the array
                 let collection_count = 1;
-                $('.vDocAtchArchCollection').empty()
+                $('.vDCrtd_vDocAtchArchCollection').empty()
                 fileCollection_arr.filter(item => {
                     if (item != '') {
-                        $('.vDocAtchArchCollection').append('<button class="btnvDIA-view-file btn btn-outline-primary btn-sm border-0 m-1" data-file_path="' + file_path + '" data-file_name="' + item + '">' + collection_count + '. ' + item + '</button> <a href="/' + file_path + '/' + item + '" target="_blank" tooltip="Open in separate tab" flow="right"> <i class="fa fa-external-link" aria-hidden="true"></i> </a><br>');
+                        $('.vDCrtd_vDocAtchArchCollection').append('' + '<button class="btnvDCrtd-view-file btn btn-outline-primary btn-sm border-0 m-1" data-file_path="' + file_path + '" data-file_name="' + item + '">' + collection_count + '. ' + item + '</button> <a href="/' + file_path + '/' + item + '" target="_blank" tooltip="Open in separate tab" flow="right"> <i class="fa fa-external-link" aria-hidden="true"></i> </a><br>');
                         collection_count += 1;
                     }
                 });
 
                 let iframeHref = '/' + file_path + '/' + file_name;
                 let content1 = iframeHref + '#toolbar=0';
-                let content2 = $('#vDocAtchArchIframe').attr('src');
+                let content2 = $('#vDCrtd_vDocAtchArchIframe').attr('src');
                 if (content1 != content2) {
-                    $('.vDIADocAtchName').empty().append(file_name);
-                    $('#vDocAtchArchIframe').attr('src', iframeHref + '#toolbar=0');
+                    $('.vDCrtdDocAtchName').empty().append(file_name);
+                    $('#vDCrtd_vDocAtchArchIframe').attr('src', iframeHref + '#toolbar=0');
                 }
 
-                // region get other requestee input
-                $('.vDocAtchArch_other_req_inputs').empty()
+                // get other requestee input
+                $('.vDCrtd_other_req_inputs').empty()
                 $.ajax({
-                    url: "get-other-cli-req-inputs/" + real_doc_uuid + "/",
+                    url: "get-other-cli-req-inputs/" + uuid + "/",
                     method: "GET",
                     headers: {
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
                     success: function(r) {
                         if (r.success) {
-                            $('.vDocAtchArch_other_req_inputs').append('<hr><h6>Other Requestee Input:</h6><br>');
+                            $('.vDCrtd_other_req_inputs').append('<hr><h6>Other Requestee Input:</h6><br>');
 
                             if (r.req_inputs.length >= 1) {
                                 r.req_inputs.forEach(dt => {
-                                    $('.vDocAtchArch_other_req_inputs').append('' +
+                                    $('.vDCrtd_other_req_inputs').append('' +
                                         '<div class="row row-tab-leader">' +
                                         '   <div class="col-md-12 col-tab-leader">' +
                                         '       <div>' +
-                                        '          <span>' + dt.req_title + '</span>' +
+                                        '          <span>' + dt.req_slug + '</span>' +
                                         '          <span> ' + dt.text_input + '</span>' +
                                         '       </div>' +
                                         '   </div>' +
@@ -704,7 +763,7 @@
                                     );
                                 });
                             } else {
-                                $('.vDocAtchArch_other_req_inputs').append('' +
+                                $('.vDCrtd_other_req_inputs').append('' +
                                     '<div class="row row-tab-leader">' +
                                     '   <div class="col-md-12">' +
                                     '       - - NO OTHER REQUESTEE INPUT - -' +
@@ -718,54 +777,54 @@
                         console.log(err);
                     }
 
-                });
-                // endregion get other requestee input
+                })
             } else if (file_type == 'act') {
                 let id = $(this).data('act_id');
                 let file_path = $(this).data('act_file_path');
                 let file_name = $(this).data('act_file_name');
-                let fileCollection = $('#dTArchived #vDIAact_fileCollection' + id).val();
+                let fileCollection = $('#dtCreated #vDCrtdact_fileCollection' + id).val();
 
                 // Split the text into an array using commas as the delimiter
                 const fileCollection_arr = fileCollection.split(',');
 
                 // Filter out empty strings from the array
                 let collection_count = 1;
-                $('.vDocAtchArchCollection').empty()
+                $('.vDCrtd_vDocAtchArchCollection').empty()
                 fileCollection_arr.filter(item => {
                     if (item != '') {
-                        $('.vDocAtchArchCollection').append('<button class="btnvDIA-view-file btn btn-outline-primary btn-sm border-0 m-1" data-file_path="' + file_path + '" data-file_name="' + item + '">' + collection_count + '. ' + item + '</button> <a href="/' + file_path + '/' + item + '" target="_blank" tooltip="Open in separate tab" flow="right"> <i class="fa fa-external-link" aria-hidden="true"></i> </a><br>');
+                        $('.vDCrtd_vDocAtchArchCollection').append('<button class="btnvDCrtd-view-file btn btn-outline-primary btn-sm border-0 m-1" data-file_path="' + file_path + '" data-file_name="' + item + '">' + collection_count + '. ' + item + '</button> <a href="/' + file_path + '/' + item + '" target="_blank" tooltip="Open in separate tab" flow="right"> <i class="fa fa-external-link" aria-hidden="true"></i> </a><br>');
                         collection_count += 1;
                     }
                 });
 
                 let iframeHref = '/' + file_path + '/' + file_name;
                 let content1 = iframeHref + '#toolbar=0';
-                let content2 = $('#vDocAtchArchIframe').attr('src');
+                let content2 = $('#vDCrtd_vDocAtchArchIframe').attr('src');
                 if (content1 != content2) {
-                    $('.vDIADocAtchName').empty().append(file_name);
-                    $('#vDocAtchArchIframe').attr('src', iframeHref + '#toolbar=0');
+                    $('.vDCrtdDocAtchName').empty().append(file_name);
+                    $('#vDCrtd_vDocAtchArchIframe').attr('src', iframeHref + '#toolbar=0');
                 }
+
+                $('.vDCrtd_other_req_inputs').empty();
             }
         });
         // endregion view document attachment
 
         // region view document attachment collection
-        $('.vDocAtchArchCollection').on('click', '.btnvDIA-view-file', function() {
+        $('.vDCrtd_vDocAtchArchCollection').on('click', '.btnvDCrtd-view-file', function() {
             let file_path = $(this).data('file_path');
             let file_name = $(this).data('file_name');
 
             let iframeHref = '/' + file_path + '/' + file_name;
-            $('.vDIADocAtchName').empty().append(file_name);
-            $('#vDocAtchArchIframe').attr('src', iframeHref + '#toolbar=0');
+            $('.vDCrtdDocAtchName').empty().append(file_name);
+            $('#vDCrtd_vDocAtchArchIframe').attr('src', iframeHref + '#toolbar=0');
         });
         // endregion view document attachment collection
 
         // region document info
-        $('#dTArchived').on('click', '.btn-fetchdocInfo_vDIA', function() {
-            // let action_id = $(this).data('action_id');
-            let action_uuid = $(this).data('action_uuid');
-            // let doc_id = $(this).data('doc_id');
+        $('#dtCreated').on('click', '.btn-fetchdocInfo_vDCrtd', function() {
+            // let action_id = $(this).data('action_id'); //DEPRECATED
+            let doc_id = $(this).data('doc_id');
             let doc_uuid = $(this).data('doc_uuid');
 
             $.ajax({
@@ -808,66 +867,65 @@
                         let remarks = r.doc_info.remarks;
                         let validated = r.doc_info.validated;
                         let compliance_deadline = r.doc_info.compliance_deadline;
-                        // endregion display agency Government to Government (G2G)
 
                         // region status bar
                         if (validated != null) {
-                            $('.vDIAheader-status').empty().append('<i class="fa fa-check-circle" aria-hidden="true"></i> VERIFIED');
-                            $('.vDIAheader-status').removeClass('border-danger text-danger').addClass('border-success text-success');
+                            $('.vDCrtdheader-status').empty().append('<i class="fa fa-check-circle" aria-hidden="true"></i> VERIFIED');
+                            $('.vDCrtdheader-status').removeClass('border-danger text-danger').addClass('border-success text-success');
                         } else {
-                            $('.vDIAheader-status').empty().append('<i class="fa fa-hourglass" aria-hidden="true"></i> NOT YET VERIFIED');
-                            $('.vDIAheader-status').removeClass('border-success text-success').addClass('border-danger text-danger');
+                            $('.vDCrtdheader-status').empty().append('<i class="fa fa-hourglass" aria-hidden="true"></i> NOT YET VERIFIED');
+                            $('.vDCrtdheader-status').removeClass('border-success text-success').addClass('border-danger text-danger');
                         }
                         // endregion status bar
 
-                        $('.vDIA-content').empty().append('' +
-                            '<div class="col-md-4 mb-2 fs-6">Document Tracking No.: <br>' + (doc_no != 'unset' ? '<span class="fw-bold fs-6">' + doc_no + '</span>' : '<span class="fw-bold text-secondary fs-6">NOT AVAILABLE</span>') + '</div>' +
+                        $('.vDCrtd-content').empty().append('' +
+                            '<div class="col-md-4 mb-2 fs-6">Document Tracking No.: <br>' + (doc_no != 'unset' ? '<span class="fw-bold fs-6">' + doc_no + '</span>' : '<span class="fw-bold text-secondary fs-6">NOT YET VALIDATED</span>') + '</div>' +
                             '<div class="col-md-4 mb-2 fs-6">Compliance Date: <br>' + (compliance_deadline != null ? '<span class="fw-bold fs-6">' + compliance_deadline + '</span>' : '<span class="fw-bold text-secondary fs-6">NOT AVAILABLE</span>') + '</div>' +
                             '<hr>' +
                             ''
                         );
 
-                        $('.vDIA-content').append('' +
+                        $('.vDCrtd-content').append('' +
                             '<div class="col-md-4 mb-2 fs-6">Document Classification: <br><span class="fw-bold fs-6">' + doc_class_full.toUpperCase() + ' — (' + class_slug + ')</span></div>' +
                             ''
                         );
 
-                        $('.vDIA-content').append('' +
+                        $('.vDCrtd-content').append('' +
                             '<div class="col-md-4 mb-2 fs-6">Application type: <br><span class="fw-bold fs-6">' + applicant.toUpperCase() + '</span></div>' +
                             '<div class="col-md-4 mb-2 fs-6">Transaction Type: <br><span class="fw-bold fs-6">' + transaction.toUpperCase() + ' (' + transaction_slug + ')</span></div>' +
                             ''
                         );
 
-                        $('#vDIAremarks').val(remarks);
+                        $('#vDCrtdremarks').val(remarks);
 
                         // region document attachments and inputs
                         let filecount = 0;
                         let inptcount = 0;
                         let app_doc_form_no = 0; //appform start from 0 
-                        $('.vDIA_doc_atch').empty(); // make sure to empty the list
-                        $('.vDIA_doc_inpts').empty(); // make sure to empty the list
+                        $('.vDCrtd_doc_atch').empty(); // make sure to empty the list
+                        $('.vDCrtd_doc_inpts').empty(); // make sure to empty the list
                         doc_attachments.forEach(dt => {
 
                             if (dt.attachment_type == 'file') {
                                 // file attachments
                                 filecount += 1;
                                 if (app_doc_form_no != dt.app_form_no) {
-                                    $('.vDIA_doc_inpts').append('' +
+                                    $('.vDCrtd_doc_inpts').append('' +
                                         '<div class="col-md-12 fs-6 mb-3"> ' +
                                         '   <hr>' +
-                                        '   <span class="fw-bold"><i class="fa fa-file" aria-hidden="true"></i> Application Form ' + dt.app_form_no + '</span>: ' +
+                                        '   <span class="fw-bold"><i class="fa fa-file" aria-hidden="true"></i> Attachment Form ' + dt.app_form_no + '</span>: ' +
                                         '</div>' +
                                         ''
                                     );
                                     app_doc_form_no = dt.app_form_no;
                                 }
-                                $('.vDIA_doc_inpts').append('' +
+                                $('.vDCrtd_doc_inpts').append('' +
                                     '<a class="col-md-2 ms-3 mb-1 fs-6 border border-primary rounded" href="/' + dt.file_path + '/' + dt.file_name + '" target="_blank" tooltip="' + dt.file_name + '" flow="down"><i class="fa fa-file-o" aria-hidden="true"></i> ' + dt.req_slug + '</a>'
                                 );
                             } else {
                                 // field inputs
                                 inptcount += 1;
-                                $('.vDIA_doc_inpts').append('' +
+                                $('.vDCrtd_doc_inpts').append('' +
                                     '<div class="col-md-12 px-3 fs-6"> ' +
                                     '    <div class="row"> ' +
                                     '       <div class="col"> ' +
@@ -884,22 +942,17 @@
                             }
                         });
                         if (filecount == 0) {
-                            $('.vDIA_doc_atch').append('' +
+                            $('.vDCrtd_doc_atch').append('' +
                                 '--- no attachment found ---'
                             );
                         }
-                        /* if (inptcount == 0) {
-                            $('.vDIA_doc_inpts').append('' +
-                                '--- no other information ---'
-                            );
-                        } */
                         // endregion document attachments and inputs
 
                         // region document status
                         let doc_stat_len = r.doc_stats.length - 1;
                         let doc_stat_inactive_len_counter = 0;
                         let total_turn_around_time = 0;
-                        $('.tbody-viewDocInfoArchived-doc_status').empty();
+                        $('.tbody-viewDocInfoRejected-doc_status').empty();
                         let identified_verify_date;
                         r.doc_stats.forEach($dt => {
                             const verification_date = new Date($dt.verification_date);
@@ -962,7 +1015,7 @@
                             }
                             // endregion identify status
 
-                            let rcvrfn = ''; //receiving name
+                            let rcvrfn = '';
                             if ($dt.receiver_mname != null) {
                                 rcvrfn = ($dt.received_uuid != null ? $dt.receiver_fname + ' ' + ($dt.receiver_mname).charAt(0) + '. ' + $dt.receiver_sname + ' ' + ($dt.receiver_suffix != null ? $dt.receiver_suffix : '') : '');
                             }
@@ -1081,7 +1134,7 @@
 
                             /* ------- endregion calculate turn around time ------- */
 
-                            $('.tbody-viewDocInfoArchived-doc_status').append('' +
+                            $('.tbody-viewDocInfoRejected-doc_status').append('' +
                                 '<tr> ' +
                                 '    <td> ' +
                                 '       ' + release_stat_disp +
@@ -1135,7 +1188,7 @@
 
                             // make all except the current document stats as grey
                             if (doc_stat_inactive_len_counter < doc_stat_len) {
-                                $('.tbody-viewDocInfoArchived-doc_status').find('td').addClass('text-secondary');
+                                $('.tbody-viewDocInfoRejected-doc_status').find('td').addClass('text-secondary');
                             }
                             doc_stat_inactive_len_counter += 1;
                         });
@@ -1146,10 +1199,10 @@
                         let ttlMinutes_ttl_tat = Math.floor((total_turn_around_time % (1000 * 60 * 60)) / (1000 * 60));
                         let ttlSeconds_ttl_tat = Math.floor((total_turn_around_time % (1000 * 60)) / 1000);
 
-                        $('.vDIA_ttlDays_ttl_tat').empty().text(ttlDays_ttl_tat + ' Days');
-                        $('.vDIA_ttlHours_ttl_tat').empty().text(ttlHours_ttl_tat + ' Hours');
-                        $('.vDIA_ttlMinutes_ttl_tat').empty().text(ttlMinutes_ttl_tat + ' Minutes');
-                        $('.vDIA_ttlSeconds_ttl_tat').empty().text(ttlSeconds_ttl_tat + ' Seconds');
+                        $('.vDCrtd_ttlDays_ttl_tat').empty().text(ttlDays_ttl_tat + ' Days');
+                        $('.vDCrtd_ttlHours_ttl_tat').empty().text(ttlHours_ttl_tat + ' Hours');
+                        $('.vDCrtd_ttlMinutes_ttl_tat').empty().text(ttlMinutes_ttl_tat + ' Minutes');
+                        $('.vDCrtd_ttlSeconds_ttl_tat').empty().text(ttlSeconds_ttl_tat + ' Seconds');
                         // endregion document status
                     }
                 },
@@ -1159,6 +1212,25 @@
             });
         });
         // endregion document info
+
+        // region perform reencryption id image
+        $('.btn-vDCrtdreencryptId').click(function() {
+            let client_id = $('#vDCrtdreencryptId').val();
+
+            $.ajax({
+                url: "/get-clientId-view-reencrypt/" + client_id + "/",
+                method: 'GET',
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+
+            console.log('reencrypt => ' + client_id)
+        });
+        // endregion perform reencryption id image
     });
 </script>
 {{-- endregion queries --}}
