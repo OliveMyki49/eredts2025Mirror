@@ -362,8 +362,6 @@
                                 '</div>' +
                                 '';
 
-
-
                             if (req_attachments.length == 0) {
                                 req_atchs_collapsible = '' +
                                     '    <a class="fs-6 text-danger">' +
@@ -371,8 +369,13 @@
                                     '    </a>';
                             }
 
-                            return '' +
-                                '<div>{{$baseUrl = config('app.bapiu');}}</div>' +
+                            //check if synced
+                            //NOTE: BE MINDFUL OF THE doc_uuid USAGE
+                            let onlineAtchLink = row['downloaded'] != null ? 
+                                '<a href="{{ $baseUrl = config('app.bapi') }}get-all-atch?uuid=' + row['doc_uuid'] + '" target="_blank">VIEW ONLINE ATTACHMENTS</a>' : 
+                                ' <span class="badge bg-danger text-white  mb-1 me-2" >LOCAL ATTACHMENTS ONLY</span> ';
+
+                            return '' + onlineAtchLink +
                                 '<div class="row ps-1">' +
                                 '   <div class="col">' +
                                 '       ' + req_atchs_collapsible +
@@ -555,7 +558,7 @@
                             }
 
                             //check if synced
-                            let synced = row['downloaded'] != null ? ' <spanc class="badge bg-success text-white  mb-1 me-2" >SYNCED</spanc> ' : ' <spanc class="badge bg-danger text-white  mb-1 me-2 badge-status-overdue" >NOT YET SYNCED</spanc> ';
+                            let synced = row['downloaded'] != null ? ' <span class="badge bg-success text-white  mb-1 me-2" >SYNCED</span> ' : ' <span class="badge bg-danger text-white  mb-1 me-2 badge-status-overdue" >NOT YET SYNCED</span> ';
 
                             let dropdownMenu = '' +
                                 '<div>' + disp_new + synced + disp_overdue + past_deadline + '</div>' +

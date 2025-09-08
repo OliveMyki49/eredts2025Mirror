@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Department of Environment and Natural Resources')
+@section('title', 'Main Dashboard')
 @section('head_extension')
     {{-- region custom css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/tab.css') }}">
