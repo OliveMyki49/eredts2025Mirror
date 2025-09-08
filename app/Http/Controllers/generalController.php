@@ -3419,7 +3419,7 @@ class generalController extends Controller
             $actReceivedCounted = $apiCallData['actReceivedCounted'] ?? 0;
             $docAtchCounted = $apiCallData['docAtchCounted'] ?? 0;
             $actAtchCounted = $apiCallData['actAtchCounted'] ?? 0;
-            $docOfficeCounted = $apiCallData['docOffice'] ?? 0;
+            $docOfficeCounted = $apiCallData['docOfficeCounted'] ?? 0;
         }
         $docCountedLocal = redts_zd_client_doc_info::whereNotNull('downloaded')->whereNull('deleted_at')->count();
         $actIntransitCountedLocal = redts_n_action::whereNull('received') //count the in-transit actions
@@ -3438,6 +3438,7 @@ class generalController extends Controller
 
         // count unsynced documents and actions
         $docCountUnsynced = redts_zd_client_doc_info::whereNull('uploaded')->whereNull('downloaded')->whereNull('deleted_at')->count();
+        $originCountUnsynced = redts_zi_origin_office::whereNull('uploaded')->whereNull('downloaded')->whereNull('deleted_at')->count();
         $actCountUnsynced = redts_n_action::whereNull('uploaded_act')->whereNull('downloaded')->whereNull('deleted_at')->count();
 
         // check count data per table
@@ -3609,18 +3610,57 @@ class generalController extends Controller
             $apidocOfficesData = $apidocOfficesArr['docOffices'] ?? [];
 
 
-            /* foreach ($apidocOfficesData as $key => $docOffice) {
+            foreach ($apidocOfficesData as $key => $docOffice) {
                 redts_zi_origin_office::create([
-                    'uuid' => $docOffice['uuid'],
+                    'user_id'  => $docOffice['user_id'],
+                    'user_uuid'  => $docOffice['user_uuid'],
+                    'doc_id'  => $docOffice['doc_id'],
+                    'doc_uuid'  => $docOffice['doc_uuid'],
+                    'origin_office_id'  => $docOffice['origin_office_id'],
+                    'origin_office_uuid'  => $docOffice['origin_office_uuid'],
+                    'downloaded'  => now(),
+                    'deleted_at'  => $docOffice['deleted_at'],
                 ]);
-            } */
+            }
         }
+
+        if ($docCountUnsynced >= 1) {
+            $unsyncedDocs = redts_zd_client_doc_info::whereNull('uploaded')
+                ->whereNull('downloaded')
+                ->whereNull('deleted_at')
+                ->get();
+
+            $unsyncedDocsMsg = [];
+            foreach ($unsyncedDocs as $doc) {
+
+                //upload each unsynced document
+                $response = Http::post($baseUrl . '07a787d9-1c08-42ce-bd80-28f1e570fe51', [
+                    'document' => $doc->toArray()
+                ]);
+
+                if ($response->successful()) {
+                    // Update the uploaded timestamp
+                    $doc->uploaded = now();
+                    $doc->downloaded = now();
+                    $doc->save();
+                } else {
+                    // Optionally log or handle failed uploads
+                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
+                    array_push($unsyncedDocsMsg, "Failed to upload doc UUID: {$doc->uuid}");
+                }
+            }
+        }
+
+        //SYNC THE 
+        //  $originCountUnsynced
 
         return response()->json([
             'success' => true,
-            
             'docCountUnsynced' => $docCountUnsynced,
             'actCountUnsynced' => $actCountUnsynced,
+
+            'unsyncedDocsMsg' => $unsyncedDocsMsg,
+            // 'successSynced' => $successSynced,
         ]);
     }
     #endregion eredts server hand-shake
