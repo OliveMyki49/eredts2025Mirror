@@ -3609,18 +3609,19 @@ class generalController extends Controller
             $apidocOfficesArr = $apidocOffices->ok() ? $apidocOffices->json() : [];
             $apidocOfficesData = $apidocOfficesArr['docOffices'] ?? [];
 
-
             foreach ($apidocOfficesData as $key => $docOffice) {
-                redts_zi_origin_office::create([
-                    'user_id'  => $docOffice['user_id'],
-                    'user_uuid'  => $docOffice['user_uuid'],
-                    'doc_id'  => $docOffice['doc_id'],
-                    'doc_uuid'  => $docOffice['doc_uuid'],
-                    'origin_office_id'  => $docOffice['origin_office_id'],
-                    'origin_office_uuid'  => $docOffice['origin_office_uuid'],
-                    'downloaded'  => now(),
-                    'deleted_at'  => $docOffice['deleted_at'],
-                ]);
+                if (!redts_zi_origin_office::where('doc_uuid', $docOffice['doc_uuid'])->exists()) {
+                    redts_zi_origin_office::create([
+                        'user_id'  => $docOffice['user_id'],
+                        'user_uuid'  => $docOffice['user_uuid'],
+                        'doc_id'  => $docOffice['doc_id'],
+                        'doc_uuid'  => $docOffice['doc_uuid'],
+                        'origin_office_id'  => $docOffice['origin_office_id'],
+                        'origin_office_uuid'  => $docOffice['origin_office_uuid'],
+                        'downloaded'  => now(),
+                        'deleted_at'  => $docOffice['deleted_at'],
+                    ]);
+                }
             }
         }
 
@@ -3640,9 +3641,10 @@ class generalController extends Controller
 
                 if ($response->successful()) {
                     // Update the uploaded timestamp
-                    $doc->uploaded = now();
-                    $doc->downloaded = now();
-                    $doc->save();
+                    redts_zd_client_doc_info::where('uuid', $doc->uuid)->update([
+                        'uploaded' => now(),
+                        'downloaded' => now(),
+                    ]);
                 } else {
                     // Optionally log or handle failed uploads
                     // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
@@ -3651,15 +3653,70 @@ class generalController extends Controller
             }
         }
 
-        //SYNC THE 
-        //  $originCountUnsynced
+        if ($actCountUnsynced >= 1) {
+            $unsyncedActs = redts_n_action::whereNull('uploaded_act')
+                ->whereNull('downloaded')
+                ->whereNull('deleted_at')
+                ->get();
+
+            $unsyncedActMsg = [];
+            foreach ($unsyncedActs as $Act) {
+
+                //upload each unsynced document
+                $response = Http::post($baseUrl . 'add5673d-b072-43fa-a068-8eb5521583cb', [
+                    'act' => $Act->toArray()
+                ]);
+
+                if ($response->successful()) {
+                    // Update the uploaded timestamp
+                    redts_n_action::where('uuid', $Act->uuid)->update([
+                        'uploaded_act' => now(),
+                        'downloaded' => now(),
+                    ]);
+                } else {
+                    // Optionally log or handle failed uploads
+                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
+                    array_push($unsyncedActMsg, "Failed to upload doc UUID: {$Act->uuid}");
+                }
+            }
+        }
+
+        // SYNC THE THE ORIGIN OFFICES
+        // IMPORTANT: THIS WILL DETERMINE WHERE THE DOC CAN BE SEEN OR TRACKED BY THE USERS
+        // $originCountUnsynced
+        $unsyncedDocsOrgMsg = [];
+        if ($originCountUnsynced >= 1) {
+            $unsyncedDocOriginCount = redts_zi_origin_office::whereNull('uploaded')
+                ->whereNull('downloaded')
+                ->whereNull('deleted_at')
+                ->get();
+
+            foreach ($unsyncedDocOriginCount as $docOrg) {
+                //upload each unsynced document
+                $response = Http::post($baseUrl . '32a7ffdb-e086-49e5-93ae-1b4be201c4d7', [
+                    'docorg' => $docOrg->toArray()
+                ]);
+
+                if ($response->successful()) {
+                    // Update the uploaded timestamp
+                    redts_zi_origin_office::where('id', $docOrg->id)->update([
+                        'uploaded' => now(),
+                        'downloaded' => now(),
+                    ]);
+                } else {
+                    // Optionally log or handle failed uploads
+                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
+                    array_push($unsyncedDocsOrgMsg, "Failed to upload doc UUID: {$docOrg->id}");
+                }
+            }
+        }
 
         return response()->json([
             'success' => true,
             'docCountUnsynced' => $docCountUnsynced,
             'actCountUnsynced' => $actCountUnsynced,
 
-            'unsyncedDocsMsg' => $unsyncedDocsMsg,
+            'unsyncedDocsOrgMsg' => $unsyncedDocsOrgMsg,
             // 'successSynced' => $successSynced,
         ]);
     }

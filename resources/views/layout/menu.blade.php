@@ -15,7 +15,7 @@
                     </sub>
                     <br>
                     ENHANCED REGIONAL ELECTRONIC DOCUMENT TRACKING SYSTEM <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL SERVER</span>
-                       <span class="loader-container"></span>
+                    <span class="loader-container"></span>
                 </label>
                 <label class="text-black text-bold navbar-brand-label-small text-start">
                     DENR V <span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">LOCAL<span>
@@ -850,24 +850,33 @@
             //check conneciton
             $('.loader-container').append(`<span class="badge bg-primary text-white badge-status-overdue" style="cursor: pointer">GETTING UPDATED RECORDS...<span>`);
 
-            $.ajax({
-                url: "/eredts-server-hand-shake",
-                method: "GET",
-                success: function(r) {
+            async function checkServerStatus() {
+                try {
+                    const response = await fetch("/eredts-server-hand-shake", {
+                        method: "GET"
+                    });
+
+                    const r = await response.json();
+
                     if (r.success) {
                         console.log(r);
-                        $('.loader-container').empty();
+                        document.querySelector('.loader-container').innerHTML = '';
                     } else {
-                        console.log('Server responded but returned error')
+                        console.log('Server responded but returned error');
                         console.log(r);
-                        $('.loader-container').empty().append(`<span class="badge bg-danger text-white badge-status-overdue" style="cursor: pointer">MAIN SERVER IS OFFLINE<span>`);
+                        document.querySelector('.loader-container').innerHTML = `
+                <span class="badge bg-danger text-white badge-status-overdue" style="cursor: pointer">
+                    MAIN SERVER IS OFFLINE
+                </span>`;
                     }
-                },
-                error: function(err) {
+                } catch (err) {
                     console.log(err);
-                    $('.loader-container').empty();
+                    document.querySelector('.loader-container').innerHTML = '';
                 }
-            });
+            }
+
+            // Call the function
+            checkServerStatus();
         });
     </script>
     {{-- region server connection check and sync --}}
