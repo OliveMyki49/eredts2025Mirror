@@ -1318,7 +1318,7 @@
                 '</div>'
             );
             $.ajax({
-                url: "{{ url('edit-inTransitAction') }}",
+                url: "/edit-inTransitAction",
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",

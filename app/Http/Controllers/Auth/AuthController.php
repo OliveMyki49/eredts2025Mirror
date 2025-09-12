@@ -201,47 +201,114 @@ class AuthController extends Controller
             $fetchedusers_office = $apiGetUsersFromApiData['users_office'] ?? [];
 
             // insert in local database while checking if user exists
-            foreach ($fetchedusers as $key => $user) {
-                if (!User::where('uuid', $user['uuid'])->exists()) {
+            foreach ($fetchedusers as $userData) {
+                $existingUser = User::where('uuid', $userData['uuid'])->first();
+
+                if (!$existingUser) {
+                    // Create new user if not found
                     User::create([
-                        'uuid' => $user['uuid'],
-                        'username' => $user['username'],
-                        'password' => $user['hashed_password'],
-                        'email' => $user['email'],
-                        'access_id' => $user['access_id'],
-                        'access_uuid' => $user['access_uuid'],
-                        'status' => $user['status'],
+                        'uuid' => $userData['uuid'],
+                        'username' => $userData['username'],
+                        'password' => $userData['hashed_password'],
+                        'email' => $userData['email'],
+                        'access_id' => $userData['access_id'],
+                        'access_uuid' => $userData['access_uuid'],
+                        'status' => $userData['status'],
                         'remember_token' => null,
-                        'admin_delete' => $user['admin_delete'],
-
+                        'admin_delete' => $userData['admin_delete'],
                     ]);
+                } else {
+                    // Check if any field has changed
+                    $hasChanges =
+                        $existingUser->username !== $userData['username'] ||
+                        $existingUser->password !== $userData['hashed_password'] ||
+                        $existingUser->email !== $userData['email'] ||
+                        $existingUser->access_id !== $userData['access_id'] ||
+                        $existingUser->access_uuid !== $userData['access_uuid'] ||
+                        $existingUser->status !== $userData['status'] ||
+                        $existingUser->admin_delete !== $userData['admin_delete'];
+
+                    if ($hasChanges) {
+                        $existingUser->update([
+                            'username' => $userData['username'],
+                            'password' => $userData['hashed_password'],
+                            'email' => $userData['email'],
+                            'access_id' => $userData['access_id'],
+                            'access_uuid' => $userData['access_uuid'],
+                            'status' => $userData['status'],
+                            'admin_delete' => $userData['admin_delete'],
+                        ]);
+                    }
                 }
             }
 
-            foreach ($fetchedprofiles as $key => $profiles) {
-                if (!redts_d_profile::where('user_uuid', $profiles['user_uuid'])->exists()) {
+
+            foreach ($fetchedprofiles as $profileData) {
+                $existingProfile = redts_d_profile::where('user_uuid', $profileData['user_uuid'])->first();
+
+                if (!$existingProfile) {
+                    // Create new profile
                     redts_d_profile::create([
-                        'user_uuid' => $profiles['user_uuid'],
-                        'fname' => $profiles['fname'],
-                        'mname' => $profiles['mname'],
-                        'sname' => $profiles['sname'],
-                        'suffix' => $profiles['suffix'],
-                        'position' => $profiles['position'],
-                        'image' => $profiles['image'],
+                        'user_uuid' => $profileData['user_uuid'],
+                        'fname' => $profileData['fname'],
+                        'mname' => $profileData['mname'],
+                        'sname' => $profileData['sname'],
+                        'suffix' => $profileData['suffix'],
+                        'position' => $profileData['position'],
+                        'image' => $profileData['image'],
                     ]);
+                } else {
+                    // Check for changes
+                    $hasChanges =
+                        $existingProfile->fname !== $profileData['fname'] ||
+                        $existingProfile->mname !== $profileData['mname'] ||
+                        $existingProfile->sname !== $profileData['sname'] ||
+                        $existingProfile->suffix !== $profileData['suffix'] ||
+                        $existingProfile->position !== $profileData['position'] ||
+                        $existingProfile->image !== $profileData['image'];
+
+                    if ($hasChanges) {
+                        $existingProfile->update([
+                            'fname' => $profileData['fname'],
+                            'mname' => $profileData['mname'],
+                            'sname' => $profileData['sname'],
+                            'suffix' => $profileData['suffix'],
+                            'position' => $profileData['position'],
+                            'image' => $profileData['image'],
+                        ]);
+                    }
                 }
             }
 
-            foreach ($fetchedusers_office as $key => $users_office) {
-                if (!redts_j_user_offices::where('user_uuid', $users_office['user_uuid'])->exists()) {
+
+            foreach ($fetchedusers_office as $officeData) {
+                $existingOffice = redts_j_user_offices::where('user_uuid', $officeData['user_uuid'])->first();
+
+                if (!$existingOffice) {
+                    // Create new record
                     redts_j_user_offices::create([
-                        'user_id' => $users_office['user_id'],
-                        'user_uuid' => $users_office['user_uuid'],
-                        'offices_id' => $users_office['offices_id'],
-                        'offices_uuid' => $users_office['offices_uuid'],
+                        'user_id' => $officeData['user_id'],
+                        'user_uuid' => $officeData['user_uuid'],
+                        'offices_id' => $officeData['offices_id'],
+                        'offices_uuid' => $officeData['offices_uuid'],
                     ]);
+                } else {
+                    // Check for changes
+                    $hasChanges =
+                        $existingOffice->user_id !== $officeData['user_id'] ||
+                        $existingOffice->offices_id !== $officeData['offices_id'] ||
+                        $existingOffice->offices_uuid !== $officeData['offices_uuid'];
+
+                    if ($hasChanges) {
+                        $existingOffice->update([
+                            'user_id' => $officeData['user_id'],
+                            'offices_id' => $officeData['offices_id'],
+                            'offices_uuid' => $officeData['offices_uuid'],
+                        ]);
+                    }
                 }
             }
+
 
             $uptmsguser = true;
         }
@@ -252,7 +319,9 @@ class AuthController extends Controller
             $officesApi = http::get($baseUrl . 'd5f75114-f3a7-4ddd-a265-0e663dd13b29');
             $officesApiData = $officesApi->ok() ? $officesApi->json() : [];
             foreach ($officesApiData['offices'] as $key => $office) {
-                if (!redts_f_offices::where('uuid', $office['uuid'])->exists()) {
+                $existingOffice = redts_f_offices::where('uuid', $office['uuid'])->first();
+
+                if (!$existingOffice) {
                     redts_f_offices::create([
                         'uuid' => $office['uuid'],
                         'region_id' => $office['region_id'],
@@ -267,6 +336,35 @@ class AuthController extends Controller
                         'cp_no' => $office['cp_no'],
                         'office_address' => $office['office_address'],
                     ]);
+                } else {
+                    $hasChanges =
+                        $existingOffice->region_id !== $office['region_id'] ||
+                        $existingOffice->slug !== $office['slug'] ||
+                        $existingOffice->office !== $office['office'] ||
+                        $existingOffice->full_office_name !== $office['full_office_name'] ||
+                        $existingOffice->office_type !== $office['office_type'] ||
+                        $existingOffice->mother_unit !== $office['mother_unit'] ||
+                        $existingOffice->header_office_title !== $office['header_office_title'] ||
+                        $existingOffice->email !== $office['email'] ||
+                        $existingOffice->tel_no !== $office['tel_no'] ||
+                        $existingOffice->cp_no !== $office['cp_no'] ||
+                        $existingOffice->office_address !== $office['office_address'];
+
+                    if ($hasChanges) {
+                        $existingOffice->update([
+                            'region_id' => $office['region_id'],
+                            'slug' => $office['slug'],
+                            'office' => $office['office'],
+                            'full_office_name' => $office['full_office_name'],
+                            'office_type' => $office['office_type'],
+                            'mother_unit' => $office['mother_unit'],
+                            'header_office_title' => $office['header_office_title'],
+                            'email' => $office['email'],
+                            'tel_no' => $office['tel_no'],
+                            'cp_no' => $office['cp_no'],
+                            'office_address' => $office['office_address'],
+                        ]);
+                    }
                 }
             }
 
@@ -280,11 +378,19 @@ class AuthController extends Controller
             $accessTypesData = $accessTypesApi->ok() ? $accessTypesApi->json() : [];
 
             foreach ($accessTypesData['access_types'] as $key => $accessType) {
-                if (!redts_a_access::where('uuid', $accessType['uuid'])->exists()) {
+                $existingAccess = redts_a_access::where('uuid', $accessType['uuid'])->first();
+
+                if (!$existingAccess) {
                     redts_a_access::create([
                         'uuid' => $accessType['uuid'],
                         'type' => $accessType['type'],
                     ]);
+                } else {
+                    if ($existingAccess->type !== $accessType['type']) {
+                        $existingAccess->update([
+                            'type' => $accessType['type'],
+                        ]);
+                    }
                 }
             }
 

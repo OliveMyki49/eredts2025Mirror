@@ -371,6 +371,7 @@ class generalController extends Controller
             'received_id' => Auth::user()->id,
             'received_uuid' => Auth::user()->uuid,
             'uploaded_act' => null,
+            'downloaded' => null,
         ]);
         #endregion update action remarks
 
@@ -545,6 +546,8 @@ class generalController extends Controller
                     redts_n_action::where('uuid', $action_uuid)->update([
                         'action_remarks' => $action_taken,
                         'released' => date('Y-m-d H:i:s'),
+                        'uploaded_act' => null,
+                        'downloaded' => null,
                     ]);
 
                     // store action query
@@ -624,6 +627,8 @@ class generalController extends Controller
                                     redts_na_action_attachments::create([
                                         'action_id' => $new_action['id'],
                                         'action_uuid' => $new_action['uuid'],
+                                        'doc_no' => $prev_doc_no,
+                                        'doc_uuid' => $prev_doc_uuid,
                                         'remarks' => $vDIRAtch_remark,
                                         'file_path' => 'action_files',
                                         'file_name' => $fileName,
@@ -736,6 +741,7 @@ class generalController extends Controller
 
             #region previous action details
             $prev_doc_id = $act_dtls->doc_id;
+            $prev_doc_no = $act_dtls->doc_no;
             $prev_doc_uuid = $act_dtls->doc_uuid;
             $prev_sender_client_id = $act_dtls->sender_client_id;
             #endregion previous action details
@@ -750,6 +756,8 @@ class generalController extends Controller
                 'action_taken' => $action_taken,
                 'action_remarks' => $action_taken,
                 'attachment_remarks' => $attachment_remarks,
+                'uploaded_act' => null,
+                'downloaded' => null,
             ]);
             #endregion update final action
 
@@ -788,6 +796,8 @@ class generalController extends Controller
                             redts_na_action_attachments::create([
                                 'action_id' => $action_id,
                                 'action_uuid' => $action_uuid,
+                                'doc_no' => $prev_doc_no,
+                                'doc_uuid' => $prev_doc_uuid,
                                 'remarks' => $vDIRAtch_remark,
                                 'file_path' => 'action_files',
                                 'file_name' => $fileName,
@@ -825,6 +835,7 @@ class generalController extends Controller
     public function updaterejectDocAction(Request $request) //DEPRECATED
     {
         $action_id = $request->input('action_id');
+        $action_uuid = $request->input('action_uuid');
         $user_access = redts_a_access::where('id', Auth::user()->access_id)->first();
         $user_office = redts_j_user_offices::where('user_id', Auth::user()->id)->first();
         $action_taken = $request->input('action_taken');
@@ -845,6 +856,8 @@ class generalController extends Controller
 
                 #region previous action details
                 $prev_doc_id = $act_dtls->doc_id;
+                $prev_doc_no = $act_dtls->doc_no;
+                $prev_doc_uuid = $act_dtls->doc_uuid;
                 $prev_sender_client_id = $act_dtls->sender_client_id;
                 #endregion previous action details
 
@@ -889,6 +902,9 @@ class generalController extends Controller
                                 // add in database
                                 redts_na_action_attachments::create([
                                     'action_id' => $action_id,
+                                    'action_uuid' => $action_uuid,
+                                    'doc_no' => $prev_doc_no,
+                                    'doc_uuid' => $prev_doc_uuid,
                                     'remarks' => $vDIRAtch_remark,
                                     'file_path' => 'action_files',
                                     'file_name' => $fileName,
@@ -3441,6 +3457,92 @@ class generalController extends Controller
         $originCountUnsynced = redts_zi_origin_office::whereNull('uploaded')->whereNull('downloaded')->whereNull('deleted_at')->count();
         $actCountUnsynced = redts_n_action::whereNull('uploaded_act')->whereNull('downloaded')->whereNull('deleted_at')->count();
 
+
+        $unsyncedDocsMsg = [];
+        if ($docCountUnsynced >= 1) {
+            $unsyncedDocs = redts_zd_client_doc_info::whereNull('uploaded')
+                ->whereNull('downloaded')
+                ->whereNull('deleted_at')
+                ->get();
+
+            $unsyncedDocsMsg = [];
+            foreach ($unsyncedDocs as $doc) {
+
+                //upload each unsynced document
+                $response = Http::post($baseUrl . '07a787d9-1c08-42ce-bd80-28f1e570fe51', [
+                    'document' => $doc->toArray()
+                ]);
+
+                if ($response->successful()) {
+                    // Update the uploaded timestamp
+                    redts_zd_client_doc_info::where('uuid', $doc->uuid)->update([
+                        'uploaded' => now(),
+                        'downloaded' => now(),
+                    ]);
+                } else {
+                    // Optionally log or handle failed uploads
+                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
+                    array_push($unsyncedDocsMsg, "Failed to upload doc UUID: {$doc->uuid}");
+                }
+            }
+        }
+
+        $unsyncedActMsg = [];
+        if ($actCountUnsynced >= 1) {
+            $unsyncedActs = redts_n_action::whereNull('uploaded_act')
+                ->whereNull('downloaded')
+                ->whereNull('deleted_at')
+                ->get();
+
+            $unsyncedActMsg = [];
+            foreach ($unsyncedActs as $Act) {
+
+                //upload each unsynced document
+                $response = Http::post($baseUrl . 'add5673d-b072-43fa-a068-8eb5521583cb', [
+                    'act' => $Act->toArray()
+                ]);
+
+                if ($response->successful()) {
+                    // Update the uploaded timestamp
+                    redts_n_action::where('uuid', $Act->uuid)->update([
+                        'uploaded_act' => now(),
+                        'downloaded' => now(),
+                    ]);
+                } else {
+                    // Optionally log or handle failed uploads
+                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
+                    array_push($unsyncedActMsg, "Failed to upload doc UUID: {$Act->uuid}");
+                }
+            }
+        }
+
+        $unsyncedDocsOrgMsg = [];
+        if ($originCountUnsynced >= 1) {
+            $unsyncedDocOriginCount = redts_zi_origin_office::whereNull('uploaded')
+                ->whereNull('downloaded')
+                ->whereNull('deleted_at')
+                ->get();
+
+            foreach ($unsyncedDocOriginCount as $docOrg) {
+                //upload each unsynced document
+                $response = Http::post($baseUrl . '32a7ffdb-e086-49e5-93ae-1b4be201c4d7', [
+                    'docorg' => $docOrg->toArray()
+                ]);
+
+                if ($response->successful()) {
+                    // Update the uploaded timestamp
+                    redts_zi_origin_office::where('id', $docOrg->id)->update([
+                        'uploaded' => now(),
+                        'downloaded' => now(),
+                    ]);
+                } else {
+                    // Optionally log or handle failed uploads
+                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
+                    array_push($unsyncedDocsOrgMsg, "Failed to upload doc UUID: {$docOrg->id}");
+                }
+            }
+        }
+
         // check count data per table
         if ($docCounted == $docCountedLocal) {
             //do nothing
@@ -3523,10 +3625,12 @@ class generalController extends Controller
                     ]);
                 } else { //check update_at if different
                     $ExistingAct = redts_n_action::where('uuid', $act['uuid'])->first();
-                    if ($ExistingAct->updated_at != $act['updated_at']) {
+
+                    $act['created_at'] = date('Y-m-d H:i:s', strtotime($act['created_at']));
+                    $act['updated_at'] = date('Y-m-d H:i:s', strtotime($act['updated_at']));
+
+                    if ($ExistingAct->updated_at != $act['updated_at'] && $ExistingAct->downloaded != null && $ExistingAct->uploaded != null) {
                         //update format of date
-                        $act['created_at'] = date('Y-m-d H:i:s', strtotime($act['created_at']));
-                        $act['updated_at'] = date('Y-m-d H:i:s', strtotime($act['updated_at']));
 
                         /* 
                             ISSUES TO ADDRESS:
@@ -3534,9 +3638,68 @@ class generalController extends Controller
                             ->ALSO CHECK CHANGES IN RECEIVED ACTIONS
 
                             ADD UUID TO ACTIONS ATTACHMENTS -> CONFIGURE IN BOTH API AND LOCAL SERVER
-
                         */
 
+                        redts_n_action::where('uuid', $act['uuid'])->update([
+                            'subject' => $act['subject'],
+                            'doc_uuid' => $act['doc_uuid'],
+                            'doc_no' => $act['doc_no'],
+                            'sender_client_id' => $act['sender_client_id'],
+                            'sender_user_id' => $act['sender_user_id'],
+                            'sender_user_uuid' => $act['sender_user_uuid'],
+                            'sender_type' => $act['sender_type'],
+                            'referred_by_office' => $act['referred_by_office'],
+                            'referred_by_office_uuid' => $act['referred_by_office_uuid'],
+                            'action_taken' => $act['action_taken'],
+                            'send_to_office' => $act['send_to_office'],
+                            'send_to_office_uuid' => $act['send_to_office_uuid'],
+                            'validated' => $act['validated'],
+                            'received_id' => $act['received_id'],
+                            'received_uuid' => $act['received_uuid'],
+                            'received' => $act['received'],
+                            'released' => $act['released'],
+                            'final_action' => $act['final_action'],
+                            'rejected' => $act['rejected'],
+                            'verification_date' => $act['verification_date'],
+                            'in_transit_remarks' => $act['in_transit_remarks'],
+                            'document_remarks' => $act['document_remarks'],
+                            'action_remarks' => $act['action_remarks'],
+                            'attachment_remarks' => $act['attachment_remarks'],
+                            'downloaded' => now(),
+                            'created_at' => $act['created_at'],
+                            'updated_at' => $act['updated_at'],
+                        ]);
+                    } else if ($act['released'] == null && $act['final_action'] == null) {
+                        redts_n_action::where('uuid', $act['uuid'])->update([
+                            'subject' => $act['subject'],
+                            'doc_uuid' => $act['doc_uuid'],
+                            'doc_no' => $act['doc_no'],
+                            'sender_client_id' => $act['sender_client_id'],
+                            'sender_user_id' => $act['sender_user_id'],
+                            'sender_user_uuid' => $act['sender_user_uuid'],
+                            'sender_type' => $act['sender_type'],
+                            'referred_by_office' => $act['referred_by_office'],
+                            'referred_by_office_uuid' => $act['referred_by_office_uuid'],
+                            'action_taken' => $act['action_taken'],
+                            'send_to_office' => $act['send_to_office'],
+                            'send_to_office_uuid' => $act['send_to_office_uuid'],
+                            'validated' => $act['validated'],
+                            'received_id' => $act['received_id'],
+                            'received_uuid' => $act['received_uuid'],
+                            'received' => $act['received'],
+                            'released' => $act['released'],
+                            'final_action' => $act['final_action'],
+                            'rejected' => $act['rejected'],
+                            'verification_date' => $act['verification_date'],
+                            'in_transit_remarks' => $act['in_transit_remarks'],
+                            'document_remarks' => $act['document_remarks'],
+                            'action_remarks' => $act['action_remarks'],
+                            'attachment_remarks' => $act['attachment_remarks'],
+                            'downloaded' => now(),
+                            'created_at' => $act['created_at'],
+                            'updated_at' => $act['updated_at'],
+                        ]);
+                    } else if ($act['released'] != null && $act['final_action'] == null) {
                         redts_n_action::where('uuid', $act['uuid'])->update([
                             'subject' => $act['subject'],
                             'doc_uuid' => $act['doc_uuid'],
@@ -3570,37 +3733,38 @@ class generalController extends Controller
                 }
             }
         }
+
         //upload unsynced actions
 
-        if ($docAtchCounted == $docAtchCountedLocal) {
+        /* if ($docAtchCounted == $docAtchCountedLocal) {
             //do nothing
         } else {
             $apidocAtchs = http::get($baseUrl . 'dbbb28c2-1c77-4089-8252-c7d3e69925a8');
             $apidocAtchsArr = $apidocAtchs->ok() ? $apidocAtchs->json() : [];
             $apidocAtchsData = $apidocAtchsArr['docAtchs'] ?? [];
 
-            /* foreach ($apidocAtchsData as $key => $docAtch) {
+            foreach ($apidocAtchsData as $key => $docAtch) {
                 if (!redts_ze_client_doc_attachments::where('uuid', $docAtch['uuid'])->exists()) {
                     redts_ze_client_doc_attachments::create([
                         'uuid' => $docAtch['uuid'],
                     ]);
                 }
-            } */
-        }
+            }
+        } */
 
-        if ($actAtchCounted == $actAtchCountedLocal) {
+        /* if ($actAtchCounted == $actAtchCountedLocal) {
             //do nothing
         } else {
             $apiactAtchs = http::get($baseUrl . 'df861ca3-ca48-4519-8567-c9a2e2e97cae');
             $apiactAtchsArr = $apiactAtchs->ok() ? $apiactAtchs->json() : [];
             $apiactAtchsData = $apiactAtchsArr['actAtchs'] ?? [];
 
-            /* foreach ($apiactAtchsData as $key => $actAtch) {
+            foreach ($apiactAtchsData as $key => $actAtch) {
                 redts_na_action_attachments::create([
                     'uuid' => $actAtch['uuid'],
                 ]);
-            } */
-        }
+            }
+        } */
 
         if ($docOfficeCounted == $docOfficeCountedLocal) {
             //do nothing
@@ -3625,99 +3789,58 @@ class generalController extends Controller
             }
         }
 
-        if ($docCountUnsynced >= 1) {
-            $unsyncedDocs = redts_zd_client_doc_info::whereNull('uploaded')
-                ->whereNull('downloaded')
-                ->whereNull('deleted_at')
-                ->get();
+        #region file upload here
+        $unsyncedAttachments = redts_na_action_attachments::whereNull('uploaded')->get();
+        $syncActFileResults = [];
+        foreach ($unsyncedAttachments as $attachment) {
+            try {
 
-            $unsyncedDocsMsg = [];
-            foreach ($unsyncedDocs as $doc) {
-
-                //upload each unsynced document
-                $response = Http::post($baseUrl . '07a787d9-1c08-42ce-bd80-28f1e570fe51', [
-                    'document' => $doc->toArray()
-                ]);
-
-                if ($response->successful()) {
-                    // Update the uploaded timestamp
-                    redts_zd_client_doc_info::where('uuid', $doc->uuid)->update([
-                        'uploaded' => now(),
-                        'downloaded' => now(),
+                // sync logic
+                $filePath = storage_path("public/assets/doc/action_files/{$attachment->file_name}");
+                if (file_exists($filePath)) {
+                    $response = Http::attach(
+                        'file',
+                        file_get_contents($filePath),
+                        $attachment->file_name
+                    )->post($baseUrl . 'edf891e1-76ea-4a98-989f-b54387753ce2', [
+                        'action_id' => $attachment->action_id,
+                        'action_uuid' => $attachment->action_uuid,
+                        'doc_no' => $attachment->doc_no,
+                        'doc_uuid' => $attachment->doc_uuid,
+                        'remarks' => $attachment->remarks,
+                        'file_name' => $attachment->file_name,
                     ]);
+
+                    if ($response->successful()) {
+                        redts_na_action_attachments::where('id', $attachment->id)->update([
+                            'uploaded' => now(),
+                        ]);
+                        $syncActFileResults[] = ['file' => $attachment->file_name, 'status' => 'synced'];
+                    } else {
+                        $syncActFileResults[] = ['file' => $attachment->file_name, 'status' => 'failed'];
+                    }
                 } else {
-                    // Optionally log or handle failed uploads
-                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
-                    array_push($unsyncedDocsMsg, "Failed to upload doc UUID: {$doc->uuid}");
+                    $syncActFileResults[] = ['file' => $attachment->file_name, 'status' => 'missing'];
                 }
+            } catch (\Exception $e) {
+                $syncActFileResults[] = [
+                    'file' => isset($attachment) ? $attachment->file_name : 'unknown',
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ];
             }
         }
-
-        if ($actCountUnsynced >= 1) {
-            $unsyncedActs = redts_n_action::whereNull('uploaded_act')
-                ->whereNull('downloaded')
-                ->whereNull('deleted_at')
-                ->get();
-
-            $unsyncedActMsg = [];
-            foreach ($unsyncedActs as $Act) {
-
-                //upload each unsynced document
-                $response = Http::post($baseUrl . 'add5673d-b072-43fa-a068-8eb5521583cb', [
-                    'act' => $Act->toArray()
-                ]);
-
-                if ($response->successful()) {
-                    // Update the uploaded timestamp
-                    redts_n_action::where('uuid', $Act->uuid)->update([
-                        'uploaded_act' => now(),
-                        'downloaded' => now(),
-                    ]);
-                } else {
-                    // Optionally log or handle failed uploads
-                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
-                    array_push($unsyncedActMsg, "Failed to upload doc UUID: {$Act->uuid}");
-                }
-            }
-        }
-
-        // SYNC THE THE ORIGIN OFFICES
-        // IMPORTANT: THIS WILL DETERMINE WHERE THE DOC CAN BE SEEN OR TRACKED BY THE USERS
-        // $originCountUnsynced
-        $unsyncedDocsOrgMsg = [];
-        if ($originCountUnsynced >= 1) {
-            $unsyncedDocOriginCount = redts_zi_origin_office::whereNull('uploaded')
-                ->whereNull('downloaded')
-                ->whereNull('deleted_at')
-                ->get();
-
-            foreach ($unsyncedDocOriginCount as $docOrg) {
-                //upload each unsynced document
-                $response = Http::post($baseUrl . '32a7ffdb-e086-49e5-93ae-1b4be201c4d7', [
-                    'docorg' => $docOrg->toArray()
-                ]);
-
-                if ($response->successful()) {
-                    // Update the uploaded timestamp
-                    redts_zi_origin_office::where('id', $docOrg->id)->update([
-                        'uploaded' => now(),
-                        'downloaded' => now(),
-                    ]);
-                } else {
-                    // Optionally log or handle failed uploads
-                    // \Log::warning("Failed to upload doc UUID: {$doc->uuid}");
-                    array_push($unsyncedDocsOrgMsg, "Failed to upload doc UUID: {$docOrg->id}");
-                }
-            }
-        }
+        #endregion file upload here
 
         return response()->json([
             'success' => true,
             'docCountUnsynced' => $docCountUnsynced,
             'actCountUnsynced' => $actCountUnsynced,
 
+            'unsyncedDocsMsg' => $unsyncedDocsMsg,
+            'unsyncedActMsg' => $unsyncedActMsg,
             'unsyncedDocsOrgMsg' => $unsyncedDocsOrgMsg,
-            // 'successSynced' => $successSynced,
+            'syncActFileResults' => $syncActFileResults,
         ]);
     }
     #endregion eredts server hand-shake

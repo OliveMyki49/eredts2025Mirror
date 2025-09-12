@@ -1519,7 +1519,7 @@
 
                             // region update add release
                             $.ajax({
-                                url: "{{ url('insert-releaseAction') }}",
+                                url: "/insert-releaseAction",
                                 method: "POST",
                                 data: sbmtfrm,
                                 headers: {
@@ -1601,7 +1601,7 @@
                             );
 
                             $.ajax({
-                                url: "{{ url('edit-finalAction') }}",
+                                url: "/edit-finalAction",
                                 method: "POST",
                                 data: sbmtfrm,
                                 headers: {

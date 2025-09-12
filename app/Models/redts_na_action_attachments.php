@@ -12,6 +12,8 @@ class redts_na_action_attachments extends Model
     protected $fillable = [
         'action_id',
         'action_uuid',
+        'doc_no',
+        'doc_uuid',
         'remarks',
         'file_path',
         'file_name',
