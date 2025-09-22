@@ -3433,6 +3433,7 @@ class generalController extends Controller
             $docCounted = $apiCallData['docCounted'] ?? 0;
             $actIntransitCounted = $apiCallData['actIntransitCounted'] ?? 0;
             $actReceivedCounted = $apiCallData['actReceivedCounted'] ?? 0;
+            $actCountedAll = $apiCallData['actCountedAll'] ?? 0;
             $docAtchCounted = $apiCallData['docAtchCounted'] ?? 0;
             $actAtchCounted = $apiCallData['actAtchCounted'] ?? 0;
             $docOfficeCounted = $apiCallData['docOfficeCounted'] ?? 0;
@@ -3448,6 +3449,7 @@ class generalController extends Controller
             ->whereNull('rejected')
             ->whereNull('deleted_at')
             ->count();
+        $actCountedAllLocal = redts_n_action::whereNull('deleted_at')->count();
         $docAtchCountedLocal = redts_ze_client_doc_attachments::whereNotNull('downloaded')->whereNull('deleted_at')->count();
         $actAtchCountedLocal = redts_na_action_attachments::whereNotNull('downloaded')->whereNull('deleted_at')->count();
         $docOfficeCountedLocal = redts_zi_origin_office::whereNotNull('downloaded')->whereNull('deleted_at')->count();
@@ -3582,8 +3584,8 @@ class generalController extends Controller
         }
         //upload unsynced documents
 
-
-        if ($actIntransitCounted == $actIntransitCountedLocal && $actReceivedCounted ==  $actReceivedCountedLocal) {
+        $acionSyncMsg = [];
+        if ($actIntransitCounted == $actIntransitCountedLocal && $actReceivedCounted ==  $actReceivedCountedLocal  && $actCountedAll == $actCountedAllLocal) {
             //do nothing
         } else {
             $apiacts = http::get($baseUrl . '3a7976e1-2b9a-47e6-be7e-d6b17938ff38');
@@ -3592,6 +3594,8 @@ class generalController extends Controller
 
             foreach ($apiactsData as $key => $act) {
                 if (!redts_n_action::where('uuid', $act['uuid'])->exists()) {
+                    array_push($acionSyncMsg, "New Action Synced: ". $act['doc_no'] . " => " . $act['uuid']);
+
                     redts_n_action::create([
                         'uuid' => $act['uuid'],
                         'subject' => $act['subject'],
@@ -3624,12 +3628,14 @@ class generalController extends Controller
                         'updated_at' => $act['updated_at'],
                     ]);
                 } else { //check update_at if different
+                    array_push($acionSyncMsg, "New Action Synced: ". $act['doc_no'] . " => " . $act['uuid']);
                     $ExistingAct = redts_n_action::where('uuid', $act['uuid'])->first();
 
                     $act['created_at'] = date('Y-m-d H:i:s', strtotime($act['created_at']));
                     $act['updated_at'] = date('Y-m-d H:i:s', strtotime($act['updated_at']));
 
-                    if ($ExistingAct->updated_at != $act['updated_at'] && $ExistingAct->downloaded != null && $ExistingAct->uploaded != null) {
+                    // if ($ExistingAct->updated_at != $act['updated_at'] && $ExistingAct->downloaded != null && $ExistingAct->uploaded != null) {
+                    if ($ExistingAct->updated_at != $act['updated_at']) {
                         //update format of date
 
                         /* 
@@ -3640,66 +3646,6 @@ class generalController extends Controller
                             ADD UUID TO ACTIONS ATTACHMENTS -> CONFIGURE IN BOTH API AND LOCAL SERVER
                         */
 
-                        redts_n_action::where('uuid', $act['uuid'])->update([
-                            'subject' => $act['subject'],
-                            'doc_uuid' => $act['doc_uuid'],
-                            'doc_no' => $act['doc_no'],
-                            'sender_client_id' => $act['sender_client_id'],
-                            'sender_user_id' => $act['sender_user_id'],
-                            'sender_user_uuid' => $act['sender_user_uuid'],
-                            'sender_type' => $act['sender_type'],
-                            'referred_by_office' => $act['referred_by_office'],
-                            'referred_by_office_uuid' => $act['referred_by_office_uuid'],
-                            'action_taken' => $act['action_taken'],
-                            'send_to_office' => $act['send_to_office'],
-                            'send_to_office_uuid' => $act['send_to_office_uuid'],
-                            'validated' => $act['validated'],
-                            'received_id' => $act['received_id'],
-                            'received_uuid' => $act['received_uuid'],
-                            'received' => $act['received'],
-                            'released' => $act['released'],
-                            'final_action' => $act['final_action'],
-                            'rejected' => $act['rejected'],
-                            'verification_date' => $act['verification_date'],
-                            'in_transit_remarks' => $act['in_transit_remarks'],
-                            'document_remarks' => $act['document_remarks'],
-                            'action_remarks' => $act['action_remarks'],
-                            'attachment_remarks' => $act['attachment_remarks'],
-                            'downloaded' => now(),
-                            'created_at' => $act['created_at'],
-                            'updated_at' => $act['updated_at'],
-                        ]);
-                    } else if ($act['released'] == null && $act['final_action'] == null) {
-                        redts_n_action::where('uuid', $act['uuid'])->update([
-                            'subject' => $act['subject'],
-                            'doc_uuid' => $act['doc_uuid'],
-                            'doc_no' => $act['doc_no'],
-                            'sender_client_id' => $act['sender_client_id'],
-                            'sender_user_id' => $act['sender_user_id'],
-                            'sender_user_uuid' => $act['sender_user_uuid'],
-                            'sender_type' => $act['sender_type'],
-                            'referred_by_office' => $act['referred_by_office'],
-                            'referred_by_office_uuid' => $act['referred_by_office_uuid'],
-                            'action_taken' => $act['action_taken'],
-                            'send_to_office' => $act['send_to_office'],
-                            'send_to_office_uuid' => $act['send_to_office_uuid'],
-                            'validated' => $act['validated'],
-                            'received_id' => $act['received_id'],
-                            'received_uuid' => $act['received_uuid'],
-                            'received' => $act['received'],
-                            'released' => $act['released'],
-                            'final_action' => $act['final_action'],
-                            'rejected' => $act['rejected'],
-                            'verification_date' => $act['verification_date'],
-                            'in_transit_remarks' => $act['in_transit_remarks'],
-                            'document_remarks' => $act['document_remarks'],
-                            'action_remarks' => $act['action_remarks'],
-                            'attachment_remarks' => $act['attachment_remarks'],
-                            'downloaded' => now(),
-                            'created_at' => $act['created_at'],
-                            'updated_at' => $act['updated_at'],
-                        ]);
-                    } else if ($act['released'] != null && $act['final_action'] == null) {
                         redts_n_action::where('uuid', $act['uuid'])->update([
                             'subject' => $act['subject'],
                             'doc_uuid' => $act['doc_uuid'],
@@ -3834,13 +3780,15 @@ class generalController extends Controller
 
         return response()->json([
             'success' => true,
-            'docCountUnsynced' => $docCountUnsynced,
-            'actCountUnsynced' => $actCountUnsynced,
-
-            'unsyncedDocsMsg' => $unsyncedDocsMsg,
-            'unsyncedActMsg' => $unsyncedActMsg,
-            'unsyncedDocsOrgMsg' => $unsyncedDocsOrgMsg,
-            'syncActFileResults' => $syncActFileResults,
+            'acionSyncMsg' => $acionSyncMsg,
+            // 'docCountUnsynced' => $docCountUnsynced,
+            // 'actCountUnsynced' => $actCountUnsynced,
+            'actCountedAll' =>  $actCountedAll  .' == '.  $actCountedAllLocal,
+            
+            // 'unsyncedDocsMsg' => $unsyncedDocsMsg,
+            // 'unsyncedActMsg' => $unsyncedActMsg,
+            // 'unsyncedDocsOrgMsg' => $unsyncedDocsOrgMsg,
+            // 'syncActFileResults' => $syncActFileResults,
         ]);
     }
     #endregion eredts server hand-shake
