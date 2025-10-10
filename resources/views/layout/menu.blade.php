@@ -391,23 +391,23 @@
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
                                         <label for="mnguaccfname" class="form-label fs-6">First Name: <span class="text-danger">*</span></label>
-                                        <input type="text" id="mnguaccfname" name="fname" class="form-control" placeholder="first name here...">
+                                        <input type="text" id="mnguaccfname" name="fname" class="form-control" placeholder="first name here..." disabled>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="mnguaccmname" class="form-label fs-6">Middle Name: <span class="text-danger">*</span></label>
-                                        <input type="text" id="mnguaccmname" name="mname" class="form-control" placeholder="middle name here...">
+                                        <input type="text" id="mnguaccmname" name="mname" class="form-control" placeholder="middle name here..." disabled>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="mnguaccsname" class="form-label fs-6">SurName: <span class="text-danger">*</span></label>
-                                        <input type="text" id="mnguaccsname" name="sname" class="form-control" placeholder="surname here...">
+                                        <input type="text" id="mnguaccsname" name="sname" class="form-control" placeholder="surname here..." disabled>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="mnguaccsuffix" class="form-label fs-6">Suffix: <span class="text-primary">( optional )</span></label>
-                                        <input type="text" id="mnguaccsuffix" name="suffix" class="form-control" placeholder="suffix here...">
+                                        <input type="text" id="mnguaccsuffix" name="suffix" class="form-control" placeholder="suffix here..." disabled>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="mnguaccposition" class="form-label fs-6">Position: <span class="text-danger">*</span></label>
-                                        <input type="text" id="mnguaccposition" name="position" class="form-control" placeholder="position here...">
+                                        <input type="text" id="mnguaccposition" name="position" class="form-control" placeholder="position here..." disabled>
                                     </div>
                                 </div>
                             </div>
@@ -415,36 +415,37 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="mnguaccusername" class="form-label fs-6">Username: <span class="text-danger">*</span></label>
-                                <input type="text" id="mnguaccusername" name="username" class="form-control" placeholder="username here..." value="{{ Auth::user()->username }}" autocomplete="username">
+                                <input type="text" id="mnguaccusername" name="username" class="form-control" placeholder="username here..." value="{{ Auth::user()->username }}" autocomplete="username" disabled>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="mnguaccemail" class="form-label fs-6">Email: <span class="text-danger">*</span></label>
-                                <input type="email" id="mnguaccemail" name="email" class="form-control" placeholder="email here..." value="{{ Auth::user()->email }}">
+                                <input type="email" id="mnguaccemail" name="email" class="form-control" placeholder="email here..." value="{{ Auth::user()->email }}" disabled>
                             </div>
                         </div>
-                        <hr>
+                        {{-- <hr>
                         <div class="row">
                             <h5>Change Password: </h5>
                             <div class="password_change_msg"></div>
                             <div class="col-md-6 mb-3">
                                 <label for="mnguaccpass" class="form-label fs-6">Password: <span class="text-danger">*</span></label>
-                                <input type="password" id="mnguaccpass" name="pass" class="form-control" placeholder="password here..." autocomplete="new-password">
+                                <input type="password" id="mnguaccpass" name="pass" class="form-control" placeholder="password here..." autocomplete="new-password" disabled>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="mnguaccrepass" class="form-label fs-6">Re-enter password: <span class="text-danger">*</span></label>
-                                <input type="password" id="mnguaccrepass" name="repass" class="form-control" placeholder="reenter here..." autocomplete="new-password">
+                                <input type="password" id="mnguaccrepass" name="repass" class="form-control" placeholder="reenter here..." autocomplete="new-password" disabled>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="mnguaccprevpass" class="form-label fs-6 prevpass">Enter current password:</label>
-                                <input type="password" id="mnguaccprevpass" name="prevpass" class="form-control prevpass" placeholder="current password here..." autocomplete="current-password">
+                                <input type="password" id="mnguaccprevpass" name="prevpass" class="form-control prevpass" placeholder="current password here..." autocomplete="current-password" disabled>
                             </div>
-                        </div>
+                        </div> --}}
                     </form>
                     <div class="upt-mnguacc-msg"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success btn-edit-user-profile">Save Changes</button>
+                    <a href="http://58.69.249.98:9120/" target="_blank" type="button" class="btn btn-danger">Please use online system</a>
+                    {{-- <button type="button" class="btn btn-success btn-edit-user-profile">Save Changes</button> --}}
                 </div>
             </div>
         </div>
@@ -618,75 +619,75 @@
             }
 
             // region update profile
-            $('.btn-edit-user-profile').click(function(e) {
-                e.preventDefault();
+            /*  $('.btn-edit-user-profile').click(function(e) {
+                 e.preventDefault();
 
-                let form = $("#mnguaccform")[0];
-                let submitForm = new FormData(form);
+                 let form = $("#mnguaccform")[0];
+                 let submitForm = new FormData(form);
 
-                $.ajax({
-                    url: "{{ url('edit-user-profile') }}",
-                    method: "POST",
-                    data: submitForm,
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    },
-                    async: true, // prevent the [Violation] 'click' handler took 1432ms 
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function(r) {
-                        if (r.success) {
-                            // console.log(r);
+                 $.ajax({
+                     url: "{{ url('edit-user-profile') }}",
+                     method: "POST",
+                     data: submitForm,
+                     headers: {
+                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                     },
+                     async: true, // prevent the [Violation] 'click' handler took 1432ms 
+                     cache: false,
+                     contentType: false,
+                     processData: false,
+                     success: function(r) {
+                         if (r.success) {
+                             // console.log(r);
 
-                            if (r.profile_upt) {
-                                appendAlertMessage('.upt-mnguacc-msg', 'success', 'Profile has been updated');
-                            }
-                            if (r.user_upt) {
-                                appendAlertMessage('.upt-mnguacc-msg', 'success', 'Username / Email is updated');
-                            } else {
-                                appendAlertMessage('.upt-mnguacc-msg', 'danger', 'Username / Email already exist');
-                            }
+                             if (r.profile_upt) {
+                                 appendAlertMessage('.upt-mnguacc-msg', 'success', 'Profile has been updated');
+                             }
+                             if (r.user_upt) {
+                                 appendAlertMessage('.upt-mnguacc-msg', 'success', 'Username / Email is updated');
+                             } else {
+                                 appendAlertMessage('.upt-mnguacc-msg', 'danger', 'Username / Email already exist');
+                             }
 
-                            if (r.image_upt) {
-                                appendAlertMessage('.upt-mnguacc-msg', 'success', '<i class="fa fa-picture-o" aria-hidden="true"></i> Profile photo has been updated');
-                            }
+                             if (r.image_upt) {
+                                 appendAlertMessage('.upt-mnguacc-msg', 'success', '<i class="fa fa-picture-o" aria-hidden="true"></i> Profile photo has been updated');
+                             }
 
-                            if (r.pass_upt_no_act) {
-                                if (r.prevpass_verified) {
-                                    if (r.pass_upt) {
-                                        appendAlertMessage('.upt-mnguacc-msg', 'success', 'Password has been updated');
-                                    } else {
-                                        appendAlertMessage('.upt-mnguacc-msg', 'warning', 'Password reentered doesn\'t match');
-                                    }
-                                } else {
-                                    $('.upt-mnguacc-msg').append('' +
-                                        '<div class="col-12 alert alert-warning alert-dismissible fade show p-2 pe-5" role="alert"> ' +
-                                        '    <strong>Wrong current pasword</strong> ' +
-                                        '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
-                                        '</div>'
-                                    );
-                                }
-                            }
+                             if (r.pass_upt_no_act) {
+                                 if (r.prevpass_verified) {
+                                     if (r.pass_upt) {
+                                         appendAlertMessage('.upt-mnguacc-msg', 'success', 'Password has been updated');
+                                     } else {
+                                         appendAlertMessage('.upt-mnguacc-msg', 'warning', 'Password reentered doesn\'t match');
+                                     }
+                                 } else {
+                                     $('.upt-mnguacc-msg').append('' +
+                                         '<div class="col-12 alert alert-warning alert-dismissible fade show p-2 pe-5" role="alert"> ' +
+                                         '    <strong>Wrong current pasword</strong> ' +
+                                         '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
+                                         '</div>'
+                                     );
+                                 }
+                             }
 
-                            // Close the message after 5 seconds
-                            setTimeout(function() {
-                                console.log('remove notifs');
-                                $('.upt-mnguacc-msg').empty(); // Remove the message
-                            }, 5000); // 5000 milliseconds = 5 seconds
-                        }
-                    },
-                    error: function(err) {
-                        console.log(err);
-                        $('.upt-mnguacc-msg').append('' +
-                            '<div class="col-12 alert alert-danger alert-dismissible fade show p-2 pe-5" role="alert"> ' +
-                            '    <strong>' + err + '</strong> ' +
-                            '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
-                            '</div>'
-                        );
-                    }
-                });
-            })
+                             // Close the message after 5 seconds
+                             setTimeout(function() {
+                                 console.log('remove notifs');
+                                 $('.upt-mnguacc-msg').empty(); // Remove the message
+                             }, 5000); // 5000 milliseconds = 5 seconds
+                         }
+                     },
+                     error: function(err) {
+                         console.log(err);
+                         $('.upt-mnguacc-msg').append('' +
+                             '<div class="col-12 alert alert-danger alert-dismissible fade show p-2 pe-5" role="alert"> ' +
+                             '    <strong>' + err + '</strong> ' +
+                             '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
+                             '</div>'
+                         );
+                     }
+                 });
+             }) */
             // endregion update profile
 
             // region random num picker
