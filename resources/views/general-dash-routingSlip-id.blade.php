@@ -234,7 +234,7 @@
 <body class="g-sidenav-show  bg-gray-200" oncontextmenu="return false;">
 
     {{-- {{ dd($doc_info) }} --}}
-    <input type="hidden" id="qrval" value="http://58.69.249.98:9133/grsid/{{ $doc_info->uuid }}">
+    <input type="hidden" id="qrval" value="http://58.69.249.98:9120/grsid/{{ $doc_info->uuid }}">
 
     <div class="d-grid gap-2 col-6 mx-auto pt-2 btn_print_route_slip_container">
         <button class="btn btn-success btn-lg btn_print_route_slip" type="button">Print Routing Slip</button>

@@ -1057,10 +1057,6 @@
                             if ($dt.rejected != null) {
                                 release_stat_disp = '<div class="border border-2 border-danger bg-white text-danger text-center fs-5 fw-bold"><i class="fa fa-times-circle" aria-hidden="true"></i><br>Rejected</div>';
                             }
-
-                            if ($dt.uploaded_act != null) {
-                                release_stat_disp += '<div class="border border-2 border-info bg-white text-info text-center fw-bold">Offline action</div>';
-                            }
                             // endregion identify status
 
                             let rcvrfn = ''; //receiving name
