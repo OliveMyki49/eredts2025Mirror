@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 03, 2025 at 01:26 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Nov 08, 2025 at 03:16 PM
+-- Server version: 9.5.0
+-- PHP Version: 8.4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) NOT NULL,
-  `batch` int(11) NOT NULL
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -40,9 +40,9 @@ CREATE TABLE `migrations` (
 --
 
 CREATE TABLE `redts_a_accesss` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `type` longtext NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -75,9 +75,9 @@ INSERT INTO `redts_a_accesss` (`id`, `uuid`, `type`, `deleted_at`, `created_at`,
 --
 
 CREATE TABLE `redts_ba_view_reqs_specs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `office_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `office_id` bigint UNSIGNED NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -90,16 +90,16 @@ CREATE TABLE `redts_ba_view_reqs_specs` (
 --
 
 CREATE TABLE `redts_b_user` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `access_id` bigint(20) UNSIGNED NOT NULL COMMENT 'a_access type here',
-  `access_uuid` char(36) DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 1,
-  `remember_token` varchar(255) DEFAULT NULL,
-  `admin_delete` int(10) UNSIGNED NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `access_id` bigint UNSIGNED NOT NULL COMMENT 'a_access type here',
+  `access_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint NOT NULL DEFAULT '1',
+  `remember_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `admin_delete` int UNSIGNED NOT NULL DEFAULT '1',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -232,9 +232,10 @@ INSERT INTO `redts_b_user` (`id`, `uuid`, `username`, `password`, `email`, `acce
 (120, '5d2f4ba7-d6ff-11ef-b430-3c7c3f2bc7d9', 'HPH_IRIGA_PROC', '$2y$10$5YlvbmJQFUg8NghZREq8t.MZXmdQO4pvcsqjLgN4ru2YFVF15UNlS', 'Sample240904144539ZU1WD5@gmail.com', 14, '4a2421dd-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
 (121, '5d2f4be0-d6ff-11ef-b430-3c7c3f2bc7d9', 'MVVA_IRIGA_PROC', '$2y$10$eOaonyewWxpcjvhFclran.Pe8B6a.35RbEIC.n6os7Npyph33f/pe', 'Sample240904144745JGRGo6@gmail.com', 14, '4a2421dd-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
 (122, '5d2f4cad-d6ff-11ef-b430-3c7c3f2bc7d9', 'SPCOT_SVEMS', '$2y$10$Ca6fhxv7vccdSiQDjdTskuAbNzUKwIQvdMdUIGRJKUsMXvb.ZegTy', 'Sample241009161330gjBQu1@gmail.com', 14, '4a2421dd-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
-(123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 'test', '$2y$10$skl86PDPr1e6i3Vyb6vo6e3avCFirZuICvtBBubkzkLDV26IkNzCa', 'testChange@gmail.com', 5, '4a241fbc-da1e-11ef-b54a-3c7c3f2bc7d9', 1, 'SdFrDVaNZuGFBq3p17f4EhzJdDhBp4woVkJNSXFup9Qgmu9b4FIXO3LSzCFd', 0, NULL, '2025-07-01 06:13:49', '2025-10-07 05:28:29'),
+(123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 'test', '$2y$10$MoenuwfW6LLtohm8ekP2k.ZcPrxlHR0yPSyXDSIq31Q5SzUoap0/O', 'testChange@gmail.com', 5, '4a241fbc-da1e-11ef-b54a-3c7c3f2bc7d9', 1, 'SdFrDVaNZuGFBq3p17f4EhzJdDhBp4woVkJNSXFup9Qgmu9b4FIXO3LSzCFd', 0, NULL, '2025-07-01 06:13:49', '2025-11-08 14:41:32'),
 (124, '07a1a310-71be-4f49-b471-a1482fa6bd0e', 'Take3', '$2y$10$zwORyfow2/YFAxmXIANU3OgSHg/gzHWFfW6jCVPPXj5FZpNqFs.Ma', 'Sample250421152407NCqbm1@gmail.com', 5, '4a241fbc-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
-(125, 'a27d2940-14c4-40ad-8d35-382223a5eed2', 'tester_albay', '$2y$10$TyL9vCf5IAkwJsECKAY05.b9MHHvvOQHT3S3NJLkU4Ye2b4b6URA.', 'Sample250709085513lE2F81@gmail.com', 5, '4a241fbc-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-07-09 00:57:33', '2025-07-09 00:57:33');
+(125, 'a27d2940-14c4-40ad-8d35-382223a5eed2', 'tester_albay', '$2y$10$TyL9vCf5IAkwJsECKAY05.b9MHHvvOQHT3S3NJLkU4Ye2b4b6URA.', 'Sample250709085513lE2F81@gmail.com', 5, '4a241fbc-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-07-09 00:57:33', '2025-07-09 00:57:33'),
+(126, '223b31bf-dda2-4fc9-942f-397a0a31e592', 'testrscig', '$2y$10$E4joutj39a4I78O9E3KvrOFMVYwcF/SQLZclQ1tVB10E5NL78cuUS', 'testrscig@gmail.com', 5, '4a241fbc-da1e-11ef-b54a-3c7c3f2bc7d9', 1, NULL, 0, NULL, '2025-11-08 14:41:32', '2025-11-08 14:41:32');
 
 -- --------------------------------------------------------
 
@@ -243,15 +244,15 @@ INSERT INTO `redts_b_user` (`id`, `uuid`, `username`, `password`, `email`, `acce
 --
 
 CREATE TABLE `redts_d_profile` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `user_uuid` char(36) DEFAULT NULL COMMENT 'comment here',
-  `fname` varchar(100) NOT NULL,
-  `mname` varchar(100) NOT NULL,
-  `sname` varchar(100) NOT NULL,
-  `suffix` varchar(255) DEFAULT NULL,
-  `position` varchar(255) NOT NULL DEFAULT 'unset',
-  `image` longtext DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `user_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'comment here',
+  `fname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `suffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `position` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unset',
+  `image` longtext COLLATE utf8mb4_unicode_ci,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -401,7 +402,8 @@ INSERT INTO `redts_d_profile` (`id`, `user_id`, `user_uuid`, `fname`, `mname`, `
 (137, NULL, '5d2f4cad-d6ff-11ef-b430-3c7c3f2bc7d9', 'Melinda', 'O.', 'Rivero', '', 'unset', '', NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
 (138, NULL, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 'Olive', 'Myki', 'Barcelon', NULL, 'Computer Programmer', 'assets/img/user_pic/test_202502061006.jpg', NULL, '2025-07-01 06:13:49', '2025-10-07 05:28:29'),
 (139, NULL, '07a1a310-71be-4f49-b471-a1482fa6bd0e', 'Take3', 'S.', 'Surname', '', 'unset', '', NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
-(140, NULL, 'a27d2940-14c4-40ad-8d35-382223a5eed2', 'tester_albay', 'S.', 'Surname', '', 'unset', '', NULL, '2025-07-09 00:57:33', '2025-07-09 00:57:33');
+(140, NULL, 'a27d2940-14c4-40ad-8d35-382223a5eed2', 'tester_albay', 'S.', 'Surname', '', 'unset', '', NULL, '2025-07-09 00:57:33', '2025-07-09 00:57:33'),
+(141, NULL, '223b31bf-dda2-4fc9-942f-397a0a31e592', 'testrscig', 'testrscig', 'testrscig', '', 'unset', '', NULL, '2025-11-08 14:41:32', '2025-11-08 14:41:32');
 
 -- --------------------------------------------------------
 
@@ -410,11 +412,11 @@ INSERT INTO `redts_d_profile` (`id`, `user_id`, `user_uuid`, `fname`, `mname`, `
 --
 
 CREATE TABLE `redts_ee_classification` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `classification_type` varchar(255) DEFAULT NULL COMMENT 'simple, complex, or highly_technical',
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `classification_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'simple, complex, or highly_technical',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -477,9 +479,9 @@ INSERT INTO `redts_ee_classification` (`id`, `uuid`, `description`, `slug`, `cla
 --
 
 CREATE TABLE `redts_e_region` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `region` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -492,19 +494,19 @@ CREATE TABLE `redts_e_region` (
 --
 
 CREATE TABLE `redts_f_offices` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `region_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'redts_f_offices_region_id_foreign',
-  `slug` varchar(255) NOT NULL,
-  `office` varchar(255) NOT NULL,
-  `full_office_name` varchar(255) NOT NULL,
-  `office_type` varchar(255) NOT NULL,
-  `mother_unit` varchar(255) DEFAULT NULL,
-  `header_office_title` varchar(255) DEFAULT NULL,
-  `email` varchar(255) NOT NULL DEFAULT 'unset',
-  `tel_no` varchar(255) NOT NULL DEFAULT 'unset',
-  `cp_no` varchar(255) NOT NULL DEFAULT 'unset',
-  `office_address` text DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `region_id` bigint UNSIGNED DEFAULT NULL COMMENT 'redts_f_offices_region_id_foreign',
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `office` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_office_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `office_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mother_unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `header_office_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unset',
+  `tel_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unset',
+  `cp_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unset',
+  `office_address` text COLLATE utf8mb4_unicode_ci,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -688,7 +690,8 @@ INSERT INTO `redts_f_offices` (`id`, `uuid`, `region_id`, `slug`, `office`, `ful
 (171, '0e4fa83d-d705-11ef-b430-3c7c3f2bc7d9', 7, 'R5-CENRO-SanJacinto-Cashier', 'C.SJ.Cashier', 'CENRO San Jacinto - Cashier', 'Office', NULL, NULL, 'unset', 'unset', 'unset', 'San Jacinto, Masbate', NULL, '2025-07-01 06:13:50', '2025-07-01 06:13:50'),
 (172, '0e4fa89d-d705-11ef-b430-3c7c3f2bc7d9', 7, 'R5-PENRO-CSur-Cashier', 'P.CSur.Cashier', 'PENRO Cam Sur - Cashier', 'Office', NULL, NULL, 'unset', 'unset', 'unset', 'Panganiban Drive, Naga City, Camarines Sur', NULL, '2025-07-01 06:13:50', '2025-07-01 06:13:50'),
 (173, '0e4fa8f8-d705-11ef-b430-3c7c3f2bc7d9', 7, 'R5-PENRO-CSur-ICT', 'P.CSur.ICT', 'PENRO Cam Sur - ICT', 'Office', NULL, NULL, 'unset', 'unset', 'unset', NULL, NULL, '2025-07-01 06:13:50', '2025-07-01 06:13:50'),
-(174, '0e4fa966-d705-11ef-b430-3c7c3f2bc7d9', 7, 'R5-CENRO-Iriga-Cashier', 'C.Iriga.Cashier', 'CENRO Iriga - Cashier', 'Office', NULL, NULL, 'unset', 'unset', 'unset', 'Iriga City, Camarines Sur', NULL, '2025-07-01 06:13:50', '2025-07-01 06:13:50');
+(174, '0e4fa966-d705-11ef-b430-3c7c3f2bc7d9', 7, 'R5-CENRO-Iriga-Cashier', 'C.Iriga.Cashier', 'CENRO Iriga - Cashier', 'Office', NULL, NULL, 'unset', 'unset', 'unset', 'Iriga City, Camarines Sur', NULL, '2025-07-01 06:13:50', '2025-07-01 06:13:50'),
+(175, '31e544df-9704-4eba-b5bd-f899f413f349', 7, 'R5-RSCIG', 'R5-RSCIG', 'Regional Strategic Communication and Initiative Group', 'Office', NULL, NULL, 'unset', 'unset', 'unset', NULL, NULL, '2025-11-08 14:41:32', '2025-11-08 14:41:32');
 
 -- --------------------------------------------------------
 
@@ -697,9 +700,9 @@ INSERT INTO `redts_f_offices` (`id`, `uuid`, `region_id`, `slug`, `office`, `ful
 --
 
 CREATE TABLE `redts_g_carousel_imgs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `file_path` varchar(255) NOT NULL,
-  `file_name` text NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `file_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_name` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -712,11 +715,11 @@ CREATE TABLE `redts_g_carousel_imgs` (
 --
 
 CREATE TABLE `redts_j_user_offices` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `user_uuid` char(36) DEFAULT NULL COMMENT 'from b_user',
-  `offices_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `offices_uuid` char(36) DEFAULT NULL COMMENT 'from f_offices',
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `user_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'from b_user',
+  `offices_id` bigint UNSIGNED DEFAULT NULL,
+  `offices_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'from f_offices',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -866,7 +869,8 @@ INSERT INTO `redts_j_user_offices` (`id`, `user_id`, `user_uuid`, `offices_id`, 
 (137, 475, '5d2f4cad-d6ff-11ef-b430-3c7c3f2bc7d9', 145, '0e4f8a3b-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
 (138, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
 (139, 483, '07a1a310-71be-4f49-b471-a1482fa6bd0e', 1, '0e4f0a5b-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-07-01 06:13:49', '2025-07-01 06:13:49'),
-(140, 484, 'a27d2940-14c4-40ad-8d35-382223a5eed2', 41, '0e4f2821-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-07-09 00:57:33', '2025-07-09 00:57:33');
+(140, 484, 'a27d2940-14c4-40ad-8d35-382223a5eed2', 41, '0e4f2821-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-07-09 00:57:33', '2025-07-09 00:57:33'),
+(141, 485, '223b31bf-dda2-4fc9-942f-397a0a31e592', 195, '31e544df-9704-4eba-b5bd-f899f413f349', NULL, '2025-11-08 14:41:32', '2025-11-08 14:41:32');
 
 -- --------------------------------------------------------
 
@@ -875,12 +879,12 @@ INSERT INTO `redts_j_user_offices` (`id`, `user_id`, `user_uuid`, `offices_id`, 
 --
 
 CREATE TABLE `redts_la_process_lengths` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `subclass_id` bigint(20) UNSIGNED NOT NULL,
-  `remarks` varchar(255) DEFAULT NULL,
-  `process_length_days` int(11) NOT NULL DEFAULT 0,
-  `process_length_hours` int(11) NOT NULL DEFAULT 0,
-  `process_length_minutes` int(11) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `subclass_id` bigint UNSIGNED NOT NULL,
+  `remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `process_length_days` int NOT NULL DEFAULT '0',
+  `process_length_hours` int NOT NULL DEFAULT '0',
+  `process_length_minutes` int NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -893,9 +897,9 @@ CREATE TABLE `redts_la_process_lengths` (
 --
 
 CREATE TABLE `redts_lc_rstct_sbmsn_of_reqs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `subclass_id` bigint(20) UNSIGNED NOT NULL,
-  `rstd_office_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `subclass_id` bigint UNSIGNED NOT NULL,
+  `rstd_office_id` bigint UNSIGNED NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -908,11 +912,11 @@ CREATE TABLE `redts_lc_rstct_sbmsn_of_reqs` (
 --
 
 CREATE TABLE `redts_le_subclass_fees` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `subclass_id` bigint(20) UNSIGNED NOT NULL,
-  `item_name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `subclass_id` bigint UNSIGNED NOT NULL,
+  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fee_amount` double(10,2) NOT NULL,
-  `cost_grouping` varchar(255) NOT NULL COMMENT 'this will determine the options of fees may be used late for example fee can have 50 20 adn 30 pesos in cost group a1',
+  `cost_grouping` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'this will determine the options of fees may be used late for example fee can have 50 20 adn 30 pesos in cost group a1',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -925,12 +929,12 @@ CREATE TABLE `redts_le_subclass_fees` (
 --
 
 CREATE TABLE `redts_l_sub_class` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `classification_id` bigint(20) UNSIGNED NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `full_description` text DEFAULT NULL,
-  `slug` varchar(255) NOT NULL,
-  `classification_type` varchar(255) DEFAULT NULL COMMENT 'simple, complex, or highly_technical',
+  `id` bigint UNSIGNED NOT NULL,
+  `classification_id` bigint UNSIGNED NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_description` text COLLATE utf8mb4_unicode_ci,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `classification_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'simple, complex, or highly_technical',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -943,29 +947,22 @@ CREATE TABLE `redts_l_sub_class` (
 --
 
 CREATE TABLE `redts_na_action_attachments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `action_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'referenced to n_action id',
-  `action_uuid` char(36) DEFAULT NULL COMMENT 'comment here',
-  `doc_no` varchar(255) DEFAULT NULL,
-  `doc_uuid` varchar(255) DEFAULT NULL,
-  `remarks` varchar(255) DEFAULT NULL,
-  `file_path` varchar(255) NOT NULL DEFAULT 'n/a',
-  `file_name` varchar(255) NOT NULL DEFAULT 'n/a',
-  `file_link` varchar(255) NOT NULL DEFAULT 'n/a',
+  `id` bigint UNSIGNED NOT NULL,
+  `action_id` bigint UNSIGNED DEFAULT NULL COMMENT 'referenced to n_action id',
+  `action_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'comment here',
+  `doc_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `doc_uuid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `file_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
+  `file_link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
   `uploaded` datetime DEFAULT NULL,
   `downloaded` datetime DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `public` tinyint(3) UNSIGNED DEFAULT 0 COMMENT 'Allow public views'
+  `public` tinyint UNSIGNED DEFAULT '0' COMMENT 'Allow public views'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `redts_na_action_attachments`
---
-
-INSERT INTO `redts_na_action_attachments` (`id`, `action_id`, `action_uuid`, `doc_no`, `doc_uuid`, `remarks`, `file_path`, `file_name`, `file_link`, `uploaded`, `downloaded`, `deleted_at`, `created_at`, `updated_at`, `public`) VALUES
-(1, 5, '3fa0236e-b8cb-43a3-9116-b5cdb3bb4e31', 'P.ALBAY.RS-MEMO-2025.10.13-2116.06.45', '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', 'FileName1', 'action_files', 'ad4_FileName1_202510131612.PDF', 'n/a', '2025-10-13 16:12:54', NULL, NULL, '2025-10-13 08:12:18', '2025-10-13 08:12:54', 0);
 
 -- --------------------------------------------------------
 
@@ -974,22 +971,15 @@ INSERT INTO `redts_na_action_attachments` (`id`, `action_id`, `action_uuid`, `do
 --
 
 CREATE TABLE `redts_nb_releasing_routes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `origin_act` bigint(20) UNSIGNED NOT NULL COMMENT 'when you release action this is the origin from n_action',
-  `origin_act_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `released_act` bigint(20) UNSIGNED NOT NULL COMMENT 'this is the new action created released to the office it is forwarded or released from n_action',
-  `released_act_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
+  `id` bigint UNSIGNED NOT NULL,
+  `origin_act` bigint UNSIGNED NOT NULL COMMENT 'when you release action this is the origin from n_action',
+  `origin_act_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `released_act` bigint UNSIGNED NOT NULL COMMENT 'this is the new action created released to the office it is forwarded or released from n_action',
+  `released_act_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `redts_nb_releasing_routes`
---
-
-INSERT INTO `redts_nb_releasing_routes` (`id`, `origin_act`, `origin_act_uuid`, `released_act`, `released_act_uuid`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4, 'e7a72926-83eb-4c65-9e18-8614bc2a14f0', 5, '3fa0236e-b8cb-43a3-9116-b5cdb3bb4e31', NULL, '2025-10-13 08:12:17', '2025-10-13 08:12:17');
 
 -- --------------------------------------------------------
 
@@ -998,22 +988,13 @@ INSERT INTO `redts_nb_releasing_routes` (`id`, `origin_act`, `origin_act_uuid`, 
 --
 
 CREATE TABLE `redts_nc_act_seens` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `action_id` bigint(20) UNSIGNED NOT NULL COMMENT 'from n_action',
-  `action_uuid` char(36) DEFAULT NULL COMMENT 'from n_action',
+  `id` bigint UNSIGNED NOT NULL,
+  `action_id` bigint UNSIGNED NOT NULL COMMENT 'from n_action',
+  `action_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'from n_action',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `redts_nc_act_seens`
---
-
-INSERT INTO `redts_nc_act_seens` (`id`, `action_id`, `action_uuid`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4, 'e7a72926-83eb-4c65-9e18-8614bc2a14f0', NULL, '2025-10-13 08:11:08', '2025-10-13 08:11:08'),
-(2, 6, '70d108dd-55a8-4ba2-9569-f6acedf87a19', NULL, '2025-10-13 08:37:10', '2025-10-13 08:37:10'),
-(3, 7, 'af512b52-d23a-47dd-941f-4d0178920d98', NULL, '2025-10-15 05:26:28', '2025-10-15 05:26:28');
 
 -- --------------------------------------------------------
 
@@ -1022,52 +1003,39 @@ INSERT INTO `redts_nc_act_seens` (`id`, `action_id`, `action_uuid`, `deleted_at`
 --
 
 CREATE TABLE `redts_n_actions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `subject` longtext DEFAULT NULL,
-  `doc_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'from main doc',
-  `doc_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `doc_no` varchar(255) DEFAULT NULL COMMENT 'indicates released by',
-  `sender_client_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'non for removal',
-  `sender_user_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'user id',
-  `sender_user_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `sender_type` varchar(255) NOT NULL,
-  `referred_by_office` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'office',
-  `referred_by_office_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `action_taken` longtext DEFAULT NULL,
-  `send_to_office` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'what office to send',
-  `send_to_office_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` longtext COLLATE utf8mb4_unicode_ci,
+  `doc_id` bigint UNSIGNED DEFAULT NULL COMMENT 'from main doc',
+  `doc_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `doc_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `sender_client_id` bigint UNSIGNED DEFAULT NULL COMMENT 'non for removal',
+  `sender_user_id` bigint UNSIGNED DEFAULT NULL COMMENT 'user id',
+  `sender_user_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `sender_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `referred_by_office` bigint UNSIGNED DEFAULT NULL COMMENT 'office',
+  `referred_by_office_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `action_taken` longtext COLLATE utf8mb4_unicode_ci,
+  `send_to_office` bigint UNSIGNED DEFAULT NULL COMMENT 'what office to send',
+  `send_to_office_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
   `validated` datetime DEFAULT NULL,
-  `received_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'user id',
-  `received_uuid` char(36) DEFAULT NULL COMMENT 'indicates received by',
+  `received_id` bigint UNSIGNED DEFAULT NULL COMMENT 'user id',
+  `received_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates received by',
   `received` timestamp NULL DEFAULT NULL,
   `released` timestamp NULL DEFAULT NULL,
   `final_action` timestamp NULL DEFAULT NULL,
   `rejected` timestamp NULL DEFAULT NULL,
   `verification_date` timestamp NULL DEFAULT NULL,
-  `in_transit_remarks` longtext DEFAULT NULL,
-  `document_remarks` longtext DEFAULT NULL,
-  `action_remarks` longtext DEFAULT NULL,
-  `attachment_remarks` longtext DEFAULT NULL,
+  `in_transit_remarks` longtext COLLATE utf8mb4_unicode_ci,
+  `document_remarks` longtext COLLATE utf8mb4_unicode_ci,
+  `action_remarks` longtext COLLATE utf8mb4_unicode_ci,
+  `attachment_remarks` longtext COLLATE utf8mb4_unicode_ci,
   `uploaded_act` timestamp NULL DEFAULT NULL,
   `downloaded` datetime DEFAULT NULL COMMENT 'insert or update when needed',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `redts_n_actions`
---
-
-INSERT INTO `redts_n_actions` (`id`, `uuid`, `subject`, `doc_id`, `doc_uuid`, `doc_no`, `sender_client_id`, `sender_user_id`, `sender_user_uuid`, `sender_type`, `referred_by_office`, `referred_by_office_uuid`, `action_taken`, `send_to_office`, `send_to_office_uuid`, `validated`, `received_id`, `received_uuid`, `received`, `released`, `final_action`, `rejected`, `verification_date`, `in_transit_remarks`, `document_remarks`, `action_remarks`, `attachment_remarks`, `uploaded_act`, `downloaded`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, '3cca4951-98ed-4e60-9395-e7f7015ce658', 'TEST1', 1, '510318b0-2553-4141-911c-29f8f4fb3390', 'PMD.ICT-MEMO-2025.10.07-47615.57.49', NULL, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 'User', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, 162, '0e4f9cfa-d705-11ef-b430-3c7c3f2bc7d9', '2025-10-07 16:10:10', 350, '5d2f123b-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-07 08:03:41', '2025-10-07 08:04:46', NULL, NULL, '2025-10-07 08:10:10', NULL, NULL, 'TESTED ONLY', NULL, NULL, '2025-10-13 16:07:49', NULL, '2025-10-07 08:03:10', '2025-10-07 08:04:46'),
-(2, '3ad7d6fb-b2cd-430f-9b68-0fdbf2b95912', 'TEST1', 1, '510318b0-2553-4141-911c-29f8f4fb3390', 'PMD.ICT-MEMO-2025.10.07-47615.57.49', NULL, 350, '5d2f123b-d6ff-11ef-b430-3c7c3f2bc7d9', 'Receiving and Releasing Clerk', 162, '0e4f9cfa-d705-11ef-b430-3c7c3f2bc7d9', 'TESTED ONLY', 166, '0e4f9e73-d705-11ef-b430-3c7c3f2bc7d9', NULL, 341, '5d2f0f19-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-07 08:05:35', '2025-10-07 08:06:07', NULL, NULL, NULL, NULL, NULL, 'RETURNED TO ICT', 'SAMPLE', NULL, '2025-10-13 16:07:49', NULL, '2025-10-07 08:04:46', '2025-10-07 08:06:07'),
-(3, 'd578330f-57e7-44a4-a23c-fcc666925566', 'TEST1', 1, '510318b0-2553-4141-911c-29f8f4fb3390', 'PMD.ICT-MEMO-2025.10.07-47615.57.49', NULL, 341, '5d2f0f19-d6ff-11ef-b430-3c7c3f2bc7d9', 'Validator', 166, '0e4f9e73-d705-11ef-b430-3c7c3f2bc7d9', 'ENDED ACTION HERE', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, 304, '5d2f09e3-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-07 08:06:34', NULL, '2025-10-07 08:07:07', NULL, NULL, NULL, NULL, 'ENDED ACTION HERE', NULL, NULL, '2025-10-13 16:07:49', NULL, '2025-10-07 08:06:07', '2025-10-07 08:07:07'),
-(4, 'e7a72926-83eb-4c65-9e18-8614bc2a14f0', 'SAMPLE SUBJECT 1', 8, '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', 'P.ALBAY.RS-MEMO-2025.10.13-2116.06.45', NULL, 21, '5d2f123b-d6ff-11ef-b430-3c7c3f2bc7d9', 'User', 148, '0e4f9cfa-d705-11ef-b430-3c7c3f2bc7d9', NULL, 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', '2025-10-13 16:10:44', 3, '5d2f09e3-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-13 08:10:55', '2025-10-13 08:12:17', NULL, NULL, '2025-10-13 08:10:44', NULL, NULL, 'SAMPLE', NULL, '2025-10-13 08:12:53', '2025-10-13 16:12:53', NULL, '2025-10-13 08:07:44', '2025-10-13 08:12:53'),
-(5, '3fa0236e-b8cb-43a3-9116-b5cdb3bb4e31', 'SAMPLE SUBJECT 1', 8, '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', 'P.ALBAY.RS-MEMO-2025.10.13-2116.06.45', NULL, NULL, '5d2f09e3-d6ff-11ef-b430-3c7c3f2bc7d9', 'Receiving and Releasing Clerk', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', 'SAMPLE', 151, '0e4f9e19-d705-11ef-b430-3c7c3f2bc7d9', NULL, 433, '5d2f41cd-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-13 08:18:07', '2025-10-13 08:18:52', NULL, NULL, NULL, NULL, NULL, 'FILE ATTACHING ONLINE', NULL, '2025-10-13 08:12:53', '2025-10-13 16:19:13', NULL, '2025-10-13 08:12:53', '2025-10-13 08:18:52'),
-(6, '70d108dd-55a8-4ba2-9569-f6acedf87a19', 'SAMPLE SUBJECT 1', 8, '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', 'P.ALBAY.RS-MEMO-2025.10.13-2116.06.45', NULL, 433, '5d2f41cd-d6ff-11ef-b430-3c7c3f2bc7d9', 'Validator', 165, '0e4f9e19-d705-11ef-b430-3c7c3f2bc7d9', 'FINAL ACTION', 162, '0e4f9cfa-d705-11ef-b430-3c7c3f2bc7d9', NULL, 21, '5d2f123b-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-13 08:37:06', NULL, '2025-10-13 08:47:28', NULL, NULL, NULL, NULL, 'FINAL ACTION', NULL, '2025-10-13 08:47:54', '2025-10-13 16:47:54', NULL, '2025-10-13 00:18:52', '2025-10-13 08:47:54'),
-(7, 'af512b52-d23a-47dd-941f-4d0178920d98', 'FROM ONLINE', 3, '87f866ce-e81d-46ca-8b9d-8d0a1b6568c7', 'PMD.ICT-MEMO-2025.10.15-47613.24.47', NULL, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 'User', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', '2025-10-15 13:10:04', 123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', '2025-10-15 05:25:28', NULL, NULL, NULL, '2025-10-15 05:10:04', NULL, NULL, NULL, NULL, '2025-10-15 05:25:44', '2025-10-15 13:25:44', NULL, '2025-10-14 21:25:04', '2025-10-15 05:25:44');
 
 -- --------------------------------------------------------
 
@@ -1076,8 +1044,8 @@ INSERT INTO `redts_n_actions` (`id`, `uuid`, `subject`, `doc_id`, `doc_uuid`, `d
 --
 
 CREATE TABLE `redts_w_upload_size_limit` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `size` bigint(20) NOT NULL COMMENT 'File size in Bytes',
+  `id` bigint UNSIGNED NOT NULL,
+  `size` bigint NOT NULL COMMENT 'File size in Bytes',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1097,13 +1065,13 @@ INSERT INTO `redts_w_upload_size_limit` (`id`, `size`, `deleted_at`, `created_at
 --
 
 CREATE TABLE `redts_y_requirements` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `subclass_id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `attachment_type` varchar(255) NOT NULL DEFAULT 'file' COMMENT 'file, text, date',
-  `requirement_type` varchar(255) NOT NULL COMMENT 'additional, required',
+  `id` bigint UNSIGNED NOT NULL,
+  `subclass_id` bigint UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attachment_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'file' COMMENT 'file, text, date',
+  `requirement_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'additional, required',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1116,10 +1084,10 @@ CREATE TABLE `redts_y_requirements` (
 --
 
 CREATE TABLE `redts_za_transaction_types` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `transaction` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transaction` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1142,9 +1110,9 @@ INSERT INTO `redts_za_transaction_types` (`id`, `uuid`, `transaction`, `slug`, `
 --
 
 CREATE TABLE `redts_zb_agencies` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `agency` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `agency` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1157,21 +1125,21 @@ CREATE TABLE `redts_zb_agencies` (
 --
 
 CREATE TABLE `redts_zc_client_infos` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `fname` varchar(255) NOT NULL,
-  `mname` varchar(255) NOT NULL,
-  `sname` varchar(255) NOT NULL,
-  `suffix` varchar(255) DEFAULT NULL,
-  `sex` varchar(6) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `email_verify` tinyint(4) NOT NULL DEFAULT 0,
-  `contact_no` varchar(255) NOT NULL,
-  `access_token` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `valid_id_front` varchar(255) DEFAULT NULL,
-  `valid_id_back` varchar(255) DEFAULT NULL,
-  `data_privacy_consent` tinyint(4) NOT NULL DEFAULT 0,
-  `terms_of_reference` tinyint(4) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `fname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `suffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sex` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verify` tinyint NOT NULL DEFAULT '0',
+  `contact_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `valid_id_front` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `valid_id_back` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `data_privacy_consent` tinyint NOT NULL DEFAULT '0',
+  `terms_of_reference` tinyint NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1184,23 +1152,23 @@ CREATE TABLE `redts_zc_client_infos` (
 --
 
 CREATE TABLE `redts_zd_client_doc_infos` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `doc_no` varchar(255) NOT NULL DEFAULT 'unset',
-  `application_type_id` bigint(20) UNSIGNED NOT NULL COMMENT 'applicant type',
-  `application_type_uuid` char(36) NOT NULL COMMENT 'indicates released by',
-  `transaction_type_id` bigint(20) UNSIGNED NOT NULL COMMENT 'transaction type',
-  `transaction_type_uuid` char(36) NOT NULL COMMENT 'indicates released by',
-  `agency` varchar(255) DEFAULT NULL,
-  `client_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `class_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'classification id',
-  `class_uuid` char(36) NOT NULL COMMENT 'indicates released by',
-  `class_slug` varchar(255) NOT NULL,
-  `subclass_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `subclass_slug` varchar(255) DEFAULT NULL,
-  `remarks` varchar(255) DEFAULT NULL COMMENT 'This is initial action subject',
-  `validated` tinyint(4) DEFAULT NULL,
-  `confidential` tinyint(1) DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `doc_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unset',
+  `application_type_id` bigint UNSIGNED NOT NULL COMMENT 'applicant type',
+  `application_type_uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'indicates released by',
+  `transaction_type_id` bigint UNSIGNED NOT NULL COMMENT 'transaction type',
+  `transaction_type_uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'indicates released by',
+  `agency` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_id` bigint UNSIGNED DEFAULT NULL,
+  `class_id` bigint UNSIGNED DEFAULT NULL COMMENT 'classification id',
+  `class_uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'indicates released by',
+  `class_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subclass_id` bigint UNSIGNED DEFAULT NULL,
+  `subclass_slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'This is initial action subject',
+  `validated` tinyint DEFAULT NULL,
+  `confidential` tinyint(1) DEFAULT '0',
   `doc_date` datetime DEFAULT NULL,
   `compliance_deadline` datetime DEFAULT NULL,
   `uploaded` datetime DEFAULT NULL COMMENT 'insert or update when needed',
@@ -1210,21 +1178,6 @@ CREATE TABLE `redts_zd_client_doc_infos` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `redts_zd_client_doc_infos`
---
-
-INSERT INTO `redts_zd_client_doc_infos` (`id`, `uuid`, `doc_no`, `application_type_id`, `application_type_uuid`, `transaction_type_id`, `transaction_type_uuid`, `agency`, `client_id`, `class_id`, `class_uuid`, `class_slug`, `subclass_id`, `subclass_slug`, `remarks`, `validated`, `confidential`, `doc_date`, `compliance_deadline`, `uploaded`, `downloaded`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'fe29411d-522a-4e0a-83e8-8ee2598bf16f', 'PMD.ICT-MEMO-2025.09.11-47617.58.08', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 31, '73e93387-d88f-11ef-bf83-3c7c3f2bc7d9', 'memo', NULL, NULL, 'SAMPLE MEMO SYNC FROM ONLINE TO LOCAL', 1, 0, '2025-09-11 00:00:00', NULL, NULL, '2025-10-07 13:52:58', NULL, '2025-09-11 01:58:34', '2025-09-11 01:58:34'),
-(2, '1c96fa70-24be-46ff-a735-096ab6b4e4d3', 'PMD.ICT-MEMO-2025.09.11-12318.03.28', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 25, '73e93387-d88f-11ef-bf83-3c7c3f2bc7d9', 'memo', NULL, NULL, 'DESTINATION LOCAL', 1, 0, '2025-09-11 00:00:00', NULL, NULL, '2025-10-07 13:52:58', NULL, '2025-09-11 02:04:12', '2025-09-11 02:04:12'),
-(3, '33925bb0-7b51-452f-b928-7ccafda7a102', 'PMD.ICT-APP-2025.09.12-12309.08.54', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 4, '73e92d81-d88f-11ef-bf83-3c7c3f2bc7d9', 'app', NULL, NULL, 'TEST OFFLINE PROCESS HERE', 1, 0, '2025-09-12 00:00:00', NULL, NULL, '2025-10-07 13:52:58', NULL, '2025-09-11 18:02:15', '2025-09-11 18:02:15'),
-(4, '5531875d-1348-40d1-9d8f-e73f6768848e', 'PMD.ICT-AFFIDVT-2025.09.12-47612.33.10', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 8, '73e92c80-d88f-11ef-bf83-3c7c3f2bc7d9', 'affidvt', NULL, NULL, 'SAMPLE ONLINE', 1, 0, '2025-09-12 00:00:00', NULL, NULL, '2025-10-07 13:52:58', NULL, '2025-09-11 20:33:23', '2025-09-11 20:33:23'),
-(5, '3e3af7b1-bee5-47dc-9e35-19852edc7389', 'PMD.ICT-APP-2025.09.12-12312.33.58', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 4, '73e92d81-d88f-11ef-bf83-3c7c3f2bc7d9', 'app', NULL, NULL, 'FROM FIELD', 1, 0, '2025-09-12 00:00:00', NULL, NULL, '2025-10-07 13:52:58', NULL, '2025-09-11 20:35:40', '2025-09-11 20:35:40'),
-(6, '7eb50906-da58-4698-90fb-cc7040c7cba3', 'PMD.ICT-AFFIDVT-2025.09.12-12312.34.29', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 2, '73e92c80-d88f-11ef-bf83-3c7c3f2bc7d9', 'affidvt', NULL, NULL, 'FROM FIELD', 1, 0, '2025-09-12 00:00:00', NULL, NULL, '2025-10-07 13:52:58', NULL, '2025-09-11 20:35:40', '2025-09-11 20:35:40'),
-(7, '510318b0-2553-4141-911c-29f8f4fb3390', 'PMD.ICT-MEMO-2025.10.07-47615.57.49', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 31, '73e93387-d88f-11ef-bf83-3c7c3f2bc7d9', 'memo', NULL, NULL, 'TEST1', 1, 0, '2025-10-07 00:00:00', NULL, NULL, '2025-10-13 15:57:47', NULL, '2025-10-07 00:03:10', '2025-10-07 00:03:10'),
-(8, '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', 'P.ALBAY.RS-MEMO-2025.10.13-2116.06.45', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 25, '73e93387-d88f-11ef-bf83-3c7c3f2bc7d9', 'memo', NULL, NULL, 'SAMPLE SUBJECT 1', 1, 0, '2025-10-13 00:00:00', NULL, '2025-10-13 16:07:48', '2025-10-13 16:07:48', NULL, '2025-10-13 08:07:44', '2025-10-13 08:07:48'),
-(9, '87f866ce-e81d-46ca-8b9d-8d0a1b6568c7', 'PMD.ICT-MEMO-2025.10.15-47613.24.47', 1, '07f89fc4-d70c-11ef-b430-3c7c3f2bc7d9', 1, '47214229-d70c-11ef-b430-3c7c3f2bc7d9', NULL, NULL, 31, '73e93387-d88f-11ef-bf83-3c7c3f2bc7d9', 'memo', NULL, NULL, 'FROM ONLINE', 1, 0, '2025-10-15 00:00:00', NULL, NULL, '2025-10-15 13:25:13', NULL, '2025-10-14 21:25:04', '2025-10-14 21:25:04');
-
 -- --------------------------------------------------------
 
 --
@@ -1232,31 +1185,24 @@ INSERT INTO `redts_zd_client_doc_infos` (`id`, `uuid`, `doc_no`, `application_ty
 --
 
 CREATE TABLE `redts_ze_client_doc_attachments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `doc_info_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `doc_info_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `req_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `app_form_no` int(11) NOT NULL,
-  `req_slug` varchar(255) NOT NULL,
-  `file_path` varchar(255) NOT NULL DEFAULT 'n/a',
-  `file_name` varchar(255) NOT NULL DEFAULT 'n/a',
-  `file_link` varchar(255) NOT NULL DEFAULT 'n/a',
-  `text_input` varchar(255) NOT NULL DEFAULT 'n/a',
-  `attachment_type` varchar(255) NOT NULL DEFAULT 'file',
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `doc_info_id` bigint UNSIGNED DEFAULT NULL,
+  `doc_info_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `req_id` bigint UNSIGNED DEFAULT NULL,
+  `app_form_no` int NOT NULL,
+  `req_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
+  `file_link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
+  `text_input` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n/a',
+  `attachment_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'file',
   `uploaded` datetime DEFAULT NULL,
   `downloaded` datetime DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `redts_ze_client_doc_attachments`
---
-
-INSERT INTO `redts_ze_client_doc_attachments` (`id`, `uuid`, `doc_info_id`, `doc_info_uuid`, `req_id`, `app_form_no`, `req_slug`, `file_path`, `file_name`, `file_link`, `text_input`, `attachment_type`, `uploaded`, `downloaded`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, '19143f95-2f8e-4fd2-bddd-8c381bc8e969', 8, '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', NULL, 1, 'Attachment Remarks', 'n/a', 'n/a', 'n/a', 'SAMPLE ONLY', 'text', NULL, NULL, NULL, '2025-10-13 08:07:44', '2025-10-13 08:07:44');
 
 -- --------------------------------------------------------
 
@@ -1265,24 +1211,24 @@ INSERT INTO `redts_ze_client_doc_attachments` (`id`, `uuid`, `doc_info_id`, `doc
 --
 
 CREATE TABLE `redts_zfa_additional_oops` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `doc_id` bigint(20) UNSIGNED NOT NULL,
-  `creator_id` bigint(20) UNSIGNED NOT NULL,
-  `header_title` varchar(255) DEFAULT NULL,
-  `header_address` varchar(255) DEFAULT NULL,
-  `or_no` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `doc_id` bigint UNSIGNED NOT NULL,
+  `creator_id` bigint UNSIGNED NOT NULL,
+  `header_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `header_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `or_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `or_no_dated` date DEFAULT NULL,
   `pay_amount` double(10,2) DEFAULT NULL,
-  `purpose` varchar(255) DEFAULT NULL,
-  `clerk_fullname` varchar(255) DEFAULT NULL,
-  `prepared_by_position` varchar(255) DEFAULT NULL,
-  `approving_remarks` varchar(255) DEFAULT NULL,
-  `approving_fullname` varchar(255) DEFAULT NULL,
-  `approving_position` varchar(255) DEFAULT NULL,
-  `per_bill_no` varchar(255) DEFAULT NULL,
+  `purpose` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `clerk_fullname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prepared_by_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approving_remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approving_fullname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approving_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `per_bill_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `per_bill_no_dated` date DEFAULT NULL,
-  `bank_no` varchar(255) DEFAULT NULL,
-  `bank_name` varchar(255) DEFAULT NULL,
+  `bank_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1295,32 +1241,32 @@ CREATE TABLE `redts_zfa_additional_oops` (
 --
 
 CREATE TABLE `redts_zf_order_of_payments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `doc_id` bigint(20) UNSIGNED NOT NULL,
-  `creator_id` bigint(20) UNSIGNED NOT NULL,
-  `order_of_payment` varchar(255) DEFAULT NULL,
-  `payment_receipt` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `doc_id` bigint UNSIGNED NOT NULL,
+  `creator_id` bigint UNSIGNED NOT NULL,
+  `order_of_payment` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_receipt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `payment_receipt_date` timestamp NULL DEFAULT NULL,
-  `header_title` varchar(255) DEFAULT NULL,
-  `header_address` varchar(255) DEFAULT NULL,
-  `or_no` varchar(255) DEFAULT NULL,
+  `header_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `header_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `or_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `or_no_dated` date DEFAULT NULL,
   `pay_amount` double(10,2) DEFAULT NULL,
-  `clerk_fullname` varchar(255) DEFAULT NULL,
-  `prepared_by_position` varchar(255) DEFAULT NULL,
-  `approving_remarks` varchar(255) DEFAULT NULL,
-  `approving_fullname` varchar(255) DEFAULT NULL,
-  `approving_position` varchar(255) DEFAULT NULL,
-  `per_bill_no` varchar(255) DEFAULT NULL,
+  `clerk_fullname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prepared_by_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approving_remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approving_fullname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approving_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `per_bill_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `per_bill_no_dated` date DEFAULT NULL,
-  `bank_no` varchar(255) DEFAULT NULL,
-  `bank_name` varchar(255) DEFAULT NULL,
-  `verified` tinyint(4) NOT NULL DEFAULT 0,
+  `bank_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `verified` tinyint NOT NULL DEFAULT '0',
   `time_verified` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `purpose` varchar(255) DEFAULT NULL COMMENT 'the reason for the request of payment'
+  `purpose` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the reason for the request of payment'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1330,11 +1276,11 @@ CREATE TABLE `redts_zf_order_of_payments` (
 --
 
 CREATE TABLE `redts_zga_other_pymnt_cost_brkdwns` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `doc_id` bigint(20) UNSIGNED NOT NULL,
-  `ofp_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `doc_id` bigint UNSIGNED NOT NULL,
+  `ofp_id` bigint UNSIGNED NOT NULL,
   `cost_breakdown_amount` double(10,2) NOT NULL,
-  `cost_breakdown` varchar(255) NOT NULL,
+  `cost_breakdown` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1347,11 +1293,11 @@ CREATE TABLE `redts_zga_other_pymnt_cost_brkdwns` (
 --
 
 CREATE TABLE `redts_zg_payment_cost_breakdowns` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `doc_id` bigint(20) UNSIGNED NOT NULL,
-  `ofp_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `doc_id` bigint UNSIGNED NOT NULL,
+  `ofp_id` bigint UNSIGNED NOT NULL,
   `cost_breakdown_amount` double(10,2) NOT NULL,
-  `cost_breakdown` varchar(255) NOT NULL,
+  `cost_breakdown` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1364,9 +1310,9 @@ CREATE TABLE `redts_zg_payment_cost_breakdowns` (
 --
 
 CREATE TABLE `redts_zh_cert_perm_routes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `sub_class_id` bigint(20) UNSIGNED NOT NULL,
-  `route` varchar(255) NOT NULL COMMENT 'url of the create template permit or certificate',
+  `id` bigint UNSIGNED NOT NULL,
+  `sub_class_id` bigint UNSIGNED NOT NULL,
+  `route` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'url of the create template permit or certificate',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1379,34 +1325,19 @@ CREATE TABLE `redts_zh_cert_perm_routes` (
 --
 
 CREATE TABLE `redts_zi_origin_offices` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) DEFAULT NULL COMMENT 'user id',
-  `user_uuid` char(36) DEFAULT NULL COMMENT 'user uuid',
-  `doc_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'zd_client_doc_infos',
-  `doc_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `origin_office_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'f_offices',
-  `origin_office_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint DEFAULT NULL COMMENT 'user id',
+  `user_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'user uuid',
+  `doc_id` bigint UNSIGNED DEFAULT NULL COMMENT 'zd_client_doc_infos',
+  `doc_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `origin_office_id` bigint UNSIGNED DEFAULT NULL COMMENT 'f_offices',
+  `origin_office_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
   `uploaded` datetime DEFAULT NULL,
   `downloaded` datetime DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `redts_zi_origin_offices`
---
-
-INSERT INTO `redts_zi_origin_offices` (`id`, `user_id`, `user_uuid`, `doc_id`, `doc_uuid`, `origin_office_id`, `origin_office_uuid`, `uploaded`, `downloaded`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 1, 'fe29411d-522a-4e0a-83e8-8ee2598bf16f', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-07 13:52:59', NULL, '2025-10-07 05:52:59', '2025-10-07 05:52:59'),
-(2, 123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 2, '1c96fa70-24be-46ff-a735-096ab6b4e4d3', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-07 13:52:59', NULL, '2025-10-07 05:52:59', '2025-10-07 05:52:59'),
-(3, 123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 3, '33925bb0-7b51-452f-b928-7ccafda7a102', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-07 13:52:59', NULL, '2025-10-07 05:52:59', '2025-10-07 05:52:59'),
-(4, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 4, '5531875d-1348-40d1-9d8f-e73f6768848e', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-07 13:52:59', NULL, '2025-10-07 05:52:59', '2025-10-07 05:52:59'),
-(5, 123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 5, '3e3af7b1-bee5-47dc-9e35-19852edc7389', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-07 13:52:59', NULL, '2025-10-07 05:52:59', '2025-10-07 05:52:59'),
-(6, 123, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 6, '7eb50906-da58-4698-90fb-cc7040c7cba3', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-07 13:52:59', NULL, '2025-10-07 05:52:59', '2025-10-07 05:52:59'),
-(7, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 1, '510318b0-2553-4141-911c-29f8f4fb3390', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-13 15:57:48', NULL, '2025-10-13 07:57:48', '2025-10-13 07:57:48'),
-(8, 21, '5d2f123b-d6ff-11ef-b430-3c7c3f2bc7d9', 8, '2a52546c-498b-4e11-92e0-f8fba1cbd6e0', 148, '0e4f9cfa-d705-11ef-b430-3c7c3f2bc7d9', '2025-10-13 16:07:49', '2025-10-13 16:07:49', NULL, '2025-10-13 08:07:44', '2025-10-13 08:07:49'),
-(9, 476, '5d2f4cfa-d6ff-11ef-b430-3c7c3f2bc7d9', 3, '87f866ce-e81d-46ca-8b9d-8d0a1b6568c7', 5, '0e4f16e7-d705-11ef-b430-3c7c3f2bc7d9', NULL, '2025-10-15 13:25:14', NULL, '2025-10-15 05:25:14', '2025-10-15 05:25:14');
 
 -- --------------------------------------------------------
 
@@ -1415,10 +1346,10 @@ INSERT INTO `redts_zi_origin_offices` (`id`, `user_id`, `user_uuid`, `doc_id`, `
 --
 
 CREATE TABLE `redts_zj_user_oop_approvees` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `approvee_fullname` varchar(255) NOT NULL,
-  `approvee_position` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `approvee_fullname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `approvee_position` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1431,11 +1362,11 @@ CREATE TABLE `redts_zj_user_oop_approvees` (
 --
 
 CREATE TABLE `redts_z_applicant_types` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) NOT NULL,
-  `transaction_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `transaction_uuid` char(36) DEFAULT NULL COMMENT 'indicates released by',
-  `applicant` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transaction_id` bigint UNSIGNED DEFAULT NULL,
+  `transaction_uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'indicates released by',
+  `applicant` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1693,199 +1624,199 @@ ALTER TABLE `redts_z_applicant_types`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_a_accesss`
 --
 ALTER TABLE `redts_a_accesss`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `redts_ba_view_reqs_specs`
 --
 ALTER TABLE `redts_ba_view_reqs_specs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_b_user`
 --
 ALTER TABLE `redts_b_user`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `redts_d_profile`
 --
 ALTER TABLE `redts_d_profile`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `redts_ee_classification`
 --
 ALTER TABLE `redts_ee_classification`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `redts_e_region`
 --
 ALTER TABLE `redts_e_region`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_f_offices`
 --
 ALTER TABLE `redts_f_offices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 
 --
 -- AUTO_INCREMENT for table `redts_g_carousel_imgs`
 --
 ALTER TABLE `redts_g_carousel_imgs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_j_user_offices`
 --
 ALTER TABLE `redts_j_user_offices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `redts_la_process_lengths`
 --
 ALTER TABLE `redts_la_process_lengths`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_lc_rstct_sbmsn_of_reqs`
 --
 ALTER TABLE `redts_lc_rstct_sbmsn_of_reqs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_le_subclass_fees`
 --
 ALTER TABLE `redts_le_subclass_fees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_l_sub_class`
 --
 ALTER TABLE `redts_l_sub_class`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_na_action_attachments`
 --
 ALTER TABLE `redts_na_action_attachments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_nb_releasing_routes`
 --
 ALTER TABLE `redts_nb_releasing_routes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_nc_act_seens`
 --
 ALTER TABLE `redts_nc_act_seens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_n_actions`
 --
 ALTER TABLE `redts_n_actions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_w_upload_size_limit`
 --
 ALTER TABLE `redts_w_upload_size_limit`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `redts_y_requirements`
 --
 ALTER TABLE `redts_y_requirements`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_za_transaction_types`
 --
 ALTER TABLE `redts_za_transaction_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `redts_zb_agencies`
 --
 ALTER TABLE `redts_zb_agencies`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zc_client_infos`
 --
 ALTER TABLE `redts_zc_client_infos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zd_client_doc_infos`
 --
 ALTER TABLE `redts_zd_client_doc_infos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_ze_client_doc_attachments`
 --
 ALTER TABLE `redts_ze_client_doc_attachments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zfa_additional_oops`
 --
 ALTER TABLE `redts_zfa_additional_oops`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zf_order_of_payments`
 --
 ALTER TABLE `redts_zf_order_of_payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zga_other_pymnt_cost_brkdwns`
 --
 ALTER TABLE `redts_zga_other_pymnt_cost_brkdwns`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zg_payment_cost_breakdowns`
 --
 ALTER TABLE `redts_zg_payment_cost_breakdowns`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zh_cert_perm_routes`
 --
 ALTER TABLE `redts_zh_cert_perm_routes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zi_origin_offices`
 --
 ALTER TABLE `redts_zi_origin_offices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_zj_user_oop_approvees`
 --
 ALTER TABLE `redts_zj_user_oop_approvees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `redts_z_applicant_types`
 --
 ALTER TABLE `redts_z_applicant_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
