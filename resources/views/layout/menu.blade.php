@@ -831,9 +831,9 @@
         function updateOnlineStatus() {
             let status = document.getElementById('internetStatusIndicator');
             if (navigator.onLine) {
-                status.innerHTML = '<span class="badge text-bg-success" >🌏 ONLINE</span>';
+                status.innerHTML = '<span class="badge text-bg-success" >🌏 CONNECTED</span>';
             } else {
-                status.innerHTML = '<span class="badge text-bg-danger skew-y-shakeing" >❌ OFFLINE</span>';
+                status.innerHTML = '<span class="badge text-bg-danger skew-y-shakeing" >❌ NO INTERNET</span>';
             }
         }
 
