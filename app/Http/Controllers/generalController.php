@@ -3594,7 +3594,7 @@ class generalController extends Controller
 
             foreach ($apiactsData as $key => $act) {
                 if (!redts_n_action::where('uuid', $act['uuid'])->exists()) {
-                    array_push($acionSyncMsg, "New Action Synced: ". $act['doc_no'] . " => " . $act['uuid']);
+                    array_push($acionSyncMsg, "New Action Synced: " . $act['doc_no'] . " => " . $act['uuid']);
 
                     redts_n_action::create([
                         'uuid' => $act['uuid'],
@@ -3628,7 +3628,7 @@ class generalController extends Controller
                         'updated_at' => $act['updated_at'],
                     ]);
                 } else { //check update_at if different
-                    array_push($acionSyncMsg, "New Action Synced: ". $act['doc_no'] . " => " . $act['uuid']);
+                    array_push($acionSyncMsg, "New Action Synced: " . $act['doc_no'] . " => " . $act['uuid']);
                     $ExistingAct = redts_n_action::where('uuid', $act['uuid'])->first();
 
                     $act['created_at'] = date('Y-m-d H:i:s', strtotime($act['created_at']));
@@ -3736,9 +3736,10 @@ class generalController extends Controller
         }
 
         #region file upload here
-        $unsyncedAttachments = redts_na_action_attachments::whereNull('uploaded')->get();
+        // for action files
+        $unsyncedActAttachments = redts_na_action_attachments::whereNull('uploaded')->get();
         $syncActFileResults = [];
-        foreach ($unsyncedAttachments as $attachment) {
+        foreach ($unsyncedActAttachments as $attachment) {
             try {
 
                 // sync logic
@@ -3776,6 +3777,69 @@ class generalController extends Controller
                 ];
             }
         }
+
+        // for doc files
+        $unsyncedDocAttachments = redts_ze_client_doc_attachments::whereNull('uploaded')->get();
+        $syncDocFileResults = [];
+
+        foreach ($unsyncedDocAttachments as $attachment) {
+            try {
+                $filePath = storage_path("public/assets/doc/doc_req_files/{$attachment->file_name}");
+
+                if (file_exists($filePath)) {
+                    $response = Http::attach(
+                        'file',
+                        file_get_contents($filePath),
+                        $attachment->file_name
+                    )->post($baseUrl . '3f3440c9-66b5-496b-8421-80adff41adf0', [
+                        'uuid' => $attachment->uuid,
+                        'doc_info_id' => $attachment->doc_info_id,
+                        'doc_info_uuid' => $attachment->doc_info_uuid,
+                        'req_id' => $attachment->req_id,
+                        'app_form_no' => $attachment->app_form_no,
+                        'req_slug' => $attachment->req_slug,
+                        'file_path' => $attachment->file_path,
+                        'file_name' => $attachment->file_name,
+                        'file_link' => $attachment->file_link,
+                        'text_input' => $attachment->text_input,
+                        'attachment_type' => $attachment->attachment_type,
+                    ]);
+
+                    if ($response->successful()) {
+                        redts_ze_client_doc_attachments::where('id', $attachment->id)->update([
+                            'uploaded' => now(),
+                        ]);
+                        $syncDocFileResults[] = [
+                            'file' => $attachment->file_name,
+                            'status' => 'synced',
+                            'msg' => $response->json()['msg'] ?? 'No message returned'
+                        ];
+                    } else {
+                        $errorMsg = $response->json()['msg'] ?? $response->body();
+                        $syncDocFileResults[] = [
+                            'file' => $attachment->file_name,
+                            'status' => 'failed',
+                            'msg' => $errorMsg
+                        ];
+                    }
+                } else {
+                    $syncDocFileResults[] = [
+                        'file' => $attachment->file_name,
+                        'status' => 'missing',
+                        'msg' => 'File not found at expected path',
+                        'attachment' => $attachment,
+                    ];
+                }
+            } catch (\Exception $e) {
+                $syncDocFileResults[] = [
+                    'file' => isset($attachment) ? $attachment->file_name : 'unknown',
+                    'status' => 'error',
+                    'msg' => $e->getMessage(),
+                    'attachment' => $attachment,
+                ];
+            }
+        }
+
         #endregion file upload here
 
         return response()->json([
@@ -3783,12 +3847,13 @@ class generalController extends Controller
             'acionSyncMsg' => $acionSyncMsg,
             // 'docCountUnsynced' => $docCountUnsynced,
             // 'actCountUnsynced' => $actCountUnsynced,
-            'actCountedAll' =>  $actCountedAll  .' == '.  $actCountedAllLocal,
-            
+            // 'actCountedAll' =>  $actCountedAll  .' == '.  $actCountedAllLocal,
+
             // 'unsyncedDocsMsg' => $unsyncedDocsMsg,
             // 'unsyncedActMsg' => $unsyncedActMsg,
             // 'unsyncedDocsOrgMsg' => $unsyncedDocsOrgMsg,
             // 'syncActFileResults' => $syncActFileResults,
+            'syncDocFileResults' => $syncDocFileResults,
         ]);
     }
     #endregion eredts server hand-shake
