@@ -1645,7 +1645,7 @@ class generalController extends Controller
                         if ($file->isValid()) {
                             $extension = $file->getClientOriginalExtension();
                             $origFileName = $file->getClientOriginalName();
-                            $fileName = $origFileName . '[' . date('YmdHi') . ']' . $extension;
+                            $fileName = $origFileName . '[' . date('YmdHi') . '].' . $extension;
                             $size = $file->getSize();
                             if ($size <= $upload_limit->size) {
                                 // get stop sending error if uploaded
