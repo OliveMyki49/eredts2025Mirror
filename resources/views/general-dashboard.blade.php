@@ -234,7 +234,7 @@
             </div>
             <div class="p-2">
                 <button class="btn btn-outline-secondary btn-refresh" tooltip="Auto load tables every 10 seconds" flow="down">
-                    <i class="fa fa-refresh" aria-hidden="true"></i> 
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
                     {{-- <span class="btn-refresh-label"> Autoload</span> --}}
                     Autoload
                 </button>
@@ -420,6 +420,9 @@
             <div class="modal-content">
                 <div class="modal-header bg-success">
                     <h1 class="modal-title fs-5 text-white" id="addndocLabel">Create New Document <b><u><span class="sdf fs-6"></span></u></b></h1>
+                    <a href="/index-bulk-doc" target="_blank" class="add-bulk-send-document-item btn btn-outline-light ms-3" title="Send document to an office in bulk with separate document tracking numbers">
+                        <i class="fa fa-file-text" aria-hidden="true"></i> CREATE BULK DOCUMENT ROUTING
+                    </a>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="height: 800px; overflow-y: scroll;">
@@ -617,11 +620,11 @@
                             $('.cnt_arhived').empty().append(r.cnt_arhived);
                             $('.cnt_snt_crtd_docs').empty().append(r.cnt_snt_crtd_docs);
 
-                            if(r.overdue_count > 0){
-                                $('.status-overdue').empty().append('<span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">❗ URGENT (' +r.overdue_count +')<span>');
+                            if (r.overdue_count > 0) {
+                                $('.status-overdue').empty().append('<span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">❗ URGENT (' + r.overdue_count + ')<span>');
                             }
-                            if(r.past_deadline > 0){
-                                $('.status-past-deadline').empty().append('<span class="badge bg-danger badge-status-overdue" style="cursor: pointer">❗ OVERDUE (' +r.past_deadline +')<span>');
+                            if (r.past_deadline > 0) {
+                                $('.status-past-deadline').empty().append('<span class="badge bg-danger badge-status-overdue" style="cursor: pointer">❗ OVERDUE (' + r.past_deadline + ')<span>');
                             }
                         }
                     },
@@ -651,7 +654,7 @@
             //endregion count stats
 
             //region click overdue warning
-            $('.status-overdue, .status-past-deadline').on('click', '.badge-status-overdue', function(){
+            $('.status-overdue, .status-past-deadline').on('click', '.badge-status-overdue', function() {
                 // console.log()
                 // $(this).removeClass('badge-status-overdue');
                 $('.tabInTransit').click();

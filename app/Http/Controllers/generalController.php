@@ -1462,6 +1462,20 @@ class generalController extends Controller
             'class_slug' => $class_slug->slug,
         ]);
     }
+    public function fetchclassslugbulk(Request $request)
+    {
+        $search = $request->input('search');
+
+        $classifications = redts_ee_classification::whereNull('deleted_at')
+            ->where(function ($query) use ($search) {
+                $query->where('slug', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            })
+            ->take(50)
+            ->get(['id', 'slug', 'description']);
+
+        return response()->json($classifications);
+    }
 
     //get user offfice
     public function fetchuseroffice()
@@ -1480,6 +1494,45 @@ class generalController extends Controller
             "success" => true,
             "user_office" => $user_office->office,
         ]);
+    }
+    public function fetchuserofficebulk(Request $request)
+    {
+
+        $type = $request->input('type');
+        $search = $request->input('search');
+
+        if ($type == 1) {
+            $data = redts_f_offices::select(
+                'redts_f_offices.id',
+                'redts_f_offices.uuid',
+                'redts_f_offices.region_id',
+                'redts_f_offices.slug',
+                'redts_f_offices.office',
+                'redts_f_offices.full_office_name',
+                'redts_f_offices.office_type',
+                'redts_f_offices.mother_unit',
+                'redts_f_offices.header_office_title',
+                'redts_f_offices.email',
+                'redts_f_offices.tel_no',
+                'redts_f_offices.cp_no',
+                'redts_f_offices.office_address',
+                'user.username'
+            )
+                ->leftJoin('redts_j_user_offices as user_office', 'user_office.offices_uuid', '=', 'redts_f_offices.uuid')
+                ->leftJoin('redts_b_user as user', 'user.uuid', '=', 'user_office.user_uuid')
+                ->where(function ($query) use ($search) {
+                    $query->where('redts_f_offices.slug', 'like', '%' . $search . '%')
+                        ->orWhere('redts_f_offices.office', 'like', '%' . $search . '%')
+                        ->orWhere('redts_f_offices.full_office_name', 'like', '%' . $search . '%')
+                        ->orWhere('redts_f_offices.office_type', 'like', '%' . $search . '%')
+                        ->orWhere('user.username', 'like', '%' . $search . '%');
+                })
+                ->whereNull('redts_f_offices.deleted_at')
+                ->take(50)
+                ->get();
+
+            return response()->json($data);
+        }
     }
     public function fetchapptransacttype()
     {
@@ -1712,6 +1765,319 @@ class generalController extends Controller
             'officeCollectionCheck' => $officeCollectionCheck,
             'user_office' => $user_office,
         ]);
+    }
+    public function indexbulkdoc(Request $request)
+    {
+        if (Auth::check()) {
+            return view('general-dashboard-bulk-create');
+        } else {
+            return $this->pageResponse()['page403'];
+        }
+    }
+
+    /**
+     * Store multiple documents in bulk with shared destination offices
+     * This method processes bulk document submissions where all documents
+     * share the same destination offices but have different document details
+     */
+    public function storebulkdocs(Request $request)
+    {
+        try {
+            $success = true;
+            $documents = $request->input('docs', []); // Array of documents
+            $shared_offices = $request->input('shared_offices', []); // Shared destination offices
+
+            $successfulDocs = 0;
+            $failedDocs = 0;
+            $results = [];
+
+            // Validate that we have shared offices
+            if (empty($shared_offices)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No destination offices provided',
+                    'total' => 0,
+                    'successful' => 0,
+                    'failed' => 0,
+                ]);
+            }
+
+            // Get user office information once (shared for all documents)
+            $user_office = user::select(
+                'offices.id as office_id',
+                'bind.offices_uuid',
+            )
+                ->leftJoin('redts_j_user_offices as bind', 'bind.user_uuid', '=', 'redts_b_user.uuid')
+                ->leftJoin('redts_f_offices as offices', 'offices.uuid', '=', 'bind.offices_uuid')
+                ->where('redts_b_user.uuid', Auth::user()->uuid)
+                ->whereNull('redts_b_user.deleted_at')
+                ->first();
+
+            if (!$user_office) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User office information not found',
+                    'total' => 0,
+                    'successful' => 0,
+                    'failed' => 0,
+                ]);
+            }
+
+            // Process each document
+            foreach ($documents as $index => $doc) {
+                try {
+                    // Generate new UUID for this document
+                    $new_doc_uuid = $this->generateUuid();
+
+                    // Extract document data
+                    $doc_no = $doc['doc_no'] ?? null;
+                    $doc_date = $doc['doc_date'] ?? null;
+                    $class_slug = $doc['class_slug'] ?? null;
+                    $confidential = $doc['confidential'] ?? null;
+                    $compliance_deadline = $doc['compliance_deadline'] ?? null;
+                    $app_type_uuid = $doc['app_type_uuid'] ?? null;
+                    $transac_uuid = $doc['transac_uuid'] ?? null;
+                    $subject = $doc['subject'] ?? null;
+                    $atch_remarks = $doc['atch_remarks'] ?? null;
+
+                    // Validate required fields for this document
+                    if (
+                        !$doc_no || !$doc_date || !$class_slug || !$confidential ||
+                        !$app_type_uuid || !$transac_uuid || !$subject
+                    ) {
+                        $failedDocs++;
+                        $results[] = [
+                            'doc_no' => $doc_no ?? 'Unknown',
+                            'status' => 'failed',
+                            'reason' => 'Missing required fields',
+                            'data' => array([
+                                'doc_no' => $doc_no,
+                                'doc_date' => $doc_date,
+                                'class_slug' => $class_slug,
+                                'confidential' => $confidential,
+                                'compliance_deadline' => $compliance_deadline,
+                                'app_type_uuid' => $app_type_uuid,
+                                'transac_uuid' => $transac_uuid,
+                                'subject' => $subject,
+                                'atch_remarks' => $atch_remarks,
+                            ]),
+                        ];
+                        continue;
+                    }
+
+                    // Get application type details
+                    $app_type = redts_z_applicant_type::select(
+                        'redts_z_applicant_types.id as app_id',
+                        'transac_type.id as transac_id'
+                    )
+                        ->leftJoin(
+                            'redts_za_transaction_types as transac_type',
+                            'transac_type.uuid',
+                            '=',
+                            'redts_z_applicant_types.transaction_uuid'
+                        )
+                        ->where('redts_z_applicant_types.uuid', $app_type_uuid)
+                        ->whereNull('redts_z_applicant_types.deleted_at')
+                        ->first();
+
+                    if (!$app_type) {
+                        $failedDocs++;
+                        $results[] = [
+                            'doc_no' => $doc_no,
+                            'status' => 'failed',
+                            'reason' => 'Invalid application type'
+                        ];
+                        continue;
+                    }
+
+                    // Get class id and uuid
+                    $class_info = redts_ee_classification::where('slug', $class_slug)
+                        ->whereNull('deleted_at')
+                        ->first(['id', 'uuid']);
+
+                    if (!$class_info) {
+                        $failedDocs++;
+                        $results[] = [
+                            'doc_no' => $doc_no,
+                            'status' => 'failed',
+                            'reason' => 'Invalid document classification'
+                        ];
+                        continue;
+                    }
+
+                    // Create document info
+                    $create_doc = redts_zd_client_doc_info::create([
+                        'uuid' => $new_doc_uuid,
+                        'doc_no' => $doc_no,
+                        'application_type_id' => $app_type->app_id,
+                        'application_type_uuid' => $app_type_uuid,
+                        'transaction_type_id' => $app_type->transac_id,
+                        'transaction_type_uuid' => $transac_uuid,
+                        'agency' => null,
+                        'client_id' => null,
+                        'class_id' => $class_info->id,
+                        'class_uuid' => $class_info->uuid,
+                        'class_slug' => $class_slug,
+                        'subclass_id' => null,
+                        'subclass_slug' => null,
+                        'remarks' => $subject,
+                        'validated' => 1,
+                        'doc_date' => $doc_date,
+                        'compliance_deadline' => $compliance_deadline,
+                    ]);
+
+                    if ($create_doc) {
+                        // Store origin office (only once per document)
+                        redts_zi_origin_office::create([
+                            'user_id' => Auth::user()->id,
+                            'user_uuid' => Auth::user()->uuid,
+                            'doc_id' => $create_doc->id,
+                            'doc_uuid' => $create_doc->uuid,
+                            'origin_office_id' => $user_office->office_id,
+                            'origin_office_uuid' => $user_office->offices_uuid,
+                        ]);
+
+                        // Create actions for each shared destination office
+                        foreach ($shared_offices as $office_uuid => $office_data) {
+                            $action_uuid = $this->generateUuid();
+
+                            redts_n_action::create([
+                                'uuid' => $action_uuid,
+                                'subject' => $subject,
+                                'doc_id' => $create_doc->id,
+                                'doc_uuid' => $create_doc->uuid,
+                                'doc_no' => $doc_no,
+                                'sender_client_id' => null,
+                                'sender_user_id' => Auth::user()->id,
+                                'sender_user_uuid' => Auth::user()->uuid,
+                                'sender_type' => 'User',
+                                'referred_by_office' => $user_office->office_id,
+                                'referred_by_office_uuid' => $user_office->offices_uuid,
+                                'action_taken' => null,
+                                'send_to_office' => $office_data['id'],
+                                'send_to_office_uuid' => $office_data['uuid'],
+                                'validated' => date('Y-m-d H:i:s'),
+                                'received_id' => null,
+                                'received_uuid' => null,
+                                'received' => null,
+                                'released' => null,
+                                'final_action' => null,
+                                'rejected' => null,
+                                'verification_date' => date('Y-m-d H:i:s'),
+                                'in_transit_remarks' => null,
+                                'document_remarks' => null,
+                                'action_remarks' => null,
+                                'attachment_remarks' => null,
+                            ]);
+                        }
+
+                        // Handle attachment remarks if provided
+                        if (!empty($atch_remarks)) {
+                            $newAttachment_uuid = $this->generateUuid();
+                            redts_ze_client_doc_attachments::create([
+                                'uuid' => $newAttachment_uuid,
+                                'doc_info_id' => $create_doc->id,
+                                'doc_info_uuid' => $create_doc->uuid,
+                                'req_id' => null,
+                                'app_form_no' => 1,
+                                'req_slug' => 'Attachment Remarks',
+                                'file_path' => 'n/a',
+                                'file_name' => 'n/a',
+                                'file_link' => 'n/a',
+                                'text_input' => $atch_remarks,
+                                'attachment_type' => 'text',
+                            ]);
+                        }
+
+                        // Handle file uploads if present
+                        if ($request->hasFile("docs.$index.files")) {
+                            $upload_limit = redts_w_upload_size_limit::where('id', 1)->first();
+                            $upload_path = "public/assets/doc/doc_req_files";
+
+                            foreach ($request->file("docs.$index.files") as $file) {
+                                if ($file->isValid()) {
+                                    $extension = $file->getClientOriginalExtension();
+                                    $origFileName = $file->getClientOriginalName();
+                                    $fileName = $origFileName . '[' . date('YmdHi') . '].' . $extension;
+                                    $size = $file->getSize();
+
+                                    if ($size <= $upload_limit->size) {
+                                        try {
+                                            // Upload file
+                                            $file->move(storage_path($upload_path), $fileName);
+                                            $file_path = 'doc_req_files/' . $fileName;
+
+                                            // Create attachment record
+                                            $newAttachment_uuid = $this->generateUuid();
+                                            redts_ze_client_doc_attachments::create([
+                                                'uuid' => $newAttachment_uuid,
+                                                'doc_info_id' => $create_doc->id,
+                                                'doc_info_uuid' => $create_doc->uuid,
+                                                'req_id' => null,
+                                                'app_form_no' => 1,
+                                                'req_slug' => 'Attachment',
+                                                'file_path' => 'doc_req_files',
+                                                'file_name' => $fileName,
+                                                'file_link' => 'n/a',
+                                                'text_input' => 'n/a',
+                                                'attachment_type' => 'file',
+                                            ]);
+                                        } catch (\Exception $e) {
+                                            // Log file upload error but don't fail the entire document
+                                            // \Log::error("File upload failed for doc $doc_no: " . $e->getMessage());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        $successfulDocs++;
+                        $results[] = [
+                            'doc_no' => $doc_no,
+                            'status' => 'success',
+                            'uuid' => $new_doc_uuid
+                        ];
+                    } else {
+                        $failedDocs++;
+                        $results[] = [
+                            'doc_no' => $doc_no,
+                            'status' => 'failed',
+                            'reason' => 'Failed to create document record'
+                        ];
+                    }
+                } catch (\Exception $e) {
+                    $failedDocs++;
+                    $results[] = [
+                        'doc_no' => $doc['doc_no'] ?? 'Unknown',
+                        'status' => 'failed',
+                        'reason' => 'Exception: ' . $e->getMessage()
+                    ];
+                    // \Log::error("Bulk document creation error: " . $e->getMessage());
+                }
+            }
+
+            $totalDocs = count($documents);
+
+            return response()->json([
+                'success' => $successfulDocs > 0,
+                'message' => "Processed $totalDocs document(s). Success: $successfulDocs, Failed: $failedDocs",
+                'total' => $totalDocs,
+                'successful' => $successfulDocs,
+                'failed' => $failedDocs,
+                'results' => $results,
+                'shared_offices_count' => count($shared_offices),
+            ]);
+        } catch (\Exception $e) {
+            // \Log::error("Bulk document submission error: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during bulk submission',
+                'error' => $e->getMessage(),
+                'total' => 0,
+                'successful' => 0,
+                'failed' => 0,
+            ]);
+        }
     }
     #endregion add new document
 

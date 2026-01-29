@@ -214,6 +214,10 @@ return [
     ])->toArray(),
 
     // custom aliases
-    'bapiu' => env('APP_BAPIU', 'http://58.69.249.100:9120/api/'), // BASE API URL
-    'bapi' => env('APP_BAPI', 'http://58.69.249.100:9120/'), // BASE API URL
+    //'bapiu' => env('APP_BAPIU', 'http://58.69.249.100:9120/api/'), // BASE API URL
+    //'bapi' => env('APP_BAPI', 'http://58.69.249.100:9120/'), // BASE API URL
+    
+    // development aliases
+    'bapiu' => env('APP_BAPIU', 'localhost:8001/api/'), // BASE API URL
+    'bapi' => env('APP_BAPI', 'localhost:8001/'), // BASE API URL
 ];

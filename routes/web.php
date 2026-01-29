@@ -243,9 +243,17 @@ Route::post('get-clientReqCreated', [generalController::class, 'fetchclientReqCr
     Route::get('get-client-fullname-and-id', [generalController::class, 'fetchclientfullnameandid'])->name('fetchclientfullnameandid');
 */
 Route::post('get-class-slug', [generalController::class, 'fetchclassslug'])->name('fetchclassslug');
+Route::post('get-class-slug-bulk', [generalController::class, 'fetchclassslugbulk'])->name('fetchclassslugbulk');
 Route::get('get-user-office', [generalController::class, 'fetchuseroffice'])->name('fetchuseroffice');
+Route::get('get-user-office-bulk', [generalController::class, 'fetchuserofficebulk'])->name('fetchuserofficebulk');
 Route::get('get-app-transact-type', [generalController::class, 'fetchapptransacttype'])->name('fetchapptransacttype');
+
+// Single document submission (original functionality)
 Route::post('insert-new-doc', [generalController::class, 'storenewdoc'])->name('storenewdoc');
+
+// Bulk document submission (new functionality)
+Route::get('index-bulk-doc', [generalController::class, 'indexbulkdoc'])->name('indexbulkdoc');
+Route::post('insert-bulk-docs', [generalController::class, 'storebulkdocs'])->name('storebulkdocs');
 #endregion add new document
 
 #region routing slip
