@@ -543,12 +543,16 @@ class clientController extends Controller
     {
         $doc_info = redts_zd_client_doc_info::select(
             'redts_zd_client_doc_infos.id',
+            'redts_zd_client_doc_infos.uuid',
             'redts_zd_client_doc_infos.doc_no',
             'redts_zd_client_doc_infos.application_type_id',
+            'redts_zd_client_doc_infos.application_type_uuid',
             'redts_zd_client_doc_infos.transaction_type_id',
+            'redts_zd_client_doc_infos.transaction_type_uuid',
             'redts_zd_client_doc_infos.agency',
             'redts_zd_client_doc_infos.client_id',
             'redts_zd_client_doc_infos.class_id',
+            'redts_zd_client_doc_infos.class_uuid',
             'redts_zd_client_doc_infos.class_slug',
             'redts_zd_client_doc_infos.subclass_id',
             'redts_zd_client_doc_infos.subclass_slug',
@@ -566,14 +570,14 @@ class clientController extends Controller
             #endregion transaction type
 
             #region client info
-            'clientInf.fname as client_fname',
-            'clientInf.mname as client_mname',
-            'clientInf.sname as client_sname',
-            'clientInf.suffix as client_suffix',
-            'clientInf.address as client_address',
-            'clientInf.email as client_email',
-            'clientInf.email_verify as client_email_verify',
-            'clientInf.contact_no as client_contact_no',
+            // 'clientInf.fname as client_fname',
+            // 'clientInf.mname as client_mname',
+            // 'clientInf.sname as client_sname',
+            // 'clientInf.suffix as client_suffix',
+            // 'clientInf.address as client_address',
+            // 'clientInf.email as client_email',
+            // 'clientInf.email_verify as client_email_verify',
+            // 'clientInf.contact_no as client_contact_no',
             #endregion client info
 
             #region doc clas
@@ -581,44 +585,52 @@ class clientController extends Controller
             #endregion doc clas
 
             #region doc type
-            'doc_type.description as doc_type_full',
+            // 'doc_type.description as doc_type_full',
             #endregion doc type
         )
-            ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'redts_zd_client_doc_infos.application_type_id')
-            ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.id', '=', 'redts_zd_client_doc_infos.transaction_type_id')
-            ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
-            ->leftJoin('redts_ee_classification as doc_class', 'doc_class.id', '=', 'redts_zd_client_doc_infos.class_id')
-            ->leftJoin('redts_l_sub_class as doc_type', 'doc_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
+            ->leftJoin('redts_z_applicant_types as app_type', 'app_type.uuid', '=', 'redts_zd_client_doc_infos.application_type_uuid')
+            ->leftJoin('redts_za_transaction_types as transac_type', 'transac_type.uuid', '=', 'redts_zd_client_doc_infos.transaction_type_uuid')
+            // ->leftJoin('redts_zc_client_infos as clientInf', 'clientInf.id', '=', 'redts_zd_client_doc_infos.client_id')
+            ->leftJoin('redts_ee_classification as doc_class', 'doc_class.uuid', '=', 'redts_zd_client_doc_infos.class_uuid')
+            // ->leftJoin('redts_l_sub_class as doc_type', 'doc_type.id', '=', 'redts_zd_client_doc_infos.subclass_id')
             ->where('redts_zd_client_doc_infos.doc_no', $doc_no)
             ->whereNull('redts_zd_client_doc_infos.deleted_at')
             ->first();
 
         $doc_stats = null;
-        $order_of_payment = null;
         if ($doc_info != null) {
             // initialise doc_id
-            $doc_id = $doc_info->id;
+            $doc_uuid = $doc_info->uuid;
 
             $doc_stats = redts_n_action::select(
                 'redts_n_actions.id',
+                'redts_n_actions.uuid',
+                'redts_n_actions.subject',
                 'redts_n_actions.doc_id',
+                'redts_n_actions.doc_uuid',
+                'redts_n_actions.doc_no',
                 'redts_n_actions.sender_client_id',
                 'redts_n_actions.sender_user_id',
+                'redts_n_actions.sender_user_uuid',
                 'redts_n_actions.sender_type',
                 'redts_n_actions.referred_by_office',
+                'redts_n_actions.referred_by_office_uuid',
                 'redts_n_actions.action_taken',
                 'redts_n_actions.send_to_office',
-                'redts_n_actions.received_id',
-                'redts_n_actions.received',
-                'redts_n_actions.released',
+                'redts_n_actions.send_to_office_uuid',
                 'redts_n_actions.validated',
+                'redts_n_actions.received_id',
+                'redts_n_actions.received_uuid',
+                'redts_n_actions.received',
                 'redts_n_actions.released',
                 'redts_n_actions.final_action',
                 'redts_n_actions.rejected',
-                'redts_n_actions.subject',
+                'redts_n_actions.verification_date',
                 'redts_n_actions.in_transit_remarks',
+                'redts_n_actions.document_remarks',
                 'redts_n_actions.action_remarks',
                 'redts_n_actions.attachment_remarks',
+                'redts_n_actions.uploaded_act',
                 'redts_n_actions.deleted_at',
                 'redts_n_actions.created_at',
 
@@ -649,13 +661,13 @@ class clientController extends Controller
                 'received_by.suffix as receiver_suffix',
                 #endregion received by
             )
-                ->leftJoin('redts_zd_client_doc_infos as doc_info', 'doc_info.id', '=', 'redts_n_actions.doc_id')
-                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.id', '=', 'doc_info.application_type_id')
-                ->leftJoin('redts_b_user as sender_user', 'sender_user.id', '=', 'redts_n_actions.sender_user_id')
+                ->leftJoin('redts_zd_client_doc_infos as doc_info', 'doc_info.uuid', '=', 'redts_n_actions.doc_uuid')
+                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.uuid', '=', 'doc_info.application_type_uuid')
+                ->leftJoin('redts_b_user as sender_user', 'sender_user.uuid', '=', 'redts_n_actions.sender_user_uuid')
                 ->leftJoin('redts_f_offices as referred_by', 'referred_by.id', '=', 'redts_n_actions.referred_by_office')
-                ->leftJoin('redts_f_offices as send_to', 'send_to.id', '=', 'redts_n_actions.send_to_office')
-                ->leftJoin('redts_d_profile as received_by', 'received_by.id', '=', 'redts_n_actions.received_id')
-                ->where('redts_n_actions.doc_id', $doc_id)
+                ->leftJoin('redts_f_offices as send_to', 'send_to.uuid', '=', 'redts_n_actions.send_to_office_uuid')
+                ->leftJoin('redts_d_profile as received_by', 'received_by.user_uuid', '=', 'redts_n_actions.received_uuid')
+                ->where('redts_n_actions.doc_uuid', $doc_uuid)
                 ->whereNull('redts_n_actions.deleted_at')
                 ->get();
         }

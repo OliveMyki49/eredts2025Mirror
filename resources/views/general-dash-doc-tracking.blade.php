@@ -387,7 +387,7 @@
                     },
                     success: function(r) {
                         if (r.success) {
-                            console.log(r);
+                            // console.log(r);
 
                             if (r.doc_info != null) {
                                 $('.toggleSeachDocCont').fadeOut();
@@ -433,7 +433,7 @@
                                         }
                                         date_forwarded_lbl = 'Date Forwarded';
                                     } else {
-                                        relese_stat_disp = '<div class="border border-2 border-success bg-white text-success text-center fs-5 fw-bold"><i class="fa fa-check-circle" aria-hidden="true"></i><br>Archived</div>';
+                                        relese_stat_disp = '<div class="border border-2 border-success bg-white text-success text-center fs-5 fw-bold"><i class="fa fa-check-circle" aria-hidden="true"></i><br>Final Action</div>';
                                         date_forwarded_lbl = 'Date Archived';
                                     }
 
