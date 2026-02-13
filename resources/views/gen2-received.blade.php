@@ -440,7 +440,13 @@
                                     '    </a>';
                             }
 
-                            return '' +
+                            //check if synced
+                            //NOTE: BE MINDFUL OF THE doc_uuid USAGE
+                            let onlineAtchLink = row['downloaded'] != null ? 
+                                '<a href="http://{{ $baseUrl = config('app.bapi') }}get-all-atch?uuid=' + row['doc_uuid'] + '" target="_blank">VIEW ONLINE ATTACHMENTS</a>' : 
+                                ' <span class="badge bg-danger text-white  mb-1 me-2" >LOCAL ATTACHMENTS ONLY</span> ';
+
+                            return '' + onlineAtchLink +
                                 '<div class="row ps-1">' +
                                 '   <div class="col">' +
                                 '       ' + req_atchs_collapsible +
@@ -664,7 +670,7 @@
                     {
                         extend: 'excel',
                         text: 'Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i>',
-                        title: `RECEIVED CLIENT REQUESTS ${new Date().toLocaleDateString()}`,
+                        title: `RECEIVED DOCUMENTS ${new Date().toLocaleDateString()}`,
                         exportOptions: {
                             columns: ':visible'
                         }
@@ -721,7 +727,7 @@
                                 '      Republic of The Philippines<br> ' +
                                 '      <b>DEPARTMENT OF ENVIRONMENT AND NATURAL RESOURCES</b><br> ' +
                                 '      Regional Center Site, Rawis, Legazpi City<br> ' + formattedDate + ' <br><br>' +
-                                '      <h2>RECEIVED CLIENT REQUESTS</h2>' +
+                                '      <h2>RECEIVED DOCUMENTS</h2>' +
                                 '      <sup>User: ' + auth_username + '</sup><br>' +
                                 '   </span>' +
                                 '   <img style="display: inline-block;  vertical-align:top; width: 100px; height: 100px;" src="{{ asset('assets/img/Bagong_Pilipinas_logo.webp') }}" > ' +

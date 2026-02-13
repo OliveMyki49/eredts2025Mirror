@@ -209,6 +209,7 @@ class generalController extends Controller
             ->get();
 
         //count how many in-transit action are not received within 1 day
+        $urgent_count = 0;
         $overdue_count = 0;
         foreach ($get_intransit as $dt) {
             $created_date = new DateTime($dt->created_at);
@@ -216,6 +217,9 @@ class generalController extends Controller
             $days_diff = $now->diff($created_date)->days;
 
             if ($days_diff > 0) {
+                $urgent_count++;
+            }
+            if ($days_diff > 3) {
                 $overdue_count++;
             }
         }
@@ -244,6 +248,7 @@ class generalController extends Controller
             // 'cnt_rejected' => $cnt_rejected, //DEPRECATED
             'cnt_snt_crtd_docs' => $cnt_snt_crtd_docs,
             'cnt_documents' => $cnt_documents, //all documents uploaded to the system
+            'urgent_count' => $urgent_count,
             'overdue_count' => $overdue_count,
             'past_deadline' => $past_deadline,
             'get_doc_deadline' => $get_doc_deadline,
@@ -3821,15 +3826,14 @@ class generalController extends Controller
         $docOfficeCountedLocal = redts_zi_origin_office::whereNotNull('downloaded')->whereNull('deleted_at')->count();
 
         // count unsynced documents and actions
-        $docCountUnsynced = redts_zd_client_doc_info::whereNull('uploaded')->whereNull('downloaded')->whereNull('deleted_at')->count();
-        $originCountUnsynced = redts_zi_origin_office::whereNull('uploaded')->whereNull('downloaded')->whereNull('deleted_at')->count();
-        $actCountUnsynced = redts_n_action::whereNull('uploaded_act')->whereNull('downloaded')->whereNull('deleted_at')->count();
+        $docCountUnsynced = redts_zd_client_doc_info::whereNull('uploaded')->whereNull('deleted_at')->count();
+        $originCountUnsynced = redts_zi_origin_office::whereNull('uploaded')->whereNull('deleted_at')->count();
+        $actCountUnsynced = redts_n_action::whereNull('uploaded_act')->whereNull('deleted_at')->count();
 
 
         $unsyncedDocsMsg = [];
         if ($docCountUnsynced >= 1) {
             $unsyncedDocs = redts_zd_client_doc_info::whereNull('uploaded')
-                ->whereNull('downloaded')
                 ->whereNull('deleted_at')
                 ->get();
 
@@ -3858,7 +3862,6 @@ class generalController extends Controller
         $unsyncedActMsg = [];
         if ($actCountUnsynced >= 1) {
             $unsyncedActs = redts_n_action::whereNull('uploaded_act')
-                ->whereNull('downloaded')
                 ->whereNull('deleted_at')
                 ->get();
 
@@ -3887,7 +3890,6 @@ class generalController extends Controller
         $unsyncedDocsOrgMsg = [];
         if ($originCountUnsynced >= 1) {
             $unsyncedDocOriginCount = redts_zi_origin_office::whereNull('uploaded')
-                ->whereNull('downloaded')
                 ->whereNull('deleted_at')
                 ->get();
 
@@ -4213,7 +4215,8 @@ class generalController extends Controller
             'acionSyncMsg' => $acionSyncMsg,
             // 'docCountUnsynced' => $docCountUnsynced,
             // 'actCountUnsynced' => $actCountUnsynced,
-            // 'actCountedAll' =>  $actCountedAll  .' == '.  $actCountedAllLocal,
+            'docCounted' =>  $docCounted  .' == '.  $docCountedLocal,
+            'actCountedAll' =>  $actCountedAll  .' == '.  $actCountedAllLocal,
 
             // 'unsyncedDocsMsg' => $unsyncedDocsMsg,
             // 'unsyncedActMsg' => $unsyncedActMsg,

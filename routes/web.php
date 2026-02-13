@@ -264,20 +264,20 @@ Route::get('grsid/{doc_uuid}/', [generalController::class, 'fetchroutingslipid']
 #endregion routing slip
 
 #region order of payment slip
-Route::get('get-orderOfPayment/{doc_id}/', [generalController::class, 'fetchorderOfPayment'])->name('fetchorderOfPayment'); //redirects to a blade file
-Route::get('add-another-oop/{doc_id}/', [generalController::class, 'fetchaddanotheroop'])->name('fetchaddanotheroop'); //additional order of paymenr
-Route::get('get-edit-another-oop/{doc_id}/{aoop_id}', [generalController::class, 'fetchupdateanotheroop'])->name('fetchupdateanotheroop'); //additional order of paymenr
-Route::post('edit-another-oop', [generalController::class, 'updateanotheroop'])->name('updateanotheroop'); //additional order of paymenr
-Route::get('get-orderOfPayment-view-only/{doc_id}/', [generalController::class, 'fetchorderOfPaymentviewonly'])->name('fetchorderOfPaymentviewonly'); //redirects to a blade file
-Route::get('get-orderOfPaymentForBilling/{doc_id}/', [generalController::class, 'fetchorderOfPaymentForBilling'])->name('fetchorderOfPaymentForBilling'); //redirects to a blade file
-Route::post('insert-edit-order-of-payment', [generalController::class, 'storeupdateorderofpayment'])->name('storeupdateorderofpayment');
-Route::post('insert-additional-order-of-payment', [generalController::class, 'storeadditionalorderofpayment'])->name('storeadditionalorderofpayment');
-Route::get('get-existing-order-of-payment', [generalController::class, 'fetchexistingorderofpayment'])->name('fetchexistingorderofpayment'); //fetcgh order of payment data
-Route::get('cli-dash-pymnt-rcpt-upld', [generalController::class, 'indexclidashpymntrcptupld'])->name('indexclidashpymntrcptupld'); //fetcgh order of payment data
-Route::post('edit-signed-order-of-payment', [generalController::class, 'updatesignedorderofpayment'])->name('updatesignedorderofpayment'); //fetcgh order of payment data
-Route::post('edit-payment-receipt', [generalController::class, 'updatepaymentreceipt'])->name('updatepaymentreceipt'); //fetcgh order of payment data
-Route::post('edit-payment-receipt-user', [generalController::class, 'updatepaymentreceiptuser'])->name('updatepaymentreceiptuser'); //fetcgh order of payment data
-Route::post('edit-verify-client-receipt', [generalController::class, 'updateverifyclientreceipt'])->name('updateverifyclientreceipt'); //fetcgh order of payment data
+// Route::get('get-orderOfPayment/{doc_id}/', [generalController::class, 'fetchorderOfPayment'])->name('fetchorderOfPayment'); //redirects to a blade file
+// Route::get('add-another-oop/{doc_id}/', [generalController::class, 'fetchaddanotheroop'])->name('fetchaddanotheroop'); //additional order of paymenr
+// Route::get('get-edit-another-oop/{doc_id}/{aoop_id}', [generalController::class, 'fetchupdateanotheroop'])->name('fetchupdateanotheroop'); //additional order of paymenr
+// Route::post('edit-another-oop', [generalController::class, 'updateanotheroop'])->name('updateanotheroop'); //additional order of paymenr
+// Route::get('get-orderOfPayment-view-only/{doc_id}/', [generalController::class, 'fetchorderOfPaymentviewonly'])->name('fetchorderOfPaymentviewonly'); //redirects to a blade file
+// Route::get('get-orderOfPaymentForBilling/{doc_id}/', [generalController::class, 'fetchorderOfPaymentForBilling'])->name('fetchorderOfPaymentForBilling'); //redirects to a blade file
+// Route::post('insert-edit-order-of-payment', [generalController::class, 'storeupdateorderofpayment'])->name('storeupdateorderofpayment');
+// Route::post('insert-additional-order-of-payment', [generalController::class, 'storeadditionalorderofpayment'])->name('storeadditionalorderofpayment');
+// Route::get('get-existing-order-of-payment', [generalController::class, 'fetchexistingorderofpayment'])->name('fetchexistingorderofpayment'); //fetcgh order of payment data
+// Route::get('cli-dash-pymnt-rcpt-upld', [generalController::class, 'indexclidashpymntrcptupld'])->name('indexclidashpymntrcptupld'); //fetcgh order of payment data
+// Route::post('edit-signed-order-of-payment', [generalController::class, 'updatesignedorderofpayment'])->name('updatesignedorderofpayment'); //fetcgh order of payment data
+// Route::post('edit-payment-receipt', [generalController::class, 'updatepaymentreceipt'])->name('updatepaymentreceipt'); //fetcgh order of payment data
+// Route::post('edit-payment-receipt-user', [generalController::class, 'updatepaymentreceiptuser'])->name('updatepaymentreceiptuser'); //fetcgh order of payment data
+// Route::post('edit-verify-client-receipt', [generalController::class, 'updateverifyclientreceipt'])->name('updateverifyclientreceipt'); //fetcgh order of payment data
 #endregion order of payment slip
 
 #region manage client requests

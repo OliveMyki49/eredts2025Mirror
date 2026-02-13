@@ -372,7 +372,7 @@
                             //check if synced
                             //NOTE: BE MINDFUL OF THE doc_uuid USAGE
                             let onlineAtchLink = row['downloaded'] != null ? 
-                                '<a href="{{ $baseUrl = config('app.bapi') }}get-all-atch?uuid=' + row['doc_uuid'] + '" target="_blank">VIEW ONLINE ATTACHMENTS</a>' : 
+                                '<a href="http://{{ $baseUrl = config('app.bapi') }}get-all-atch?uuid=' + row['doc_uuid'] + '" target="_blank">VIEW ONLINE ATTACHMENTS</a>' : 
                                 ' <span class="badge bg-danger text-white  mb-1 me-2" >LOCAL ATTACHMENTS ONLY</span> ';
 
                             return '' + onlineAtchLink +
@@ -548,20 +548,33 @@
                             if (row['act_count_received'] == 0) {
                                 disp_new = '<span class="badge bg-primary mb-1 me-2">NEW</span>';
                             }
-                            let disp_overdue = '';
+                            let disp_urgent = '';
                             if (diffdays > 0) {
-                                disp_overdue = '<span class="badge bg-warning text-black text-uppercase mb-1 me-2 badge-status-overdue">URGENT (' + diffdays + ' DAY/S)</span>';
+                                disp_urgent = '<span class="badge bg-warning text-black text-uppercase mb-1 me-2 badge-status-overdue" title="No action taken for more than 24 hours">URGENT (' + diffdays + ' DAY/S)</span>';
                             }
+
+                            let disp_overdue = '';
+                            if (diffdays > 3) {
+                                disp_overdue = '<span class="badge bg-danger text-white text-uppercase mb-1 me-2 badge-status-overdue" title="No action taken for more than 3 days">OVERDUE (' + diffdays + ' DAY/S)</span>';
+                            }
+                            /* 
+                                Urgent means the task is still within its allowed time, but it has been sitting for a while and needs attention soon. 
+                                In your code, this is shown when the number of days since creation (diffdays) is greater than 0. It’s basically saying: 
+                                “This has been waiting, please act quickly before the deadline passes.”
+
+                                Overdue means the deadline has already passed. In your code, this is when diffdaysdeadline is greater than 0. 
+                                It’s saying: “You missed the compliance deadline, this is late.”
+                            */
                             let past_deadline = '';
                             if (diffdaysdeadline > 0) {
-                                past_deadline = '<span class="badge bg-danger text-white text-uppercase mb-1 me-2 badge-status-overdue">OVERDUE (' + diffdaysdeadline + ' DAY/S)</span>';
+                                past_deadline = '<span class="badge bg-danger text-white text-uppercase mb-1 me-2 badge-status-overdue" title="This document is past its compliance date/deadline">LATE (' + diffdaysdeadline + ' DAY/S)</span>';
                             }
 
                             //check if synced
                             let synced = row['downloaded'] != null ? ' <span class="badge bg-success text-white  mb-1 me-2" >SYNCED</span> ' : ' <span class="badge bg-danger text-white  mb-1 me-2 badge-status-overdue" >NOT YET SYNCED</span> ';
 
                             let dropdownMenu = '' +
-                                '<div>' + disp_new + synced + disp_overdue + past_deadline + '</div>' +
+                                '<div>' + disp_new + synced + disp_urgent +  disp_overdue + past_deadline + '</div>' +
                                 '<div class="dropdown">' +
                                 '    <div ' +
                                 '       data-bs-toggle="dropdown" ' +
@@ -617,7 +630,7 @@
                     {
                         extend: 'excel',
                         text: 'Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i>',
-                        title: `IN-TRANSIT CLIENT REQUESTS ${new Date().toLocaleDateString()}`,
+                        title: `IN-TRANSIT DOCUMENTS ${new Date().toLocaleDateString()}`,
                         exportOptions: {
                             columns: ':visible'
                         }
@@ -671,7 +684,7 @@
                                 '      Republic of The Philippines<br> ' +
                                 '      <b>DEPARTMENT OF ENVIRONMENT AND NATURAL RESOURCES</b><br> ' +
                                 '      Regional Center Site, Rawis, Legazpi City<br> ' + formattedDate + ' <br><br>' +
-                                '      <h2>IN-TRANSIT CLIENT REQUESTS</h2>' +
+                                '      <h2>IN-TRANSIT DOCUMENTS</h2>' +
                                 '      <sup>User: ' + auth_username + '</sup><br>' +
                                 '   </span>' +
                                 '   <img style="display: inline-block;  vertical-align:top; width: 100px; height: 100px;" src="{{ asset('assets/img/Bagong_Pilipinas_logo.webp') }}" > ' +

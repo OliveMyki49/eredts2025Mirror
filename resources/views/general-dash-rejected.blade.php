@@ -684,7 +684,7 @@
                     {
                         extend: 'excel',
                         text: 'Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i>',
-                        title: `REJECTED CLIENT REQUESTS ${new Date().toLocaleDateString()}`,
+                        title: `REJECTED DOCUMENTS ${new Date().toLocaleDateString()}`,
                         exportOptions: {
                             columns: ':visible'
                         }
@@ -738,7 +738,7 @@
                                 '      Republic of The Philippines<br> ' +
                                 '      <b>DEPARTMENT OF ENVIRONMENT AND NATURAL RESOURCES</b><br> ' +
                                 '      Regional Center Site, Rawis, Legazpi City<br> ' + formattedDate + ' <br><br>' +
-                                '      <h2>REJECTED CLIENT REQUESTS</h2>' +
+                                '      <h2>REJECTED DOCUMENTS</h2>' +
                                 '      <sup>User: ' + auth_username + '</sup><br>' +
                                 '   </span>' +
                                 '   <img style="display: inline-block;  vertical-align:top; width: 100px; height: 100px;" src="{{ asset('assets/img/Bagong_Pilipinas_logo.webp') }}" > ' +

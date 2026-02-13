@@ -620,11 +620,14 @@
                             $('.cnt_arhived').empty().append(r.cnt_arhived);
                             $('.cnt_snt_crtd_docs').empty().append(r.cnt_snt_crtd_docs);
 
-                            if (r.overdue_count > 0) {
-                                $('.status-overdue').empty().append('<span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer">❗ URGENT (' + r.overdue_count + ')<span>');
+                            if (r.urgent_count > 0) {
+                                $('.status-urgent').empty().append('<span class="badge bg-warning text-black badge-status-overdue" style="cursor: pointer" title="No action taken for more than 24 hours">❗ URGENT (' + r.urgent_count + ')<span>');
+                            }
+                            if (r.overdue_count > 3) {
+                                $('.status-overdue').empty().append('<span class="badge bg-danger badge-status-overdue" style="cursor: pointer" title="No action taken for more than 3 days">❗ OVERDUE (' + r.overdue_count + ')<span>');
                             }
                             if (r.past_deadline > 0) {
-                                $('.status-past-deadline').empty().append('<span class="badge bg-danger badge-status-overdue" style="cursor: pointer">❗ OVERDUE (' + r.past_deadline + ')<span>');
+                                $('.status-past-deadline').empty().append('<span class="badge bg-danger badge-status-overdue" style="cursor: pointer"  title="Document routing that is past compliance date/deadline">❗ LATE (' + r.past_deadline + ')<span>');
                             }
                         }
                     },
