@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\redts_ba_view_reqs_spec;
 use App\Models\register;
 use App\Models\redts_p_logs;
 use Illuminate\Http\Request;
@@ -168,11 +169,13 @@ class AuthController extends Controller
         // count users from the api
         $apiGetCountData = $apiGetCount->ok() ? $apiGetCount->json() : [];
         $usersCounted = 0;
+        $usersDesigCounted = 0;
         $officesCounted = 0;
         $accessCounted = 0;
         $get_size_limit = [];
         if ($apiGetCountData != []) {
             $usersCounted = $apiGetCountData['usersCounted'] ?? 0;
+            $usersDesigCounted = $apiGetCountData['usersDesigCounted'] ?? 0;
             $officesCounted = $apiGetCountData['officesCounted'] ?? 0;
             $accessCounted = $apiGetCountData['accessCounted'] ?? 0;
             $get_size_limit = $apiGetCountData['get_size_limit'] ?? [];
@@ -180,10 +183,12 @@ class AuthController extends Controller
 
         //count users in local database
         $localUsersCounted = User::whereNull('deleted_at')->count();
+        $localUsersDesigCounted = redts_ba_view_reqs_spec::whereNull('deleted_at')->count();
         $localofficesCounted = redts_f_offices::whereNull('deleted_at')->count();
         $localaccessCounted = redts_a_access::whereNull('deleted_at')->count();
 
         $uptmsguser = false;
+        $uptmsguserDesig = false;
         $uptmsgoffice = false;
         $uptmsgaccess = false;
         $uptmsguploadlimit = false;
@@ -241,7 +246,6 @@ class AuthController extends Controller
                     }
                 }
             }
-
 
             foreach ($fetchedprofiles as $profileData) {
                 $existingProfile = redts_d_profile::where('user_uuid', $profileData['user_uuid'])->first();
@@ -311,6 +315,37 @@ class AuthController extends Controller
 
 
             $uptmsguser = true;
+        }
+
+        if ($usersDesigCounted == $localUsersDesigCounted) {
+            // if same do nothing
+        } else {
+            //get data from getusers api
+            $apiGetUsersFromApi = http::get($baseUrl . 'd1e2a17f-8b7e-4552-898e-aab919461c29');
+            $apiGetUsersFromApiData = $apiGetUsersFromApi->ok() ? $apiGetUsersFromApi->json() : [];
+
+            $fetcheduserDesig = $apiGetUsersFromApiData['userDesig'] ?? [];
+
+            //create or add designated office will be used for viewing of specific office documents no other actions;
+            foreach ($fetcheduserDesig as $userDesig) {
+                $exists = redts_ba_view_reqs_spec::where('user_uuid', $userDesig['user_uuid'])
+                    ->where('office_uuid', $userDesig['office_uuid'])
+                    ->exists();
+
+                if (!$exists) {
+                    redts_ba_view_reqs_spec::create([
+                        'user_uuid'   => $userDesig['user_uuid'],
+                        'office_uuid' => $userDesig['office_uuid'],
+                    ]);
+                } else {
+                    redts_ba_view_reqs_spec::where('user_uuid', $userDesig['user_uuid'])
+                        ->where('office_uuid', $userDesig['office_uuid'])->update([
+                            'deleted_at' => $userDesig['deleted_at'] ?? null,
+                        ]);
+                }
+            }
+
+            $uptmsguserDesig = false;
         }
 
         if ($officesCounted == $localofficesCounted) {
@@ -425,8 +460,9 @@ class AuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "apiGetCountData" => $apiGetCountData,
+            "apiGetCountData" => $apiGetCountData, //count all data from the api
             "uptmsguser" =>  $uptmsguser,
+            "uptmsguserDesig" =>  $uptmsguserDesig,
             "uptmsgoffice" =>  $uptmsgoffice,
             "uptmsgaccess" =>  $uptmsgaccess,
             "uptmsguploadlimit" =>  $uptmsguploadlimit,

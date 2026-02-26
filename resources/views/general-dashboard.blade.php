@@ -233,10 +233,10 @@
                 </button>
             </div>
             <div class="p-2">
-                <button class="btn btn-outline-secondary btn-refresh" tooltip="Auto load tables every 10 seconds" flow="down">
+                <button class="btn btn-outline-secondary btn-refresh" tooltip="Refresh tables every 10 seconds" flow="down">
                     <i class="fa fa-refresh" aria-hidden="true"></i>
                     {{-- <span class="btn-refresh-label"> Autoload</span> --}}
-                    Autoload
+                    Refresh
                 </button>
             </div>
         </div>
@@ -992,7 +992,7 @@
             let key = 0;
             const addcDIR_users_selected = [];
             $("#addSendToaddndoc").keyup(function() {
-                console.log('searching');
+                // console.log('searching');
                 let search = $(this).val();
                 if (search != "") {
                     $.ajax({

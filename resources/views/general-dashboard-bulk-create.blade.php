@@ -393,7 +393,7 @@
                                             '   data-uuid="' + value.uuid + '" ' +
                                             '   data-office="' + value.office + '" ' +
                                             '   data-full-office-name="' + value.full_office_name + '">' +
-                                            '   ' + value.full_office_name +
+                                            '   ' + (value.username == null ? value.full_office_name + ' (' + value.slug + ')' : '<span class="text-primary">[' + value.username + ']</span> ' + ' (' + value.slug + ')') +
                                             '</button>'
                                         );
                                     }

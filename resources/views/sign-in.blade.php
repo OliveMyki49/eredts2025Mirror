@@ -303,7 +303,7 @@
 
                         console.log(r);
 
-                        if (r.uptmsguser == true || r.uptmsgoffice == false || r.uptmsgaccess == false || r.uptmsguploadlimit == false) {
+                        if (r.uptmsguser == true || r.uptmsguserDesig == true || r.uptmsgoffice == true || r.uptmsgaccess == true || r.uptmsguploadlimit == true) {
                             $('.loader-container').empty().append(`
                                 <div class="alert alert-success row mb-0" role="alert">
                                     <div class="col-md-1">

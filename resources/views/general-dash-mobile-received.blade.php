@@ -2456,7 +2456,7 @@
         let key = 0;
         const addcDIR_users_selected = [];
         $("#addSendTovDIR").keyup(function() {
-            console.log('searching');
+            // console.log('searching');
             let search = $(this).val();
             if (search != "") {
                 $.ajax({

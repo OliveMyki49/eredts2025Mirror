@@ -463,7 +463,7 @@
                     },
                     /* column 6 : sender */
                     {
-                        data: 'sender_type',
+                        data: 'sender_username',
                         render: function(data, type, row) {
                             let sender = row['sender_username'];
                             let sender_type = row['sender_type'];
