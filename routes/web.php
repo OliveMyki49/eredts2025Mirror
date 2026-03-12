@@ -237,6 +237,11 @@ Route::post('get-clientReqAchived', [generalController::class, 'fetchclientReqAc
 Route::post('get-clientReqCreated', [generalController::class, 'fetchclientReqCreated'])->name('fetchclientReqCreated');
 #endregion created
 
+#region specific office viewer documents
+Route::get('get-clientReqViewerOffices', [generalController::class, 'fetchclientReqViewerOffices'])->name('fetchclientReqViewerOffices');
+Route::post('get-clientReqViewer', [generalController::class, 'fetchclientReqViewer'])->name('fetchclientReqViewer');
+#region specific office view
+
 #region add new document
 /* 
     NOT NEEDED HERE

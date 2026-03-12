@@ -383,9 +383,20 @@
                                 </div>
                                 {{-- endregion Archived --}}
 
+                                {{-- region View Office Documents --}}
+                                <input type="radio" name="tabs" id="tabViewSpecific" @if ($active_tab == 'tabViewSpecific') checked="checked" @endif>
+                                <label class="tab-label align-end tabViewSpecific" for="tabViewSpecific" onclick="var updatedUrl='dashboard?active_tab=tabViewSpecific';window.history.replaceState(null,null,updatedUrl);">
+                                    <i class="fa fa-building" aria-hidden="true"></i> Viewer Tab
+                                </label>
+                                <div class="tab">
+                                    {{-- Call in separate file --}}
+                                    @include('gen6-viewer') {{-- this is not yet implemented --}}
+                                </div>
+                                {{-- endregion View Office Documents --}}
+
                                 {{-- region Created Documents --}}
                                 <input type="radio" name="tabs" id="tabCreated" @if ($active_tab == 'tabCreated') checked="checked" @endif>
-                                <label class="tab-label align-end tabCreated" for="tabCreated" onclick="var updatedUrl='dashboard?active_tab=tabCreated';window.history.replaceState(null,null,updatedUrl);">
+                                <label class="tab-label align-end tabCreated" for="tabCreated" onclick="var updatedUrl='dashboard?active_tab=tabCreated';window.history.replaceState(null,null,updatedUrl);" style="margin-left: 0;">
                                     <i class="fa fa-paper-plane" aria-hidden="true"></i> Created Documents
                                 </label>
                                 <div class="tab">
@@ -664,7 +675,7 @@
             });
             //endregion click overdue warning
 
-            // region click funciton
+            // region click function for cards
             $('.cnt_in_transit_card').click(function() {
                 $('.tabInTransit').click();
             });
@@ -680,10 +691,10 @@
             $('.cnt_snt_crtd_docs_card').click(function() {
                 $('.tabCreated').click();
             });
-            // endregion click funciton
+            // endregion click function for cards
 
             //clear console
-            $('.tabInTransit, .tabReceived, .tabReleased, .tabArchived, .tabRejected, .tabCreated').click(function() {
+            $('.tabInTransit, .tabReceived, .tabReleased, .tabArchived, .tabRejected, .tabCreated, .tabViewSpecific').click(function() {
                 console.clear();
             });
 
@@ -696,6 +707,7 @@
             let tabReceived_loaded = false;
             let tabReleased_loaded = false;
             let tabArchived_loaded = false;
+            let tabViewSpecific_loaded = false;
             let tabCreated_loaded = false;
             $('.tabInTransit').click(function() {
                 document.title = "In-Transit"; // change page title
@@ -719,6 +731,12 @@
                 document.title = "Archived"; // change page title
                 if (tabArchived_loaded == false) {
                     tabArchived_loaded = true;
+                }
+            });
+            $('.tabViewSpecific').click(function() {
+                document.title = "View Specific"; // change page title
+                if (tabViewSpecific_loaded == false) {
+                    tabViewSpecific_loaded = true;
                 }
             });
             $('.tabCreated').click(function() {
@@ -754,6 +772,10 @@
                         }
                         if (tabArchived_loaded == true) {
                             $('#dTArchived').DataTable().ajax.reload(null, false);
+                        }
+                        if (tabViewSpecific_loaded == true) {
+                            // $('#dTCreated').DataTable().ajax.reload(null, false);
+                            // not yet implemented
                         }
                         if (tabCreated_loaded == true) {
                             $('#dTCreated').DataTable().ajax.reload(null, false);

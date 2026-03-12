@@ -1429,6 +1429,222 @@ class generalController extends Controller
     }
     #endregion created
 
+    #region specific office viewer
+    public function fetchclientReqViewerOffices()
+    {
+        $user_uuid = Auth::user()->uuid;
+
+        $viewerspecific_office = redts_ba_view_reqs_spec::select(
+            'redts_ba_view_reqs_specs.user_id',
+            'redts_ba_view_reqs_specs.user_uuid',
+            'redts_ba_view_reqs_specs.office_id',
+            'redts_ba_view_reqs_specs.office_uuid',
+            'redts_ba_view_reqs_specs.deleted_at',
+
+            #region office
+            'office.full_office_name',
+            #endregion office
+        )
+            ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'redts_ba_view_reqs_specs.office_uuid')
+            ->where('redts_ba_view_reqs_specs.user_uuid', $user_uuid)
+            ->whereNull('redts_ba_view_reqs_specs.deleted_at')
+            ->get();
+
+        foreach ($viewerspecific_office as $key => $dt) {
+            $dt->doc_counts = redts_zi_origin_office::where('origin_office_uuid', $dt->office_uuid)
+                ->count();
+        }
+
+        return response()->json([
+            'success' => true,
+            'viewerspecific_office' => $viewerspecific_office,
+        ]);
+    }
+    public function fetchclientReqViewer()
+    {
+        if (Auth::user()->access_id != null) { //protect the data from leaking if someone remove the access code restriction in on the display
+            $response = $this->fetchotheruserinfo();
+            $data = json_decode($response->getContent(), true); // Decoding the JSON response to an associative array
+            $user_offices_uuid = $data['user_offices_uuid'];
+            $user_uuid = Auth::user()->uuid;
+
+            $viewerspecific_office = redts_ba_view_reqs_spec::select(
+                'office_uuid',
+            )
+                ->where('user_uuid', $user_uuid)
+                ->whereNull('deleted_at')
+                ->pluck('office_uuid');
+
+            $data = redts_zd_client_doc_info::select(
+                #region document info
+                'redts_zd_client_doc_infos.id',
+                'redts_zd_client_doc_infos.uuid',
+                'redts_zd_client_doc_infos.doc_no',
+                'redts_zd_client_doc_infos.application_type_id',
+                'redts_zd_client_doc_infos.application_type_uuid',
+                'redts_zd_client_doc_infos.transaction_type_id',
+                'redts_zd_client_doc_infos.transaction_type_uuid',
+                'redts_zd_client_doc_infos.agency',
+                'redts_zd_client_doc_infos.client_id',
+                'redts_zd_client_doc_infos.class_id',
+                'redts_zd_client_doc_infos.class_uuid',
+                'redts_zd_client_doc_infos.class_slug',
+                'redts_zd_client_doc_infos.subclass_id',
+                'redts_zd_client_doc_infos.subclass_slug',
+                'redts_zd_client_doc_infos.remarks',
+                'redts_zd_client_doc_infos.validated',
+                'redts_zd_client_doc_infos.doc_date',
+                'redts_zd_client_doc_infos.compliance_deadline',
+                'redts_zd_client_doc_infos.created_at',
+                #endregion document info
+
+                #region applicant type
+                'app_type.applicant as app_type',
+                #endregion applicant type
+
+                #region transaction type
+                // 'transact_type.transaction', //merged to the application column
+                'transact_type.slug as transact_slug', //displayed only as slug / abbreviation
+                #endregion transaction type
+
+                #region class
+                'class.description as class_title',
+                #endregion class
+
+                #region office
+                'office.full_office_name',
+                #endregion office
+            )
+                ->leftJoin('redts_z_applicant_types as app_type', 'app_type.uuid', '=', 'redts_zd_client_doc_infos.application_type_uuid')
+                ->leftJoin('redts_za_transaction_types as transact_type', 'transact_type.uuid', '=', 'redts_zd_client_doc_infos.transaction_type_uuid')
+                ->leftJoin('redts_ee_classification as class', 'class.uuid', '=', 'redts_zd_client_doc_infos.class_uuid')
+                ->leftJoin('redts_zi_origin_offices as origin', 'origin.doc_uuid', '=', 'redts_zd_client_doc_infos.uuid')
+                ->leftJoin('redts_f_offices as office', 'office.uuid', '=', 'origin.origin_office_uuid')
+                ->whereIn('origin.origin_office_uuid', $viewerspecific_office)
+                ->whereNull('redts_zd_client_doc_infos.deleted_at')
+                ->get();
+
+            foreach ($data as $key => $dt) {
+                // document attachments
+                $req_attachments_arr = array();
+                $req_attachments = redts_ze_client_doc_attachments::where('doc_info_uuid', $dt->uuid)->where('attachment_type', 'file')->whereNull('deleted_at')->get();
+                foreach ($req_attachments as $key => $attach) {
+                    array_push($req_attachments_arr, [
+                        'slug' => $attach->req_slug,
+                        'app_form_no' => $attach->app_form_no,
+                        'file_path' => $attach->file_path,
+                        'file_name' => $attach->file_name,
+                    ]);
+                }
+                $dt->req_attachments = $req_attachments_arr;
+
+                // get all action with specific doc_id
+                $doc_action_query = redts_n_action::where('doc_uuid', $dt->uuid)->whereNull('deleted_at')->get(['uuid']); //all action for the document
+                $last_doc_action_query = redts_n_action::where('doc_uuid', $dt->uuid)
+                    ->whereNull('deleted_at')
+                    ->latest('created_at')
+                    ->first(); //get the last action
+                $last_doc_action_query = redts_n_action::where('doc_uuid', $dt->uuid)
+                    ->whereNull('deleted_at')
+                    ->latest('created_at')
+                    ->first(); // may return null
+
+                if ($last_doc_action_query) {
+                    $last_doc_action = redts_n_action::select(
+                        'redts_n_actions.id',
+                        'redts_n_actions.uuid',
+                        'redts_n_actions.subject',
+                        'redts_n_actions.doc_id',
+                        'redts_n_actions.doc_uuid',
+                        'redts_n_actions.doc_no',
+                        'redts_n_actions.sender_client_id',
+                        'redts_n_actions.sender_user_id',
+                        'redts_n_actions.sender_user_uuid',
+                        'redts_n_actions.sender_type',
+                        'redts_n_actions.referred_by_office',
+                        'redts_n_actions.referred_by_office_uuid',
+                        'redts_n_actions.action_taken',
+                        'redts_n_actions.send_to_office',
+                        'redts_n_actions.send_to_office_uuid',
+                        'redts_n_actions.validated',
+                        'redts_n_actions.received_id',
+                        'redts_n_actions.received_uuid',
+                        'redts_n_actions.received',
+                        'redts_n_actions.released',
+                        'redts_n_actions.final_action',
+                        'redts_n_actions.rejected',
+                        'redts_n_actions.verification_date',
+                        'redts_n_actions.in_transit_remarks',
+                        'redts_n_actions.document_remarks',
+                        'redts_n_actions.action_remarks',
+                        'redts_n_actions.attachment_remarks',
+                        'redts_n_actions.deleted_at',
+                        'redts_n_actions.created_at',
+                        'referred_by.office as referred_by_abbrv',
+                        'referred_by.full_office_name as referred_by_full_office_name',
+                        'send_to.office as send_to_abbrv',
+                        'send_to.full_office_name as send_to_full_office_name'
+                    )
+                        ->leftJoin('redts_f_offices as referred_by', 'referred_by.uuid', '=', 'redts_n_actions.referred_by_office_uuid')
+                        ->leftJoin('redts_f_offices as send_to', 'send_to.uuid', '=', 'redts_n_actions.send_to_office_uuid')
+                        ->where('redts_n_actions.uuid', $last_doc_action_query->uuid)
+                        ->whereNull('redts_n_actions.deleted_at')
+                        ->first();
+
+                    // Status message logic
+                    $stat_msg = '';
+                    $stat_msg_stat = '';
+                    if ($last_doc_action->final_action == null) {
+                        if ($last_doc_action->received_id != null) {
+                            $stat_msg = 'Received,' . strtoupper($last_doc_action->send_to_abbrv);
+                            $stat_msg_stat = 'received';
+                        } else {
+                            $stat_msg = 'In-Transit,' . strtoupper($last_doc_action->send_to_abbrv);
+                            $stat_msg_stat = 'intransit';
+                        }
+                    } else {
+                        $stat_msg = 'Archived,' . strtoupper($last_doc_action->send_to_abbrv);
+                        $stat_msg_stat = 'completed';
+                    }
+                } else {
+                    // Handle case where no last action exists
+                    $stat_msg = 'No actions found';
+                    $stat_msg_stat = 'none';
+                }
+
+                $dt->stat_msg = $stat_msg;
+                $dt->stat_msg_stat = $stat_msg_stat;
+
+
+                // action attachments
+                $act_attachments_arr = array();
+
+                // Check if there are any actions before trying to get attachments
+                // if ($last_doc_action_query->isNotEmpty()) {
+                foreach ($doc_action_query as $key => $daq) {
+                    $act_attachments = redts_na_action_attachments::where('action_uuid', $daq->uuid)->whereNull('deleted_at')->get();
+                    foreach ($act_attachments as $key => $attach) {
+                        array_push($act_attachments_arr, [
+                            'slug' => $attach->act_slug,
+                            'file_path' => $attach->file_path,
+                            'file_name' => $attach->file_name,
+                            'remarks' => $attach->remarks,
+                        ]);
+                    }
+
+                    $dt->act_attachments = $act_attachments_arr;
+                }
+                $dt->act_attachments = $act_attachments_arr;
+                // } else {
+                //     $dt->act_attachments = null;
+                // }
+            }
+
+            return dataTables($data)->toJson();
+        }
+    }
+    #endregion specific office viewer
+
     #region add new document
     /* 
     public function fetchclientfullnameandid()
