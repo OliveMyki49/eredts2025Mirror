@@ -234,7 +234,7 @@
 <body class="g-sidenav-show  bg-gray-200" oncontextmenu="return false;">
 
     {{-- {{ dd($doc_info) }} --}}
-    <input type="hidden" id="qrval" value="http://58.69.249.100:9120/grsid/{{ $doc_info->uuid }}">
+    <input type="hidden" id="qrval" value="http://58.69.249.101:9120/grsid/{{ $doc_info->uuid }}">
 
     <div class="d-grid gap-2 col-6 mx-auto pt-2 btn_print_route_slip_container">
         <button class="btn btn-success btn-lg btn_print_route_slip" type="button">Print Routing Slip</button>
@@ -259,7 +259,7 @@
                                             <p style="margin-block-start: 0px;">
                                                 <span class="fs-5"><b style="color: #004ad6; text-shadow: 1px 1px rgba(134, 134, 134, 0.5)">Department of Environment and Natural Resources</b></span>
                                                 <br>
-                                                <span class="fs-5"><b style="color: #249200; text-shadow: 1px 1px rgba(134, 134, 134, .5)">Kagawaran ng Kapaligiran at Likas Yaman</b></span>
+                                                <span class="fs-5"><b style="color: #249200; text-shadow: 1px 1px rgba(134, 134, 134, .5)">Kagawaran ng Kapaligiran at Likas na Yaman</b></span>
                                                 <br>
                                             </p>
                                             <div class="d-flex justify-content-start qrcontainer" style="position: absolute; top: -15px; right:0;">
@@ -328,7 +328,7 @@
                                             COMPLIANCE DEADLINE:
                                         </div>
                                         <div class="col-6">
-                                            {{ strtoupper(date('F j, Y g:i A', strtotime($doc_info->compliance_deadline))) }}
+                                            {{ $doc_info->compliance_deadline==null? 'N/A' : strtoupper(date('F j, Y g:i A', strtotime($doc_info->compliance_deadline))) }}
                                         </div>
                                     </div>
                                 </div>

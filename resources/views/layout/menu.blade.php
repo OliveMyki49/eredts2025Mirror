@@ -447,7 +447,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="http://58.69.249.100:9120/" target="_blank" type="button" class="btn btn-danger">Please use online system</a>
+                    <a href="http://58.69.249.101:9120/" target="_blank" type="button" class="btn btn-danger">Please use online system</a>
                     {{-- <button type="button" class="btn btn-success btn-edit-user-profile">Save Changes</button> --}}
                 </div>
             </div>

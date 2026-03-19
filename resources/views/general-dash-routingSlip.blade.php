@@ -240,7 +240,7 @@
                                             <p style="margin-block-start: 0px;">
                                                 <span class="fs-5"><b style="color: #004ad6; text-shadow: 1px 1px rgba(134, 134, 134, 0.5)">Department of Environment and Natural Resources</b></span>
                                                 <br>
-                                                <span class="fs-5"><b style="color: #249200; text-shadow: 1px 1px rgba(134, 134, 134, .5)">Kagawaran ng Kapaligiran at Likas Yaman</b></span>
+                                                <span class="fs-5"><b style="color: #249200; text-shadow: 1px 1px rgba(134, 134, 134, .5)">Kagawaran ng Kapaligiran at Likas na Yaman</b></span>
                                                 <br>
                                             </p>
                                             <div class="d-flex justify-content-start qrcontainer" style="position: absolute; top: -15px; right:0;">

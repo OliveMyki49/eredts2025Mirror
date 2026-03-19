@@ -2714,6 +2714,7 @@ class generalController extends Controller
                 'redts_zd_client_doc_infos.doc_date',
                 'redts_zd_client_doc_infos.compliance_deadline',
                 'redts_zd_client_doc_infos.deleted_at',
+                'redts_zd_client_doc_infos.created_at',
 
                 #region app type
                 'app_type.applicant',
