@@ -214,6 +214,7 @@ Route::get('get-office', [generalController::class, 'fetchoffice'])->name('fetch
 Route::post('get-office_via_search', [generalController::class, 'fetchoffice_via_search'])->name('fetchoffice_via_search');
 Route::get('get-processLengths/{subclass_id}/', [generalController::class, 'fetchprocessLengths'])->name('fetchprocessLengths');
 Route::post('insert-releaseAction', [generalController::class, 'storereleaseAction'])->name('storereleaseAction');
+Route::post('insert-bulkreleaseAction', [generalController::class, 'storebulkreleaseAction'])->name('storebulkreleaseAction');
 Route::post('send-validatedDocNotifier', [validatedDocNotifierController::class, 'sendvalidatedDocNotifier'])->name('sendvalidatedDocNotifier');
 Route::post('send-notifyClientBilling', [notifyClientBillingController::class, 'sendnotifyClientBilling'])->name('sendnotifyClientBilling');
 Route::post('edit-finalAction', [generalController::class, 'updatefinalAction'])->name('updatefinalAction');
@@ -223,6 +224,7 @@ Route::get('insert-seen-recvd-act/{action_id}/{action_uuid}/', [generalControlle
 
 #region released
 Route::post('get-clientReqReleased', [generalController::class, 'fetchclientReqReleased'])->name('fetchclientReqReleased');
+Route::post('insert-AddAtch', [generalController::class, 'storeAddAtch'])->name('storeAddAtch');
 #endregion released
 
 #region archived

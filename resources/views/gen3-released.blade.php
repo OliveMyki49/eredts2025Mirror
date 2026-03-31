@@ -106,6 +106,55 @@
                         </div>
                     </div>
 
+                    {{-- UPLOAD ARCHIVED ATTACHMENTS --}}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIRlsd_collapsible_arc_atch" aria-expanded="false" aria-controls="vDIRlsd_collapsible_arc_atch">
+                                UPLOAD ADDITIONAL ATTACHMENTS
+                            </button>
+                        </h2>
+                        <div id="vDIRlsd_collapsible_arc_atch" class="accordion-collapse collapse" data-bs-parent="#vDIRlsd_accordian">
+                            <div class="accordion-body">
+
+                                {{-- region Attachments here --}}
+                                <div class="p-2 my-1 border rounded">
+                                    <div class="row">
+                                        <form id="addvDIRlsdAddAtch">
+                                            {{-- region important do not remove --}}
+                                            <input type="hidden" id="vDIRlsdaction_id" name="action_id">
+                                            <input type="hidden" id="vDIRlsdaction_uuid" name="action_uuid">
+                                            <input type="hidden" id="vDIRlsddoc_no" name="doc_no">
+                                            <input type="hidden" id="vDIRlsddoc_uuid" name="doc_uuid">
+                                            {{-- endregion important do not remove --}}
+
+                                            <div class="col-md mb-3 mt-4">
+                                                <button type="button" class="btn btn-outline-primary btn-sm btnvDIRlsdAddAtchs" tooltip="Only allows PDF file" flow="right">
+                                                    <span class="fa-stack fa-sm">
+                                                        <i class="fa fa-square fa-stack-2x"></i>
+                                                        <i class="fa fa-file fa-stack-1x fa-inverse"></i>
+                                                        <i class="fa fa-plus fa-stack-1x"></i>
+                                                    </span>
+                                                    Add Attachment
+                                                </button>
+                                                <div class="row vDIRlsdAtchCtnr p-2">
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md text-end">
+                                            <button type="button" class="btn btn-primary btn-sm float-end btn-save-archive-atch" tooltip="Save archived Attachments" flow="left">
+                                                Upload Additional Attachment/s
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- endregion Attachments here --}}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- endregion accordian --}}
 
                     {{-- PAYMENT STATUS ==================================================================================================> HIDE --}}
                     <div class="accordion-item" style="display: none;">
@@ -917,6 +966,13 @@
                         let validated = r.doc_info.validated;
                         let compliance_deadline = r.doc_info.compliance_deadline;
 
+                        
+                        // set action id for receive
+                        $('#vDIRlsdaction_id').val(action_id);
+                        $('#vDIRlsdaction_uuid').val(action_uuid);
+                        $('#vDIRlsddoc_no').val(doc_no);
+                        $('#vDIRlsddoc_uuid').val(doc_uuid);
+
                         // region status bar
                         if (validated != null) {
                             $('.vDIRlsdheader-status').empty().append('<i class="fa fa-check-circle" aria-hidden="true"></i> VERIFIED');
@@ -1262,6 +1318,101 @@
             });
         });
         // endregion document info
+
+        /* region upload additional attachments */
+        // region upload archive attachments
+        $('.btn-save-archive-atch').click(function() {
+            let form = $('#addvDIRlsdAddAtch')[0];
+            let sbmtfrm = new FormData(form);
+            // region upload archived attachments
+            $.ajax({
+                url: "/insert-AddAtch",
+                method: "POST",
+                data: sbmtfrm,
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                },
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(r) {
+                    if (r.success) {
+
+                        $('#genDashNotifs').append('' +
+                            '<div class="col-12 alert alert-info alert-dismissible fade show p-2 pe-5" role="alert"> ' +
+                            '    <strong>Archived Attachments Uploaded ✅</strong> ' +
+                            '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
+                            '</div>'
+                        );
+
+                        // region clear
+                        console.log('clear this fields');
+                        $('.vDIRlsdAtchCtnr').empty();
+                        // endregion clear
+
+                        // reload
+                        $('#dTReleased').DataTable().ajax.reload(null, false);
+
+                    } else {
+                        $('#genDashNotifs').append('' +
+                            '<div class="col-12 alert alert-danger alert-dismissible fade show p-2 pe-5" role="alert"> ' +
+                            '    <strong>' + r.msg + '</strong> ' +
+                            '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
+                            '</div>'
+                        );
+
+                        // console.log(r);
+
+                        // reload
+                        $('#dTReleased').DataTable().ajax.reload(null, false);
+                    }
+
+
+                    // Close the message after 5 seconds
+                    setTimeout(function() {
+                        console.log('remove notifs');
+                        $('#genDashNotifs').empty(); // Remove the message
+                    }, 10000); // 5000 milliseconds = 5 seconds
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+            // endregion upload archived attachments
+        })
+        // endregion upload archive attachments
+
+        // region add attachments 
+        let vDIRlsd_atch_count = 1;
+        $('.btnvDIRlsdAddAtchs').click(function() {
+            $('.vDIRlsdAtchCtnr').append('' +
+                '    <div class="col-12 mb-1 d-flex flex-row vDIRlsdAtchCtnr_poped border shadow"> ' +
+                '        <div class="p-2"> ' +
+                '           <input type="text" value="AddFile-" class="form-control text-secondary" name="vDIRlsdAtch_remark_start[]" placeholder="Attachment Remark"  readonly="true">' +
+                '        </div> ' +
+                '        <div class="p-2"> ' +
+                '           <input type="text" value="FileName' + vDIRlsd_atch_count + '" class="form-control" name="vDIRlsdAtch_remark[]" placeholder="Attachment Remark"> ' +
+                '        </div> ' +
+                '        <div class="p-2"> ' +
+                '           <input type="file" class="form-control vDIRlsdAtch_file" name="vDIRlsdAtch_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif"> ' +
+                '        </div> ' +
+                '        <div class="p-2"> ' +
+                '           <button class="btn btn-danger btn-sm btn_vDIRlsdAtchCtnr_poped_cls"> <i class="fa fa-times" aria-hidden="true"></i> </button> ' +
+                '        </div> ' +
+                '    </div> ' +
+                ''
+            );
+            vDIRlsd_atch_count += 1;
+        });
+        // endregion add attachments
+        
+        // remove attch
+        $('.vDIRlsdAtchCtnr').on('click', '.btn_vDIRlsdAtchCtnr_poped_cls', function() {
+            $(this).closest('.vDIRlsdAtchCtnr_poped').remove();
+        });
+        // endregion add attachments 
+        /* region upload additional attachments */
     });
 </script>
 {{-- endregion queries --}}

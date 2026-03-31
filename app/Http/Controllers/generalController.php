@@ -182,7 +182,7 @@ class generalController extends Controller
 
         $cnt_in_transit = redts_n_action::where('send_to_office_uuid', $user_offices_uuid)->whereNull('received')->whereNull('final_action')->whereNull('rejected')->whereNull('deleted_at')->count();
         $cnt_received = redts_n_action::where('send_to_office_uuid', $user_offices_uuid)->where('received_uuid', $user_uuid)->whereNull('released')->whereNull('final_action')->whereNull('rejected')->whereNull('deleted_at')->count();
-        $cnt_released = redts_n_action::where('send_to_office_uuid', $user_offices_uuid)->where('received_uuid', $user_uuid)->whereNotNull('released',)->whereNull('final_action')->whereNull('rejected')->whereNull('deleted_at')->count();
+        $cnt_released = redts_n_action::where('send_to_office_uuid', $user_offices_uuid)->where('received_uuid', $user_uuid)->whereNotNull('released', )->whereNull('final_action')->whereNull('rejected')->whereNull('deleted_at')->count();
         $cnt_archived = redts_n_action::where('redts_n_actions.send_to_office_uuid', $user_offices_uuid)->where('redts_n_actions.received_uuid', $user_uuid)->whereNotNull('redts_n_actions.final_action')->whereNull('rejected')->whereNull('redts_n_actions.deleted_at')->count();
         // $cnt_rejected = redts_n_action::where('redts_n_actions.send_to_office_uuid', $user_offices_uuid)->where('redts_n_actions.received_uuid', $user_uuid)->whereNotNull('rejected')->whereNull('redts_n_actions.deleted_at')->count(); //DEPRECATED
         $cnt_snt_crtd_docs = redts_zi_origin_office::where('user_uuid', $user_uuid)->whereNull('deleted_at')->count(); //count all documents created by specific user
@@ -532,7 +532,7 @@ class generalController extends Controller
         if ($request->input('vDIR_id') != null) {
             $office_have_user = true;
             foreach ($data['vDIR_id'] as $key => $value) {
-                $recipient_office_uuid =  $data['vDIR_uuid'][$key];
+                $recipient_office_uuid = $data['vDIR_uuid'][$key];
                 if (redts_j_user_offices::where('offices_uuid', $recipient_office_uuid)->exists()) {
                     //continue
                 } else {
@@ -544,8 +544,8 @@ class generalController extends Controller
 
                 #region store new release action for each recipient
                 foreach ($data['vDIR_id'] as $key => $value) {
-                    $recipient_office_id =  $data['vDIR_id'][$key];
-                    $recipient_office_uuid =  $data['vDIR_uuid'][$key];
+                    $recipient_office_id = $data['vDIR_id'][$key];
+                    $recipient_office_uuid = $data['vDIR_uuid'][$key];
 
                     //update action in received
                     redts_n_action::where('uuid', $action_uuid)->update([
@@ -619,7 +619,7 @@ class generalController extends Controller
                             $vDIRAtch_remark = $dt['vDIRAtch_remark'][$key];
 
                             $extension = $file->getClientOriginalExtension();
-                            $fileName = 'ad' . $action_id . '_' .  $vDIRAtch_remark . '_' . date('YmdHi') . '.' . $extension;
+                            $fileName = 'ad' . $action_id . '_' . $vDIRAtch_remark . '_' . date('YmdHi') . '.' . $extension;
                             $size = $file->getSize();
 
                             if ($size <= $upload_limit->size) {
@@ -717,6 +717,149 @@ class generalController extends Controller
             ]);
         }
     }
+
+    public function storebulkreleaseAction(Request $request)
+    {
+        $data = $request->all();
+        $user_id = Auth::user()->id;
+        $user_uuid = Auth::user()->uuid;
+        $user_access = redts_a_access::where('uuid', Auth::user()->access_uuid)->first();
+        $user_office = redts_j_user_offices::where('user_uuid', $user_uuid)->first();
+
+        $results = [];
+        $attachmentsMsg = [];
+
+        // Validate offices
+        if (empty($data['vDIR_id'])) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'No recipients found',
+            ]);
+        }
+
+        // Loop through each document block
+        if (!empty($data['action_uuid'])) {
+            foreach ($data['action_uuid'] as $docIndex => $action_uuid) {
+                $action_taken = $data['action_taken'][$docIndex] ?? null;
+                $attachment_remarks = $data['vDIR_atch_remarks'][$docIndex] ?? null;
+                $subject = $data['subject'][$docIndex] ?? "No Subject Found";
+
+                // Fetch previous action details
+                $act_dtls = redts_n_action::where('uuid', $action_uuid)->whereNull('deleted_at')->first();
+                if (!$act_dtls) {
+                    $results[] = [
+                        'docIndex' => $docIndex,
+                        'success' => false,
+                        'msg' => "Invalid action UUID: $action_uuid"
+                    ];
+                    continue;
+                }
+
+                $prev_doc_id = $act_dtls->doc_id;
+                $prev_doc_uuid = $act_dtls->doc_uuid;
+                $prev_doc_no = $act_dtls->doc_no;
+
+                $new_action_arr = [];
+
+                // Loop through offices
+                foreach ($data['vDIR_id'] as $key => $recipient_office_id) {
+                    $recipient_office_uuid = $data['vDIR_uuid'][$key];
+
+                    // Update current action as released
+                    redts_n_action::where('uuid', $action_uuid)->update([
+                        'action_remarks' => $action_taken,
+                        'released' => now(),
+                    ]);
+
+                    // Create new action
+                    $new_action_uuid = $this->generateUuid();
+                    $new_action = redts_n_action::create([
+                        'uuid' => $new_action_uuid,
+                        'subject' => $subject,
+                        'doc_id' => $prev_doc_id,
+                        'doc_uuid' => $prev_doc_uuid,
+                        'doc_no' => $prev_doc_no,
+                        'sender_user_id' => $user_id,
+                        'sender_user_uuid' => $user_uuid,
+                        'sender_type' => $user_access->type,
+                        'referred_by_office' => $user_office->offices_id,
+                        'referred_by_office_uuid' => $user_office->offices_uuid,
+                        'action_taken' => $action_taken,
+                        'send_to_office' => $recipient_office_id,
+                        'send_to_office_uuid' => $recipient_office_uuid,
+                        'attachment_remarks' => $attachment_remarks,
+                    ]);
+
+                    // Create releasing route link
+                    redts_nb_releasing_route::create([
+                        'origin_act' => $act_dtls->id,
+                        'origin_act_uuid' => $action_uuid,
+                        'released_act' => $new_action->id,
+                        'released_act_uuid' => $new_action->uuid,
+                    ]);
+
+                    $this->recordAction("Forwarded doc_no:$prev_doc_no to office_id:$recipient_office_id with new action_id {$new_action->id}");
+
+                    $new_action_arr[] = [
+                        'id' => $new_action->id,
+                        'uuid' => $new_action->uuid,
+                    ];
+                }
+
+                // Handle file uploads for this document
+                if ($request->hasFile("vDIRdocs.$action_uuid.files")) {
+                    $fileCount = 0;
+                    foreach ($request->file("vDIRdocs.$action_uuid.files") as $file) {
+                        if ($file->isValid()) {
+                            $extension = $file->getClientOriginalExtension();
+                            $fileName = 'bd' . $prev_doc_id . $fileCount . '_' . time() . '.' . $extension;
+
+
+                            $upload_path = "public/assets/doc/action_files";
+                            // You can move the uploaded file to a specific directory if needed
+                            $file->move(storage_path($upload_path), $fileName);
+                            // $file_path = $upload_path . '/' . $fileName;
+
+                            foreach ($new_action_arr as $new_action) {
+                                redts_na_action_attachments::create([
+                                    'action_id' => $new_action['id'],
+                                    'action_uuid' => $new_action['uuid'],
+                                    'doc_no' => $prev_doc_no,
+                                    'doc_uuid' => $prev_doc_uuid,
+                                    'remarks' => $fileName, //this is the file name
+                                    'file_path' => 'action_files',
+                                    'file_name' => $fileName,
+                                    'file_link' => 'n/a',
+                                ]);
+                            }
+
+                            $attachmentsMsg[] = ['msg' => "uploaded: $fileName"];
+
+                            $fileCount++;
+                        }
+                    }
+                }
+
+                $results[] = [
+                    'docIndex' => $docIndex,
+                    'success' => true,
+                    'msg' => 'Forwarded successfully',
+                ];
+            }
+
+            return response()->json([
+                'success' => true,
+                'results' => $results,
+                'attachmentsMsg' => $attachmentsMsg,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'msg' => 'No documents found',
+        ]);
+    }
+
     public function fetchprocessLengths($subclass_id)
     {
         $process_length = redts_la_process_length::where('subclass_id', $subclass_id)->whereNull('deleted_at')->get();
@@ -789,7 +932,7 @@ class generalController extends Controller
                         $vDIRAtch_remark = $dt['vDIRAtch_remark'][$key];
 
                         $extension = $file->getClientOriginalExtension();
-                        $fileName = 'ad' . $action_id . '_' .  $vDIRAtch_remark . '_' . date('YmdHi') . '.' . $extension;
+                        $fileName = 'ad' . $action_id . '_' . $vDIRAtch_remark . '_' . date('YmdHi') . '.' . $extension;
                         $size = $file->getSize();
 
                         if ($size <= $upload_limit->size) {
@@ -896,7 +1039,7 @@ class generalController extends Controller
                             $vDIRAtch_remark = $dt['vDIRAtch_remark'][$key];
 
                             $extension = $file->getClientOriginalExtension();
-                            $fileName = 'ad' . $action_id . '_' .  $vDIRAtch_remark . '_' . date('YmdHi') . '.' . $extension;
+                            $fileName = 'ad' . $action_id . '_' . $vDIRAtch_remark . '_' . date('YmdHi') . '.' . $extension;
                             $size = $file->getSize();
 
                             if ($size <= $upload_limit->size) {
@@ -971,7 +1114,7 @@ class generalController extends Controller
             $user_id = Auth::user()->id;
             $username = Auth::user()->username;
             //record log
-            $this->recordAction('Action uuid:[' . $action_uuid . '] has been seen by user ' . $username . '[' .  $user_id . ']');
+            $this->recordAction('Action uuid:[' . $action_uuid . '] has been seen by user ' . $username . '[' . $user_id . ']');
         }
 
         return response()->json([
@@ -1052,7 +1195,7 @@ class generalController extends Controller
             ->leftJoin('redts_f_offices as send_to', 'send_to.uuid', '=', 'redts_n_actions.send_to_office_uuid')
             ->where('redts_n_actions.send_to_office_uuid', $user_offices_uuid)
             ->where('redts_n_actions.received_uuid', $user_uuid)
-            ->whereNotNull('redts_n_actions.released',)
+            ->whereNotNull('redts_n_actions.released', )
             ->whereNull('redts_n_actions.final_action')
             ->whereNull('redts_n_actions.rejected')
             ->whereNull('redts_n_actions.deleted_at')
@@ -1146,6 +1289,77 @@ class generalController extends Controller
         }
 
         return dataTables($data)->toJson();
+    }
+
+    public function storeAddAtch(Request $request)
+    {
+        $data = $request->all();
+
+        $action_id = $request->input('action_id');
+        $action_uuid = $request->input('action_uuid');
+        $doc_no = $request->input('doc_no');
+        $doc_uuid = $request->input('doc_uuid');
+        $user_id = Auth::user()->id;
+        $user_access = redts_a_access::where('id', Auth::user()->access_id)->first();
+        $user_office = redts_j_user_offices::where('user_id', Auth::user()->id)->first();
+        #region store uploadActionDocs
+
+        //region retrieve document here
+        $upload_limit = redts_w_upload_size_limit::where('id', 1)->first();
+        $upload_path = "public/assets/doc/action_files";
+        //endregion retrieve document here
+
+        //region uploading of documents
+        $dt = $request->all();
+        $attachmentsMsg = array();
+        $count_files = 0;
+        if ($request->file('vDIRlsdAtch_file') != null) {
+            foreach ($request->file('vDIRlsdAtch_file') as $key => $file) {
+                $count_files += 1;
+                $file_path = null;
+                if ($file->isValid()) {
+                    $vDIRlsdAtch_remark = $dt['vDIRlsdAtch_remark'][$key];
+
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = 'AdF' . $user_id . '_' . $vDIRlsdAtch_remark . '_' . date('YmdHi') . '.' . $extension;
+                    $size = $file->getSize();
+
+                    if ($size <= $upload_limit->size) {
+                        // You can move the uploaded file to a specific directory if needed
+                        $file->move(storage_path($upload_path), $fileName);
+                        $file_path = $upload_path . '/' . $fileName;
+
+                        // add in database
+                        redts_na_action_attachments::create([
+                            'action_id' => $action_id,
+                            'action_uuid' => $action_uuid,
+                            'doc_no' => $doc_no,
+                            'doc_uuid' => $doc_uuid,
+                            'remarks' => $vDIRlsdAtch_remark,
+                            'file_path' => 'action_files',
+                            'file_name' => $fileName,
+                            'file_link' => 'n/a',
+                        ]);
+
+                        // message
+                        array_push($attachmentsMsg, ['msg' => 'uploaded: ' . $file_path]);
+                    } else {
+                        array_push($attachmentsMsg, ['msg' => 'denied: file size exceeded ' . $file_path]);
+                    }
+                }
+            }
+        } else {
+            array_push($attachmentsMsg, ['msg' => 'no file has been uploaded']);
+        }
+        //endregion uploading of documents
+
+        #endregion store uploadActionDocs
+
+        // Final response to send back to the frontend
+        return response()->json([
+            'success' => true,
+            'msg' => $attachmentsMsg
+        ]);
     }
     #endregion released
 
@@ -1865,7 +2079,7 @@ class generalController extends Controller
                     'doc_uuid' => $create_doc->uuid,
                     'doc_no' => $doc_no,
                     'sender_client_id' => null,
-                    'sender_user_id' =>  Auth::user()->id,
+                    'sender_user_id' => Auth::user()->id,
                     'sender_user_uuid' => Auth::user()->uuid,
                     'sender_type' => 'User',
                     'referred_by_office' => $user_office->office_id,
@@ -1972,16 +2186,18 @@ class generalController extends Controller
         return response()->json([
             'success' => $success,
             'msg' => 'success upload',
-            'data' => array([
-                '1_doc_date' => $doc_date,
-                '2_class_slug' => $class_slug,
-                '3_doc_no' => $doc_no,
-                '4_confidential' => $confidential,
-                '5_compliance_deadline' => $compliance_deadline,
-                '6_app_type_uuid' => $app_type_uuid,
-                '7_transac_uuid' => $transac_uuid,
-                '8_subject' => $subject,
-            ]),
+            'data' => array(
+                [
+                    '1_doc_date' => $doc_date,
+                    '2_class_slug' => $class_slug,
+                    '3_doc_no' => $doc_no,
+                    '4_confidential' => $confidential,
+                    '5_compliance_deadline' => $compliance_deadline,
+                    '6_app_type_uuid' => $app_type_uuid,
+                    '7_transac_uuid' => $transac_uuid,
+                    '8_subject' => $subject,
+                ]
+            ),
             'filearrCollectionCheck' => $filearrCollectionCheck,
             'officeCollectionCheck' => $officeCollectionCheck,
             'user_office' => $user_office,
@@ -2071,17 +2287,19 @@ class generalController extends Controller
                             'doc_no' => $doc_no ?? 'Unknown',
                             'status' => 'failed',
                             'reason' => 'Missing required fields',
-                            'data' => array([
-                                'doc_no' => $doc_no,
-                                'doc_date' => $doc_date,
-                                'class_slug' => $class_slug,
-                                'confidential' => $confidential,
-                                'compliance_deadline' => $compliance_deadline,
-                                'app_type_uuid' => $app_type_uuid,
-                                'transac_uuid' => $transac_uuid,
-                                'subject' => $subject,
-                                'atch_remarks' => $atch_remarks,
-                            ]),
+                            'data' => array(
+                                [
+                                    'doc_no' => $doc_no,
+                                    'doc_date' => $doc_date,
+                                    'class_slug' => $class_slug,
+                                    'confidential' => $confidential,
+                                    'compliance_deadline' => $compliance_deadline,
+                                    'app_type_uuid' => $app_type_uuid,
+                                    'transac_uuid' => $transac_uuid,
+                                    'subject' => $subject,
+                                    'atch_remarks' => $atch_remarks,
+                                ]
+                            ),
                         ];
                         continue;
                     }
@@ -2366,7 +2584,7 @@ class generalController extends Controller
     #endregion id reencryption
 
     #region fetch document infos
-    public  function fetchdocInfos($doc_uuid) // CONVERTED TO UUID
+    public function fetchdocInfos($doc_uuid) // CONVERTED TO UUID
     {
         $doc_info = redts_zd_client_doc_info::select(
             'redts_zd_client_doc_infos.uuid',
@@ -2481,7 +2699,7 @@ class generalController extends Controller
             ->get();
 
         #region get document attachments
-        $doc_attachments  = redts_ze_client_doc_attachments::select(
+        $doc_attachments = redts_ze_client_doc_attachments::select(
             'redts_ze_client_doc_attachments.id',
             'redts_ze_client_doc_attachments.doc_info_id',
             'redts_ze_client_doc_attachments.doc_info_uuid',
@@ -2506,7 +2724,7 @@ class generalController extends Controller
 
         #region get action attachments
         foreach ($doc_stats as $key => $dt) {
-            $attachments  = redts_na_action_attachments::where('action_uuid', $dt['uuid'])->whereNull('deleted_at')->get();
+            $attachments = redts_na_action_attachments::where('action_uuid', $dt['uuid'])->whereNull('deleted_at')->get();
             $dt->attachments = $attachments;
         }
         #endregion get action attachments
@@ -2689,7 +2907,8 @@ class generalController extends Controller
     {
         //allow access in public
         // if (Auth::check()) {
-        if ($doc_info = redts_zd_client_doc_info::where('uuid', $doc_uuid)->exists() ||
+        if (
+            $doc_info = redts_zd_client_doc_info::where('uuid', $doc_uuid)->exists() ||
             $doc_info = redts_zd_client_doc_info::where('id', $doc_uuid)->exists() ||
             $doc_info = redts_zd_client_doc_info::where('doc_no', $doc_uuid)->exists()
         ) {
@@ -2931,7 +3150,7 @@ class generalController extends Controller
             $dt->req_attachments = $req_attachments_arr;
 
             // get all action with specific doc_id
-            $doc_actions =  redts_n_action::select('id')->where('doc_id', $dt->id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
+            $doc_actions = redts_n_action::select('id')->where('doc_id', $dt->id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
             $last_doc_action_id = $doc_actions->last();
             $last_doc_action = redts_n_action::select(
                 'redts_n_actions.id',
@@ -3023,7 +3242,8 @@ class generalController extends Controller
                         'verified' => $ofp->verified,
                     ]);
                 }
-            };
+            }
+            ;
 
             $dt->order_of_payment = $order_of_payment_arr;
         }
@@ -3116,7 +3336,7 @@ class generalController extends Controller
                 $dt->req_attachments = $req_attachments_arr;
 
                 // get all action with specific doc_id
-                $doc_actions =  redts_n_action::select('id')->where('doc_id', $dt->id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
+                $doc_actions = redts_n_action::select('id')->where('doc_id', $dt->id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
                 $last_doc_action_id = $doc_actions->last();
                 $last_doc_action = redts_n_action::select(
                     'redts_n_actions.id',
@@ -3208,7 +3428,8 @@ class generalController extends Controller
                             'verified' => $ofp->verified,
                         ]);
                     }
-                };
+                }
+                ;
 
                 $dt->order_of_payment = $order_of_payment_arr;
             }
@@ -3310,7 +3531,7 @@ class generalController extends Controller
                     $dt->req_attachments = $req_attachments_arr;
 
                     // get all action with specific doc_id
-                    $doc_actions =  redts_n_action::select('id')->where('doc_id', $dt->id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
+                    $doc_actions = redts_n_action::select('id')->where('doc_id', $dt->id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
                     $last_doc_action_id = $doc_actions->last();
                     $last_doc_action = redts_n_action::select(
                         'redts_n_actions.id',
@@ -3402,7 +3623,8 @@ class generalController extends Controller
                                 'verified' => $ofp->verified,
                             ]);
                         }
-                    };
+                    }
+                    ;
 
                     $dt->order_of_payment = $order_of_payment_arr;
                 }
@@ -3479,7 +3701,7 @@ class generalController extends Controller
     #region certification for chainsaw registration
     public function indexpermcertroutechecker($doc_no, $subclass_id)
     {
-        if (redts_zh_cert_perm_routes::where('sub_class_id',  $subclass_id)->exists()) {
+        if (redts_zh_cert_perm_routes::where('sub_class_id', $subclass_id)->exists()) {
             return $this->indexgendashcertchainsawreg($doc_no);
         } else {
             return '' .
@@ -3853,14 +4075,14 @@ class generalController extends Controller
         $ip = $fetchExternalIp['ip'];
         $country = $fetchExternalIp['country'];
 
-        $file = 'login_' .  date('Y_m') . '.txt';
+        $file = 'login_' . date('Y_m') . '.txt';
         $upload_path = "public/assets/doc/login_records";
         $full_path = storage_path($upload_path . '/' . $file);
         $text = '' .
             '{ ' .
-            '  "user_id": "' .  (Auth::user()->id ?? '') . '", ' .
-            '  "user": "' .  (Auth::user()->username ?? '') . '", ' .
-            '  "action_taken": "' .   $action . '",' .
+            '  "user_id": "' . (Auth::user()->id ?? '') . '", ' .
+            '  "user": "' . (Auth::user()->username ?? '') . '", ' .
+            '  "action_taken": "' . $action . '",' .
             '  "email": "' . (Auth::user()->email ?? '') . '", ' .
             '  "ip_address": "' . $ip . '", ' .
             '  "date_time": "' . date('Y-m-d H:i:s') . '" ' .
@@ -4170,7 +4392,7 @@ class generalController extends Controller
         //upload unsynced documents
 
         $acionSyncMsg = [];
-        if ($actIntransitCounted == $actIntransitCountedLocal && $actReceivedCounted ==  $actReceivedCountedLocal  && $actCountedAll == $actCountedAllLocal) {
+        if ($actIntransitCounted == $actIntransitCountedLocal && $actReceivedCounted == $actReceivedCountedLocal && $actCountedAll == $actCountedAllLocal) {
             //do nothing
         } else {
             $apiacts = http::get($baseUrl . '3a7976e1-2b9a-47e6-be7e-d6b17938ff38');
@@ -4307,14 +4529,14 @@ class generalController extends Controller
             foreach ($apidocOfficesData as $key => $docOffice) {
                 if (!redts_zi_origin_office::where('doc_uuid', $docOffice['doc_uuid'])->exists()) {
                     redts_zi_origin_office::create([
-                        'user_id'  => $docOffice['user_id'],
-                        'user_uuid'  => $docOffice['user_uuid'],
-                        'doc_id'  => $docOffice['doc_id'],
-                        'doc_uuid'  => $docOffice['doc_uuid'],
-                        'origin_office_id'  => $docOffice['origin_office_id'],
-                        'origin_office_uuid'  => $docOffice['origin_office_uuid'],
-                        'downloaded'  => now(),
-                        'deleted_at'  => $docOffice['deleted_at'],
+                        'user_id' => $docOffice['user_id'],
+                        'user_uuid' => $docOffice['user_uuid'],
+                        'doc_id' => $docOffice['doc_id'],
+                        'doc_uuid' => $docOffice['doc_uuid'],
+                        'origin_office_id' => $docOffice['origin_office_id'],
+                        'origin_office_uuid' => $docOffice['origin_office_uuid'],
+                        'downloaded' => now(),
+                        'deleted_at' => $docOffice['deleted_at'],
                     ]);
                 }
             }
@@ -4335,13 +4557,13 @@ class generalController extends Controller
                         file_get_contents($filePath),
                         $attachment->file_name
                     )->post($baseUrl . 'edf891e1-76ea-4a98-989f-b54387753ce2', [
-                        'action_id' => $attachment->action_id,
-                        'action_uuid' => $attachment->action_uuid,
-                        'doc_no' => $attachment->doc_no,
-                        'doc_uuid' => $attachment->doc_uuid,
-                        'remarks' => $attachment->remarks,
-                        'file_name' => $attachment->file_name,
-                    ]);
+                                'action_id' => $attachment->action_id,
+                                'action_uuid' => $attachment->action_uuid,
+                                'doc_no' => $attachment->doc_no,
+                                'doc_uuid' => $attachment->doc_uuid,
+                                'remarks' => $attachment->remarks,
+                                'file_name' => $attachment->file_name,
+                            ]);
 
                     if ($response->successful()) {
                         redts_na_action_attachments::where('id', $attachment->id)->update([
@@ -4377,18 +4599,18 @@ class generalController extends Controller
                         file_get_contents($filePath),
                         $attachment->file_name
                     )->post($baseUrl . '3f3440c9-66b5-496b-8421-80adff41adf0', [
-                        'uuid' => $attachment->uuid,
-                        'doc_info_id' => $attachment->doc_info_id,
-                        'doc_info_uuid' => $attachment->doc_info_uuid,
-                        'req_id' => $attachment->req_id,
-                        'app_form_no' => $attachment->app_form_no,
-                        'req_slug' => $attachment->req_slug,
-                        'file_path' => $attachment->file_path,
-                        'file_name' => $attachment->file_name,
-                        'file_link' => $attachment->file_link,
-                        'text_input' => $attachment->text_input,
-                        'attachment_type' => $attachment->attachment_type,
-                    ]);
+                                'uuid' => $attachment->uuid,
+                                'doc_info_id' => $attachment->doc_info_id,
+                                'doc_info_uuid' => $attachment->doc_info_uuid,
+                                'req_id' => $attachment->req_id,
+                                'app_form_no' => $attachment->app_form_no,
+                                'req_slug' => $attachment->req_slug,
+                                'file_path' => $attachment->file_path,
+                                'file_name' => $attachment->file_name,
+                                'file_link' => $attachment->file_link,
+                                'text_input' => $attachment->text_input,
+                                'attachment_type' => $attachment->attachment_type,
+                            ]);
 
                     if ($response->successful()) {
                         redts_ze_client_doc_attachments::where('id', $attachment->id)->update([
@@ -4432,8 +4654,8 @@ class generalController extends Controller
             'acionSyncMsg' => $acionSyncMsg,
             // 'docCountUnsynced' => $docCountUnsynced,
             // 'actCountUnsynced' => $actCountUnsynced,
-            'docCounted' =>  $docCounted  .' == '.  $docCountedLocal,
-            'actCountedAll' =>  $actCountedAll  .' == '.  $actCountedAllLocal,
+            'docCounted' => $docCounted . ' == ' . $docCountedLocal,
+            'actCountedAll' => $actCountedAll . ' == ' . $actCountedAllLocal,
 
             // 'unsyncedDocsMsg' => $unsyncedDocsMsg,
             // 'unsyncedActMsg' => $unsyncedActMsg,
