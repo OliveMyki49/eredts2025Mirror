@@ -656,7 +656,7 @@
             // region SUBMIT BULK FORM
             $('.btn-bulk-submit').click(function(e) {
                 e.preventDefault();
-                $(this).disabled = true; //disable the submit button to prevent multiple submits
+                $(this).prop('disabled', true); // disable the submit button to prevent multiple submits
 
                 // Validate shared offices
                 if (sharedOffices_selected.length === 0) {
@@ -681,7 +681,7 @@
                 });
 
                 if (!isValid) {
-                    $(this).disabled = false; //enable the submit button
+                    $(this).prop('disabled', false); // re-enable if validation fails
                     $('.genDashNotifs').html(
                         '<div class="alert alert-danger alert-dismissible fade show p-2" data-bs-dismiss="alert" role="alert">' +
                         '    <strong>Please fill in all required fields for all documents.</strong>' +
