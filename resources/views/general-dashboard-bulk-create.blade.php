@@ -372,6 +372,7 @@
 
             // region SHARED OFFICE SEARCH - Search for offices to add as destinations
             $('#sharedSendTo').keyup(function() {
+                $('.btn-bulk-submit').prop('disabled', false); // re-enable submit button
                 let search = $(this).val();
                 if (search.length >= 2) {
                     $.ajax({
@@ -657,7 +658,7 @@
             $('.btn-bulk-submit').click(function(e) {
                 e.preventDefault();
                 $(this).prop('disabled', true); // disable the submit button to prevent multiple submits
-
+                    
                 // Validate shared offices
                 if (sharedOffices_selected.length === 0) {
                     $('.addSendToListaddndocmsg').html(
