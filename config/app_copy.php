@@ -218,7 +218,6 @@ return [
     //'bapi' => env('APP_BAPI', 'http://58.69.249.101:9120/'), // BASE API URL
     
     // development aliases
-    //this file is ok
     'bapiu' => env('APP_BAPIU', 'localhost:8001/api/'), // BASE API URL
     'bapi' => env('APP_BAPI', 'localhost:8001/'), // BASE API URL
 ];

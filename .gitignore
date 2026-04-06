@@ -18,6 +18,7 @@ yarn-error.log
 /.idea
 /.vscode
 KIOSK2021xx.mp4
+/config/app.php
 
 #public paths
 /storage/assets
