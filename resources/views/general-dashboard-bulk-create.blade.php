@@ -705,7 +705,8 @@
                     processData: false,
                     success: function(response) {
                         if (response.success) {
-                            console.log(response);
+                             this.disabled = true; //disable the submit button to prevent multiple submits
+
                             $('.genDashNotifs').html(
                                 '<div class="alert alert-success alert-dismissible fade show p-2" data-bs-dismiss="alert" role="alert">' +
                                 '    <strong>Success!</strong> ' + response.total + ' document(s) submitted successfully.' +
