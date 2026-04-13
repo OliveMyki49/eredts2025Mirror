@@ -106,7 +106,7 @@
                         </div>
                     </div>
 
-                    {{-- UPLOAD ARCHIVED ATTACHMENTS --}}
+                    {{-- UPLOAD ADDITIONAL ATTACHMENTS --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIRlsd_collapsible_arc_atch" aria-expanded="false" aria-controls="vDIRlsd_collapsible_arc_atch">
@@ -144,7 +144,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md text-end">
-                                            <button type="button" class="btn btn-primary btn-sm float-end btn-save-archive-atch" tooltip="Save archived Attachments" flow="left">
+                                            <button type="button" class="btn btn-primary btn-sm float-end btn-save-add-atch" tooltip="Save Attachments" flow="left">
                                                 Upload Additional Attachment/s
                                             </button>
                                         </div>
@@ -1321,10 +1321,10 @@
 
         /* region upload additional attachments */
         // region upload archive attachments
-        $('.btn-save-archive-atch').click(function() {
+        $('.btn-save-add-atch').click(function() {
             let form = $('#addvDIRlsdAddAtch')[0];
             let sbmtfrm = new FormData(form);
-            // region upload archived attachments
+            // region upload additional attachments
             $.ajax({
                 url: "/insert-AddAtch",
                 method: "POST",
@@ -1341,7 +1341,7 @@
 
                         $('#genDashNotifs').append('' +
                             '<div class="col-12 alert alert-info alert-dismissible fade show p-2 pe-5" role="alert"> ' +
-                            '    <strong>Archived Attachments Uploaded ✅</strong> ' +
+                            '    <strong>Additional Attachment/s Uploaded ✅</strong> ' +
                             '    <button type="button" class="btn-close pt-1" data-bs-dismiss="alert" aria-label="Close"></button> ' +
                             '</div>'
                         );
@@ -1379,7 +1379,7 @@
                     console.log(err);
                 }
             });
-            // endregion upload archived attachments
+            // endregion upload additional attachments
         })
         // endregion upload archive attachments
 
