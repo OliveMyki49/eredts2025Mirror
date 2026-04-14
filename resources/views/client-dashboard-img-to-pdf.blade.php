@@ -265,7 +265,7 @@ twenty (20) working days
                         <b>Disclaimer:</b>
                         <br>
                         <ul class="list-group list-group">
-                            <li class="list-group-item">The image to PDF converter is an embedded feature in the <b>Regional Frontline Services Online Application and Tracking System (RFSOATS)</b>.</li>
+                            <li class="list-group-item">The image to PDF converter is an embedded feature in the <b>Enhanced Regional Electronic Document Tracking System (EREDTS)</b>.</li>
                             <li class="list-group-item">This feature converts images into PDF files. It's important to note that the <b>uploaded files are not stored in the system.</b></li>
                             <li class="list-group-item"> Therefore, <b> any file uploaded here is solely used for the purpose of image to PDF conversion. Once the page is reloaded, any previously uploaded image file will be removed</b>.</li>
                         </ul>
