@@ -65,7 +65,15 @@ twenty (20) working days
 
             // region file upload restriction
             $('.attachment_list_required, .attachment_list_additional').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                var allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -97,7 +105,15 @@ twenty (20) working days
 
             // for id upload
             $('.upon-access-info').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                var allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 

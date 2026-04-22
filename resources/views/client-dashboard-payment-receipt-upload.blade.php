@@ -65,7 +65,15 @@ twenty (20) working days
 
             // region file upload restriction
             $('.attachment_list_required, .attachment_list_additional').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                var allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -97,7 +105,15 @@ twenty (20) working days
 
             // for id upload
             $('.upon-access-info').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                var allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -355,7 +371,15 @@ twenty (20) working days
         $(function() {
             // region file upload restriction
             $('#addPR_ReceiptForm').on('change', '.file_input_tag', function() {
-                let allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                let allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 let maxSizeByte = $('#upload_limit').val(); // Maximum allowed file size in megabytes
                 let selectedFile = this.files[0];
 
@@ -451,14 +475,14 @@ twenty (20) working days
                                 }, 5000); // 5000 milliseconds = 5 seconds
                             }
                         } else {
-                            if(r.data_privacy_consent == 0){
+                            if (r.data_privacy_consent == 0) {
                                 $('#genDashNotifs').append('' +
                                     '<div class="alert alert-danger alert-dismissible fade show p-2" data-bs-dismiss="alert" role="alert">' +
                                     '    <strong>Please approve data privacy concent &nbsp;&nbsp;&nbsp;&nbsp;</strong><br>' +
                                     '    <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>' +
                                     '</div>'
                                 );
-                            }else{
+                            } else {
                                 $('#genDashNotifs').append('' +
                                     '<div class="alert alert-danger alert-dismissible fade show p-2" data-bs-dismiss="alert" role="alert">' +
                                     '    <strong>No file has been uploaded &nbsp;&nbsp;&nbsp;&nbsp;</strong><br>' +
@@ -479,8 +503,8 @@ twenty (20) working days
                 });
             })
 
-             // region toggle client consent radio
-             $('#addcliDashdata_privacy_consent').click(function() {
+            // region toggle client consent radio
+            $('#addcliDashdata_privacy_consent').click(function() {
                 if ($('#addcliDashdata_privacy_consent').is(":checked")) {
                     $('.privacy_consent_container').removeClass('border-danger').addClass('border-success');
                 } else {

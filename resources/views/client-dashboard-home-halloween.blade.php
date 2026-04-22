@@ -58,7 +58,15 @@
 
             // region file upload restriction
             $('.attachment_list_required').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                var allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -168,9 +176,9 @@
         .main_content {
             /* background: rgba(255, 255, 255, 0.4) url('../assets/img/halloween_imgs/pumpkins.jpg'); */
             /* background-color: #333;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed; */
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed; */
             overflow: auto;
             white-space: nowrap;
         }
@@ -244,10 +252,10 @@
         }
 
         /* @keyframes fly-cycle {
-            100%{
-                background-position: -3600px 0;
-            }
-        } */
+                100%{
+                    background-position: -3600px 0;
+                }
+            } */
         @keyframes fly-cycle {
 
             100% {
@@ -403,6 +411,7 @@
             overflow-x: hidden;
             background-color: #9c3d541c;
         }
+
         /* endregion disable horizontal scrolling */
     </style>
     {{-- endregion halloween styles --}}
@@ -571,8 +580,7 @@
         </a>
         <div class="collapse p-0 m-0" id="fixedweatherwidget">
             <div class="card card-body p-0 m-0">
-                <div id="ww_e0cd57a008b0a" v='1.3' loc='id' a='{"t":"responsive","lang":"en","sl_lpl":1,"ids":["wl5260"],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"#FFB300","cl_font":"#000000","cl_cloud":"rgba(156,61,84,1)","cl_persp":"#000000","cl_sun":"#000000","cl_moon":"#000000","cl_thund":"#000000","cl_odd":"#00000000"}'>More forecasts: <a href="https://cuacalab.id/cuaca_medan/"
-                        id="ww_e0cd57a008b0a_u" target="_blank">Prakiraan cuaca medan</a></div>
+                <div id="ww_e0cd57a008b0a" v='1.3' loc='id' a='{"t":"responsive","lang":"en","sl_lpl":1,"ids":["wl5260"],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"#FFB300","cl_font":"#000000","cl_cloud":"rgba(156,61,84,1)","cl_persp":"#000000","cl_sun":"#000000","cl_moon":"#000000","cl_thund":"#000000","cl_odd":"#00000000"}'>More forecasts: <a href="https://cuacalab.id/cuaca_medan/" id="ww_e0cd57a008b0a_u" target="_blank">Prakiraan cuaca medan</a></div>
                 <script async src="https://app2.weatherwidget.org/js/?id=ww_e0cd57a008b0a"></script>
             </div>
         </div>

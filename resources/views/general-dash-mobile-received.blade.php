@@ -1730,7 +1730,7 @@
                                         '    </div> ' +
                                         '</div> '
                                     );
-                                }else{
+                                } else {
                                     $('.payment_document_receipt').append('' +
                                         '<label for="client_receipt" class="form-label fs-6">Client Payment Receipt:</label><br>' +
                                         '<div class="d-grid gap-2 text-center border rounded bg-warning p-3">' +
@@ -1935,7 +1935,7 @@
 
                                 $('.other-order-of-payment-cont').append('' +
                                     '<div class="text-start fs-6">' +
-                                        '   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> <a class="text-primary" href="/get-edit-another-oop/'+ doc_id +'/'+ id +'" target="_blank"> ' + purpose + ' . . . . . . . Php ' + pay_amount + '.00</a>' +
+                                    '   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> <a class="text-primary" href="/get-edit-another-oop/' + doc_id + '/' + id + '" target="_blank"> ' + purpose + ' . . . . . . . Php ' + pay_amount + '.00</a>' +
                                     '</div>'
                                 );
                             });
@@ -1962,12 +1962,12 @@
 
                         if (r.msg == 'seen') {
                             $('#rcvd_act_' + action_id).parent().append('' +
-                                    '<div ' +
-                                    '   class="text-secondary"' +
-                                    '   style="' +
-                                    '    display: inline-block;' +
-                                    '    font-size: 15px;' +
-                                    '">Seen</div>');
+                                '<div ' +
+                                '   class="text-secondary"' +
+                                '   style="' +
+                                '    display: inline-block;' +
+                                '    font-size: 15px;' +
+                                '">Seen</div>');
                         }
                     };
                 },
@@ -2356,7 +2356,7 @@
                 '           <input type="text" value="FileName' + vDIR_atch_count + '" class="form-control" name="vDIRAtch_remark[]" placeholder="Attachment Remark"> ' +
                 '        </div> ' +
                 '        <div class="p-2"> ' +
-                '           <input type="file" class="form-control vDIRAtch_file" name="vDIRAtch_file[]"> ' +
+                '           <input type="file" class="form-control vDIRAtch_file" name="vDIRAtch_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"> ' +
                 '        </div> ' +
                 '        <div class="p-2"> ' +
                 '           <button class="btn btn-danger btn-sm btn_vDIRAtchCtnr_poped_cls"> <i class="fa fa-times" aria-hidden="true"></i> </button> ' +
@@ -2369,7 +2369,15 @@
 
         // restric only pdf upload in add attachment
         $('.vDIRAtchCtnr').on('change', '.vDIRAtch_file', function() {
-            var allowedFormats = ["application/pdf"];
+            let allowedFormats = [
+                "application/pdf", // PDF
+                "application/msword", // Word (.doc)
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                "application/vnd.ms-excel", // Excel (.xls)
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+            ];
             var maxSizeMB = 10; // Maximum allowed file size in megabytes
             var selectedFile = this.files[0];
 
@@ -2517,7 +2525,7 @@
                                     '   data-office_type = "' + office_type + '" ' +
                                     '   data-username = "' + username + '" ' +
                                     '>' +
-                                    '   <span>'+ (username == null ? full_office_name + ' (' + slug + ')' : '<span class="text-primary">['+ username +']</span> ' + ' (' + slug + ')' ) +'</span>' +
+                                    '   <span>' + (username == null ? full_office_name + ' (' + slug + ')' : '<span class="text-primary">[' + username + ']</span> ' + ' (' + slug + ')') + '</span>' +
                                     '</li>'
                                 );
                             }

@@ -58,7 +58,15 @@
 
             // region file upload restriction
             $('.attachment_list_required, .attachment_list_additional').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                let allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -90,7 +98,15 @@
 
             // for id upload
             $('.upon-access-info').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                let allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -463,7 +479,7 @@
                                         '       ' + ($dt.in_transit_remarks != null ? $dt.in_transit_remarks : '<span class="fs-6 text-secondary">NO REMARKS</span>') +
                                         '    </td> ' +
                                         '    <td> ' +
-                                        '        <span class="fw-bold">'+ date_forwarded_lbl +'</span> ' +
+                                        '        <span class="fw-bold">' + date_forwarded_lbl + '</span> ' +
                                         '        <br> ' +
                                         '       ' + (months[date_of_action.getMonth()]).toUpperCase() + ' ' + date_of_action.getDate() + ', ' + date_of_action.getFullYear() +
                                         '       <br>' + date_of_action.getHours() + ':' + (date_of_action.getMinutes() > 10 ? date_of_action.getMinutes() : '0' + date_of_action.getMinutes()) +
@@ -479,17 +495,16 @@
                                 console.log('last action');
 
                                 if (last_act.final_action == null) {
-                                    if(last_act.rejected != null){
+                                    if (last_act.rejected != null) {
                                         $('#getdocInfcrnt_doc_no_stats').empty().append('<span class="fs-6 fw-bold text-danger">THE DOCUMENT REQUEST HAS BEEN REJECTED: <i>' + (last_act.action_taken).toUpperCase() + '</i></span>');
-                                    }else{
+                                    } else {
                                         if (last_act.received_id != null) {
                                             $('#getdocInfcrnt_doc_no_stats').empty().append('RECEIVED BY OFFICE OF THE <i>' + (last_act.send_to_full_office_name).toUpperCase() + '</i>');
                                         } else {
                                             $('#getdocInfcrnt_doc_no_stats').empty().append('<span class="fs-6 fw-bold text-success">SENT TO OFFICE OF THE <i>' + (last_act.send_to_full_office_name).toUpperCase() + '</i></span>');
                                         }
                                     }
-                                }
-                                else {
+                                } else {
                                     $('#getdocInfcrnt_doc_no_stats').empty().append('<span class="fs-6 fw-bold text-success">THE DOCUMENT REQUEST HAS BEEN APPROVED AND RELEASED IN THE OFFICE OF THE <i>' + (last_act.send_to_full_office_name).toUpperCase() + '</i></span>');
                                 }
                                 // endregion get last action

@@ -58,7 +58,15 @@
 
             // region file upload restriction
             $('.attachment_list_required').on('change', '.file_input_tag', function() {
-                var allowedFormats = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
+                var allowedFormats = [
+                    "application/pdf", // PDF
+                    "application/msword", // Word (.doc)
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                    "application/vnd.ms-excel", // Excel (.xls)
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                    "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+                ];
                 var maxSizeMB = 9; // Maximum allowed file size in megabytes
                 var selectedFile = this.files[0];
 
@@ -175,10 +183,10 @@
 
         .stat_kiosk_nav {
             /* background: rgba(255, 255, 255, 0.4) url('../assets/img/denr-protected-area-blur.png');
-                                                                                background-color: #333;
-                                                                                background-size: cover;
-                                                                                background-repeat: no-repeat;
-                                                                                background-attachment: fixed; */
+                                                                                    background-color: #333;
+                                                                                    background-size: cover;
+                                                                                    background-repeat: no-repeat;
+                                                                                    background-attachment: fixed; */
 
             /* original color gradient green to blue */
             /* background: linear-gradient(to bottom right, #4a9485, #4a9485, #328da9, #05a0f2); */
@@ -265,8 +273,8 @@
         /* region active services */
         .active-services {
             /* color: #149D20;
-                                                    font-weight: 700;
-                                                    font-family: 'Montserrat', sans-serif !important; */
+                                                        font-weight: 700;
+                                                        font-family: 'Montserrat', sans-serif !important; */
             /* margin-top: 2%; */
             /* margin-bottom: 30px; */
             /* border-bottom: 2px solid; */

@@ -289,8 +289,8 @@
                         {{-- File Uploads --}}
                         <div class="col-12 mb-3">
                             <label class="form-label">File Attachments (Optional)</label>
-                            <input type="file" class="form-control doc-file-uploads" name="docs[0][files][]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                            <small class="text-muted">You can upload multiple files. Accepted formats: PDF, JPG, PNG, DOC, DOCX</small>
+                            <input type="file" class="form-control doc-file-uploads" name="docs[0][files][]" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                            <small class="text-muted">You can upload multiple files. Accepted formats: PDF, DOCX, XLSX, PPTX</small>
                             <div class="file_list mt-2"></div>
                         </div>
                     </div>
@@ -625,8 +625,8 @@
                             <div class="col-12 mb-3">
                                 <label class="form-label">File Attachments (Optional)</label>
                                 <input type="file" class="form-control doc-file-uploads" name="docs[${itemCounter - 1}][files][]" 
-                                       multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                                <small class="text-muted">You can upload multiple files. Accepted formats: PDF, JPG, PNG, DOC, DOCX</small>
+                                       multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                                <small class="text-muted">You can upload multiple files. Accepted formats: PDF, DOCX, XLSX, PPTX</small>
                                 <div class="file_list mt-2"></div>
                             </div>
                         </div>

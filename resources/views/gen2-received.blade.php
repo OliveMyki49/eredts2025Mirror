@@ -1,6 +1,5 @@
 {{-- region display table --}}
-<table class="table table-striped table-bordered dataTable " id="dTReceived" role="grid" aria-describedby="Table"
-    style="width: 100%;" cellspacing="0">
+<table class="table table-striped table-bordered dataTable " id="dTReceived" role="grid" aria-describedby="Table" style="width: 100%;" cellspacing="0">
     <thead style="border-bottom: 1px solid #000;">
         <tr>
             <th>ID</th>
@@ -40,14 +39,12 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #497ac1">
-                <h1 class="modal-title fs-5 text-white" id="vDocAtchRcvLabel">Document Attachment: <b><u><span
-                                class="viewDocAtchNameReceived fs-6"></span></u></b></h1>
+                <h1 class="modal-title fs-5 text-white" id="vDocAtchRcvLabel">Document Attachment: <b><u><span class="viewDocAtchNameReceived fs-6"></span></u></b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="height: 800px; overflow-y: scroll;">
                 <div class="viewDocAtchReceivedCollection"></div>
-                <embed id="viewDocAtchReceivedIframe" name="viewDocAtchReceivedIframe" width="100%" height="80%"
-                    style="background:url(../assets/img/denrloadsmaller.webp) center center no-repeat;">
+                <embed id="viewDocAtchReceivedIframe" name="viewDocAtchReceivedIframe" width="100%" height="80%" style="background:url(../assets/img/denrloadsmaller.webp) center center no-repeat;">
                 <div class="viewDocAtchReceived_other_req_inputs"></div>
             </div>
             <div class="modal-footer">
@@ -78,14 +75,11 @@
                     {{-- GENERAL INFORMATION --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#vDIR_collapsible_gen_info" aria-expanded="false"
-                                aria-controls="vDIR_collapsible_gen_info">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIR_collapsible_gen_info" aria-expanded="false" aria-controls="vDIR_collapsible_gen_info">
                                 GENERAL INFORMATION
                             </button>
                         </h2>
-                        <div id="vDIR_collapsible_gen_info" class="accordion-collapse collapse"
-                            data-bs-parent="#vDIR_accordian">
+                        <div id="vDIR_collapsible_gen_info" class="accordion-collapse collapse" data-bs-parent="#vDIR_accordian">
                             <div class="accordion-body">
                                 <div class="row vDIR_content">
                                     {{-- Document Info Contents generated here --}}
@@ -97,14 +91,11 @@
                     {{-- DOCUMENT REMARKS AND ATTACHMENTS --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#vDIR_collapsible_req_info" aria-expanded="false"
-                                aria-controls="vDIR_collapsible_req_info">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vDIR_collapsible_req_info" aria-expanded="false" aria-controls="vDIR_collapsible_req_info">
                                 DOCUMENT REMARKS AND ATTACHMENTS
                             </button>
                         </h2>
-                        <div id="vDIR_collapsible_req_info" class="accordion-collapse collapse"
-                            data-bs-parent="#vDIR_accordian">
+                        <div id="vDIR_collapsible_req_info" class="accordion-collapse collapse" data-bs-parent="#vDIR_accordian">
                             <div class="accordion-body">
                                 <div class="row vDIR_doc_inpts">
                                     --- no other information ---
@@ -118,14 +109,11 @@
                         {{-- Document Action --}}
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#vDIR_collapsible_doc_act" aria-expanded="false"
-                                    aria-controls="vDIR_collapsible_doc_act">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#vDIR_collapsible_doc_act" aria-expanded="false" aria-controls="vDIR_collapsible_doc_act">
                                     DOCUMENT ACTION
                                 </button>
                             </h2>
-                            <div id="vDIR_collapsible_doc_act" class="accordion-collapse show"
-                                data-bs-parent="#vDIR_accordian">
+                            <div id="vDIR_collapsible_doc_act" class="accordion-collapse show" data-bs-parent="#vDIR_accordian">
                                 <div class="accordion-body">
                                     {{-- region actions here --}}
                                     <div class="row">
@@ -144,8 +132,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 mb-3">
                                                         <div class="form-floating">
-                                                            <select class="form-control" id="vDIRdoc_action"
-                                                                name="doc_action">
+                                                            <select class="form-control" id="vDIRdoc_action" name="doc_action">
                                                                 <option value="n/a">-- CHOOSE ACTION --</option>
                                                                 <option value="for_release">FORWARD TO</option>
                                                                 <option value="final_action">FINAL ACTION</option>
@@ -158,21 +145,16 @@
                                                     {{-- choose where office to release --}}
                                                     <div class="col-md-12 mb-3 vDIRdoc_action_other">
                                                         <div class="addSendToListvDIRmsg"></div>
-                                                        <div
-                                                            class="vDIRdoc_action_other_toggle border border-secondary px-2 rounded">
+                                                        <div class="vDIRdoc_action_other_toggle border border-secondary px-2 rounded">
                                                             <div id="addSendToListvDIR" class="row">
                                                                 {{-- populate send to office here --}}
                                                             </div>
                                                             <div class="form-floating">
-                                                                <input type="text" class="form-control fs-6 border-0"
-                                                                    placeholder="Search by office name . . ."
-                                                                    id="addSendTovDIR">
-                                                                <label for="addSendTovDIR"
-                                                                    style="font-size: 1rem;">Choose Office*</label>
+                                                                <input type="text" class="form-control fs-6 border-0" placeholder="Search by office name . . ." id="addSendTovDIR">
+                                                                <label for="addSendTovDIR" style="font-size: 1rem;">Choose Office*</label>
                                                             </div>
                                                             <div class="col" style="position: relative">
-                                                                <ul class="list-group addPWB-searchResult"
-                                                                    style="position:absolute ;z-index: 100"></ul>
+                                                                <ul class="list-group addPWB-searchResult" style="position:absolute ;z-index: 100"></ul>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -182,19 +164,15 @@
 
                                                 {{-- region Subject modification here --}}
                                                 {{-- <div class="p-2 my-1 border rounded"> --}}
-                                                    <div class="row">
-                                                        <div class="col-md mb-3">
-                                                            <div class="form-floating">
-                                                                <textarea
-                                                                    class="form-control toUpperCase bg-secondary-subtle"
-                                                                    placeholder="Subject here" id="vDIR_subject"
-                                                                    name="subject" readonly></textarea>
-                                                                <label for="vDIR_subject"
-                                                                    style="font-size: 1rem;">Subject*</label>
-                                                            </div>
+                                                <div class="row">
+                                                    <div class="col-md mb-3">
+                                                        <div class="form-floating">
+                                                            <textarea class="form-control toUpperCase bg-secondary-subtle" placeholder="Subject here" id="vDIR_subject" name="subject" readonly></textarea>
+                                                            <label for="vDIR_subject" style="font-size: 1rem;">Subject*</label>
                                                         </div>
                                                     </div>
-                                                    {{--
+                                                </div>
+                                                {{--
                                                 </div> --}}
                                                 {{-- endregion Attachments here --}}
 
@@ -204,13 +182,8 @@
                                                 <div class="row">
                                                     <div class="col-md-12 mb-3">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control toUpperCase"
-                                                                style="color:#343a40;" id="vDIRaction_taken"
-                                                                name="action_taken" placeholder="Action remarks here"
-                                                                required>
-                                                            <label for="vDIRaction_taken"
-                                                                style="color:rgba(33, 37, 41, 0.75);;"
-                                                                class="fs-6">Action Taken*</label>
+                                                            <input type="text" class="form-control toUpperCase" style="color:#343a40;" id="vDIRaction_taken" name="action_taken" placeholder="Action remarks here" required>
+                                                            <label for="vDIRaction_taken" style="color:rgba(33, 37, 41, 0.75);;" class="fs-6">Action Taken*</label>
                                                         </div>
                                                         <div class="action_rejected_container"></div>
                                                     </div>
@@ -230,19 +203,13 @@
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <div class="form-floating">
-                                                                <textarea class="form-control toUpperCase"
-                                                                    placeholder="Attachment Remarks"
-                                                                    id="vDIR_attachment_remarks"
-                                                                    name="attachment_remarks"></textarea>
-                                                                <label for="vDIR_attachment_remarks"
-                                                                    style="font-size: 1rem;">Attachment Remarks
+                                                                <textarea class="form-control toUpperCase" placeholder="Attachment Remarks" id="vDIR_attachment_remarks" name="attachment_remarks"></textarea>
+                                                                <label for="vDIR_attachment_remarks" style="font-size: 1rem;">Attachment Remarks
                                                                     (Optional)</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6 mb-3 mt-4">
-                                                            <button type="button"
-                                                                class="btn btn-outline-primary btn-sm btnvDIRAddAtchs"
-                                                                tooltip="Only allows PDF file" flow="right">
+                                                            <button type="button" class="btn btn-outline-primary btn-sm btnvDIRAddAtchs" tooltip="Only allows PDF file" flow="right">
                                                                 <span class="fa-stack fa-sm">
                                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                                     <i class="fa fa-file fa-stack-1x fa-inverse"></i>
@@ -260,20 +227,14 @@
 
                                                 {{-- reject document confirmation --}}
                                                 <div class="rowp-2 my-1 ">
-                                                    <div
-                                                        class="col-md-12 my-2 vDIRdoc_action_reject_toggle border border-2 border-danger rounded">
+                                                    <div class="col-md-12 my-2 vDIRdoc_action_reject_toggle border border-2 border-danger rounded">
                                                         <div class="p-2 text-danger fs-6 px-3">
                                                             I hereby agree that once this action is submitted, this
                                                             request will be rejected and cannot be undone.
                                                             <hr style="magin: 10px 0;">
                                                             <div class="form-check">
-                                                                <input class="form-check-input align-self-center"
-                                                                    type="checkbox" value="1"
-                                                                    style="height: 20px; width: 20px;"
-                                                                    id="vDIR_reject_doc_checker" name="doc_reject">
-                                                                <label
-                                                                    class="form-check-label text-danger fs-6 fw-bold px-3"
-                                                                    for="vDIR_reject_doc_checker">
+                                                                <input class="form-check-input align-self-center" type="checkbox" value="1" style="height: 20px; width: 20px;" id="vDIR_reject_doc_checker" name="doc_reject">
+                                                                <label class="form-check-label text-danger fs-6 fw-bold px-3" for="vDIR_reject_doc_checker">
                                                                     I AGREE
                                                                 </label>
                                                             </div>
@@ -282,10 +243,8 @@
                                                 </div>
 
                                                 <br>
-                                                <button type="button" class="btn btn-outline-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-outline-success btn-vDIR-submit"
-                                                    data-bs-dismiss="modal">PERFORM ACTION</button>
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-outline-success btn-vDIR-submit" data-bs-dismiss="modal">PERFORM ACTION</button>
                                             </div>
                                         </div>
                                     </div>
@@ -338,8 +297,8 @@
                 <div class="row m-3 text-center">
                     <button class="btn btn-outline-primary border-0 vDIRscrollToTop">Return to top</button>
                     <script>
-                        $(document).ready(function () {
-                            $('.vDIRscrollToTop').click(function () {
+                        $(document).ready(function() {
+                            $('.vDIRscrollToTop').click(function() {
                                 $('#vDIRModal').scrollTop(0);
                             });
                         });
@@ -359,8 +318,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h1 class="modal-title fs-5 text-white" id="vDIRbulksendLabel">BULK SEND TO SPECIFIC OFFICE<b><u><span
-                                class="sdf fs-6"></span></u></b></h1>
+                <h1 class="modal-title fs-5 text-white" id="vDIRbulksendLabel">BULK SEND TO SPECIFIC OFFICE<b><u><span class="sdf fs-6"></span></u></b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="height: 800px; overflow-y: scroll;">
@@ -382,13 +340,11 @@
                                 {{-- populate send to office here --}}
                             </div>
                             <div class="form-floating">
-                                <input type="text" class="form-control fs-6 border-0"
-                                    placeholder="Search by office name . . ." id="addbulkOfficeListvDIR">
+                                <input type="text" class="form-control fs-6 border-0" placeholder="Search by office name . . ." id="addbulkOfficeListvDIR">
                                 <label for="addbulkOfficeListvDIR" style="font-size: 1rem;">Choose Office*</label>
                             </div>
                             <div class="col" style="position: relative">
-                                <ul class="list-group addbulkOfficeListvDIR-searchResult"
-                                    style="position:absolute ;z-index: 100"></ul>
+                                <ul class="list-group addbulkOfficeListvDIR-searchResult" style="position:absolute ;z-index: 100"></ul>
                             </div>
                         </div>
                     </div>
@@ -420,14 +376,14 @@
 
 {{-- region populate table --}}
 <script>
-    $(function () {
+    $(function() {
         //store selected docs in an array
         let vDIR_selected_docs = {}; //this will be used for bulk sending and checking table if item is selected or not
 
         // region populate table
         function dTReceived_func() {
             // Setup - add a text input to each footer cell
-            $('#dTReceived tfoot th').each(function () {
+            $('#dTReceived tfoot th').each(function() {
                 var title = $(this).text();
                 $(this).html('<input type="text" style="width: 100%;" placeholder="Search ' + title + '" />');
             });
@@ -441,7 +397,7 @@
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
                     async: true,
-                    error: function (xhr, error, code) {
+                    error: function(xhr, error, code) {
                         console.log(xhr, code);
                     }
                 },
@@ -458,7 +414,7 @@
                     /* column 1 : doc_no */
                     {
                         data: 'doc_no',
-                        render: function (data, typw, row) {
+                        render: function(data, typw, row) {
                             return '<a' +
                                 '   style="cursor: pointer" ' +
                                 '   onMouseOut="this.style.color=`#000`" ' +
@@ -476,7 +432,7 @@
                     /* column 2 : subject */
                     {
                         data: 'subject',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return '' +
                                 '<span class="text-primary text-uppercase">' +
                                 '   ' + row['class_slug'] +
@@ -490,7 +446,7 @@
                     /* column 3 : Doc Attachments */
                     {
                         data: 'req_attachments',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             let req_attachments = row['req_attachments'];
                             let disp = '';
                             let file_names = '';
@@ -567,7 +523,7 @@
                     /* column 4 : Action Attachments */
                     {
                         data: 'act_attachments',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             let attachment_remarks = (row['attachment_remarks'] != null ? row['attachment_remarks'] + '<br>' : '');
                             let act_attachments = row['act_attachments'];
                             let disp = '';
@@ -636,14 +592,14 @@
                     /* column 5 : application_type */
                     {
                         data: 'applicant',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return (row['applicant']).toUpperCase();
                         }
                     },
                     /* column 6 : sender */
                     {
                         data: 'sender_type',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             let sender = row['sender_username'];
                             let sender_type = row['sender_type'];
 
@@ -656,7 +612,7 @@
                     /* column 7 : created at */
                     {
                         data: 'created_at',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                             const d = new Date(new Date(row['created_at']).toLocaleString('en-US', {
                                 timeZone: 'Asia/Manila'
@@ -675,7 +631,7 @@
                     /* column 9 : status & action */
                     {
                         data: 'doc_no',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             let id = row['id'];
                             let uuid = row['uuid'];
                             let act_seen = row['act_seen_id']; //act_seen doesn't have a uuid because it doesnt have any relation to other tables and only be used to check if the action is seen or not
@@ -759,14 +715,14 @@
                 scrollCollapse: true,
                 paging: true,
                 columnDefs: [{
-                    width: '5%',
-                    targets: [0],
-                    visible: false,
-                },
-                {
-                    targets: [5, 6, 7, 8],
-                    visible: false,
-                }
+                        width: '5%',
+                        targets: [0],
+                        visible: false,
+                    },
+                    {
+                        targets: [5, 6, 7, 8],
+                        visible: false,
+                    }
                 ],
                 /* reason for disabling: Causes error for dropdown will overlap */
                 /* fixedColumns: {
@@ -806,7 +762,7 @@
                         exportOptions: {
                             columns: ':visible'
                         },
-                        customize: function (win) {
+                        customize: function(win) {
                             // Add a <style> tag to the <head> element
                             $('head', win.document).append(
                                 '<style> ' +
@@ -874,13 +830,13 @@
                     {
                         // Custom Search Button
                         text: '<input class="form-control form-control-sm border-0 dTReceived_search" type="text" placeholder="Search (Click to refresh)">',
-                        action: function (e, dt, node, config) {
+                        action: function(e, dt, node, config) {
                             var searchValue = $(node).find('.dTReceived_search').val();
                             dt.search(searchValue).draw();
                         }
                     }
                 ],
-                createdRow: function (row, data, dataIndex) {
+                createdRow: function(row, data, dataIndex) {
                     $(row).addClass('TestingAdd');
 
 
@@ -889,14 +845,14 @@
                         $(row).css('background-color', '#d1ecf1');
                     }
                 },
-                initComplete: function () {
+                initComplete: function() {
                     // Apply the search
                     this.api()
                         .columns()
-                        .every(function () {
+                        .every(function() {
                             var that = this;
 
-                            $('input', this.footer()).on('keyup change clear', function () {
+                            $('input', this.footer()).on('keyup change clear', function() {
                                 if (that.search() !== this.value) {
                                     that.search(this.value).draw();
                                 }
@@ -909,7 +865,7 @@
 
         /* region Call tab on click */
         let tabReceived = false;
-        $('label[for=tabReceived]').click(function () {
+        $('label[for=tabReceived]').click(function() {
             if (tabReceived == false) {
                 dTReceived_func();
                 tabReceived = true;
@@ -930,7 +886,7 @@
 
         // {{-- region queries --}}
         // region view document attachment
-        $('#dTReceived').on('click', '.btnvDIR-viewDocAtch', function () {
+        $('#dTReceived').on('click', '.btnvDIR-viewDocAtch', function() {
             let username = $('#auth_username').val();
             let file_type = $(this).data('file_type');
 
@@ -1002,7 +958,7 @@
                     headers: {
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
-                    success: function (r) {
+                    success: function(r) {
                         if (r.success) {
                             $('.viewDocAtchReceived_other_req_inputs').append('<hr><h6>Other Input:</h6><br>');
 
@@ -1030,7 +986,7 @@
                             }
                         }
                     },
-                    error: function (err) {
+                    error: function(err) {
                         console.log(err);
                     }
 
@@ -1071,7 +1027,7 @@
         // endregion view document attachment
 
         // region view document attachment collection
-        $('.viewDocAtchReceivedCollection').on('click', '.btnvDIR-view-file', function () {
+        $('.viewDocAtchReceivedCollection').on('click', '.btnvDIR-view-file', function() {
             let file_path = $(this).data('file_path');
             let file_name = $(this).data('file_name');
 
@@ -1082,7 +1038,7 @@
         // endregion view document attachment collection
 
         // region document info
-        $('#dTReceived').on('click', '.btn-fetchdocInfo_vDIR', function () {
+        $('#dTReceived').on('click', '.btn-fetchdocInfo_vDIR', function() {
 
             console.clear(); //empty console before adding new
 
@@ -1110,7 +1066,7 @@
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },
-                success: function (r) {
+                success: function(r) {
                     // region success query
                     if (r.success) {
                         let doc_no = r.doc_info.doc_no;
@@ -1525,7 +1481,7 @@
                                 headers: {
                                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                                 },
-                                success: function (r) {
+                                success: function(r) {
                                     if (r.success) {
                                         // region populate selection
                                         $('#vDIRprocess_length').empty().append('<option value="n/a">-- CHOOSE PROCESS LENGTH --</option>');
@@ -1546,7 +1502,7 @@
                                         // endregion populate selection
                                     }
                                 },
-                                error: function (err) {
+                                error: function(err) {
                                     console.log(err);
                                 }
                             });
@@ -1580,7 +1536,7 @@
                         // endregion pass params in a input tag to be fetched by process date
                     } //endregion success query
                 },
-                error: function (err) {
+                error: function(err) {
                     console.log(err);
                 }
             });
@@ -1593,7 +1549,7 @@
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },
-                success: function (r) {
+                success: function(r) {
                     if (r.success) {
                         console.log(r.msg);
 
@@ -1608,7 +1564,7 @@
                         }
                     };
                 },
-                error: function (err) {
+                error: function(err) {
                     console.log(err);
                 }
             });
@@ -1618,7 +1574,7 @@
         // endregion document info
 
         // region receive perform action
-        $('.btn-vDIR-submit').click(function () {
+        $('.btn-vDIR-submit').click(function() {
             let remarks = $('#vDIRremarks').val();
             let action_id = $('#vDIRaction_id').val();
             let doc_id = $('#vDIRdoc_id').val();
@@ -1653,7 +1609,7 @@
                                 cache: false,
                                 contentType: false,
                                 processData: false,
-                                success: function (r) {
+                                success: function(r) {
                                     if (r.success) {
 
                                         $('#genDashNotifs').append('' +
@@ -1704,12 +1660,12 @@
 
 
                                     // Close the message after 5 seconds
-                                    setTimeout(function () {
+                                    setTimeout(function() {
                                         console.log('remove notifs');
                                         $('#genDashNotifs').empty(); // Remove the message
                                     }, 10000); // 5000 milliseconds = 5 seconds
                                 },
-                                error: function (err) {
+                                error: function(err) {
                                     console.log(err);
                                 }
                             });
@@ -1735,7 +1691,7 @@
                                 cache: false,
                                 contentType: false,
                                 processData: false,
-                                success: function (r) {
+                                success: function(r) {
                                     if (r.success) {
                                         // console.log(r);
 
@@ -1762,7 +1718,7 @@
                                         $('#dTReceived').DataTable().ajax.reload(null, false);
 
                                         // Close the message after 5 seconds
-                                        setTimeout(function () {
+                                        setTimeout(function() {
                                             console.log('remove notifs');
                                             $('#genDashNotifs').empty(); // Remove the message
                                         }, 10000); // 5000 milliseconds = 5 seconds
@@ -1775,13 +1731,13 @@
                                         );
 
                                         // Close the message after 5 seconds
-                                        setTimeout(function () {
+                                        setTimeout(function() {
                                             console.log('remove notifs');
                                             $('#genDashNotifs').empty(); // Remove the message
                                         }, 10000); // 5000 milliseconds = 5 seconds
                                     }
                                 },
-                                error: function (err) {
+                                error: function(err) {
                                     console.log(err);
                                 }
                             });
@@ -1807,7 +1763,7 @@
                                 cache: false,
                                 contentType: false,
                                 processData: false,
-                                success: function (r) {
+                                success: function(r) {
                                     if (r.success) {
                                         // console.log(r);
 
@@ -1845,7 +1801,7 @@
                                                 'doc_no': doc_track_no,
                                                 'email': user_email,
                                                 'msg': 'Your request has been rejected; "' + action_taken + '"',
-                                            },];
+                                            }, ];
 
                                             toEmailer(
                                                 user_email,
@@ -1856,7 +1812,7 @@
                                         // endregion send email to user
 
                                         // Close the message after 5 seconds
-                                        setTimeout(function () {
+                                        setTimeout(function() {
                                             console.log('remove notifs');
                                             $('#genDashNotifs').empty(); // Remove the message
                                         }, 10000); // 5000 milliseconds = 5 seconds
@@ -1869,13 +1825,13 @@
                                         );
 
                                         // Close the message after 5 seconds
-                                        setTimeout(function () {
+                                        setTimeout(function() {
                                             console.log('remove notifs');
                                             $('#genDashNotifs').empty(); // Remove the message
                                         }, 10000); // 5000 milliseconds = 5 seconds
                                     }
                                 },
-                                error: function (err) {
+                                error: function(err) {
                                     console.log(err);
                                 }
                             });
@@ -1890,7 +1846,7 @@
                             );
 
                             // Close the message after 5 seconds
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 console.log('remove notifs');
                                 $('#genDashNotifs').empty(); // Remove the message
                             }, 10000); // 5000 milliseconds = 5 seconds
@@ -1905,7 +1861,7 @@
                             );
 
                             // Close the message after 5 seconds
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 console.log('remove notifs');
                                 $('#genDashNotifs').empty(); // Remove the message
                             }, 10000); // 5000 milliseconds = 5 seconds
@@ -1919,7 +1875,7 @@
                     );
 
                     // Close the message after 5 seconds
-                    setTimeout(function () {
+                    setTimeout(function() {
                         console.log('remove notifs');
                         $('#genDashNotifs').empty(); // Remove the message
                     }, 10000); // 5000 milliseconds = 5 seconds
@@ -1933,7 +1889,7 @@
                 );
 
                 // Close the message after 5 seconds
-                setTimeout(function () {
+                setTimeout(function() {
                     console.log('remove notifs');
                     $('#genDashNotifs').empty(); // Remove the message
                 }, 10000); // 5000 milliseconds = 5 seconds
@@ -1943,14 +1899,14 @@
 
         // region add attachments 
         let vDIR_atch_count = 1;
-        $('.btnvDIRAddAtchs').click(function () {
+        $('.btnvDIRAddAtchs').click(function() {
             $('.vDIRAtchCtnr').append('' +
                 '    <div class="col-12 mb-1 d-flex flex-row vDIRAtchCtnr_poped border shadow"> ' +
                 '        <div class="p-2"> ' +
                 '           <input type="text" value="FileName' + vDIR_atch_count + '" class="form-control" name="vDIRAtch_remark[]" placeholder="Attachment Remark"> ' +
                 '        </div> ' +
                 '        <div class="p-2"> ' +
-                '           <input type="file" class="form-control vDIRAtch_file" name="vDIRAtch_file[]"> ' +
+                '           <input type="file" class="form-control vDIRAtch_file" name="vDIRAtch_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"> ' +
                 '        </div> ' +
                 '        <div class="p-2"> ' +
                 '           <button class="btn btn-danger btn-sm btn_vDIRAtchCtnr_poped_cls"> <i class="fa fa-times" aria-hidden="true"></i> </button> ' +
@@ -1962,8 +1918,16 @@
         });
 
         // restric only pdf upload in add attachment
-        $('.vDIRAtchCtnr').on('change', '.vDIRAtch_file', function () {
-            var allowedFormats = ["application/pdf"];
+        $('.vDIRAtchCtnr').on('change', '.vDIRAtch_file', function() {
+            let allowedFormats = [
+                "application/pdf", // PDF
+                "application/msword", // Word (.doc)
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Word (.docx)
+                "application/vnd.ms-excel", // Excel (.xls)
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel (.xlsx)
+                "application/vnd.ms-powerpoint", // PowerPoint (.ppt)
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation" // PowerPoint (.pptx)
+            ];
             var maxSizeMB = 10; // Maximum allowed file size in megabytes
             var selectedFile = this.files[0];
 
@@ -1984,7 +1948,7 @@
         });
 
         // remove attch
-        $('.vDIRAtchCtnr').on('click', '.btn_vDIRAtchCtnr_poped_cls', function () {
+        $('.vDIRAtchCtnr').on('click', '.btn_vDIRAtchCtnr_poped_cls', function() {
             $(this).closest('.vDIRAtchCtnr_poped').remove();
         });
         // endregion add attachments 
@@ -1993,7 +1957,7 @@
         $('.btn-vDIR-submit').prop('disabled', true); //disable submit button
         $('.vDIRdoc_action_other').hide(); // hide send to button
         $('.vDIRdoc_action_reject_toggle').hide(); // hide send to button
-        $('#vDIRdoc_action').change(function () {
+        $('#vDIRdoc_action').change(function() {
             let val = $('#vDIRdoc_action :selected').val();
 
             if (val == 'for_release') {
@@ -2022,7 +1986,7 @@
                 );
 
                 // Close the message after 5 seconds
-                setTimeout(function () {
+                setTimeout(function() {
                     $('.action_rejected_container').empty(); // Remove the message
                 }, 5000); // 5000 milliseconds = 5 seconds
             } else {
@@ -2034,7 +1998,7 @@
         // endregion choose document action
 
         //region enable perform action if action taken input have value
-        $('#vDIRaction_taken, #vDIR_subject').keyup(function () {
+        $('#vDIRaction_taken, #vDIR_subject').keyup(function() {
             let action = $('#vDIRaction_taken').val();
             let subject = $('#vDIR_subject').val();
             if (action != '' && subject != '') {
@@ -2049,7 +2013,7 @@
         // Set Text to search box and get details
         let key = 0;
         const addcDIR_users_selected = [];
-        $("#addSendTovDIR").keyup(function () {
+        $("#addSendTovDIR").keyup(function() {
             // console.log('searching');
             let search = $(this).val();
             if (search != "") {
@@ -2064,7 +2028,7 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}",
                     },
                     dataType: 'json',
-                    success: function (response) {
+                    success: function(response) {
                         // console.log('api-responded');
                         // console.log(response.data);
                         // console.log('length: ' + response.data.length);
@@ -2088,7 +2052,7 @@
                             });
 
                             detail_status = '';
-                            if (valueExist == true) { } else {
+                            if (valueExist == true) {} else {
                                 let fetch_message = response.data[i].fetch_message;
                                 let id = response.data[i].id;
                                 let uuid = response.data[i].uuid;
@@ -2120,11 +2084,11 @@
                         }
 
                         // binding click event to li
-                        $(".addPWB-searchResult li").bind("click", function () {
+                        $(".addPWB-searchResult li").bind("click", function() {
                             addSendToListvDIR(this);
                         });
                     },
-                    error: function (error) {
+                    error: function(error) {
                         console.log(error)
                     }
                 });
@@ -2197,7 +2161,7 @@
             $("#addSendTovDIR").val('');
         }
         // remove data when X is clicked
-        $('#addSendToListvDIR').on("click", ".btnListItemRemove_vDIR", function () {
+        $('#addSendToListvDIR').on("click", ".btnListItemRemove_vDIR", function() {
             let target = $(this).data('target');
             $(this).closest('.' + target).remove();
             const indexToRemove = addcDIR_users_selected.indexOf($(this).data('key')); // find the index of the value to remove
@@ -2372,7 +2336,7 @@
         /* endregion MINIFIED SEARCH MODAL  */
 
         // region set length of processing
-        $('#vDIRprocess_length').change(function () {
+        $('#vDIRprocess_length').change(function() {
             let id = $('#vDIRprocess_length :selected').val();
             if (id != 'n/a') {
                 let remarks = $('#vDIRprocess_length :selected').data('remarks');
@@ -2454,7 +2418,7 @@
                     message: toMessage,
                 },
                 dataType: 'json',
-                success: function (r) {
+                success: function(r) {
                     // console.log(r);
                     if (r.success) {
                         $('#genDashNotifs').append('' +
@@ -2465,7 +2429,7 @@
                         );
 
                         // Close the message after 5 seconds
-                        setTimeout(function () {
+                        setTimeout(function() {
                             console.log('remove notifs');
                             $('#genDashNotifs').empty(); // Remove the message
                         }, 10000); // 5000 milliseconds = 5 seconds
@@ -2479,7 +2443,7 @@
                         );
                     }
                 },
-                error: function (err) {
+                error: function(err) {
                     console.log(err);
                 }
             })
@@ -2505,7 +2469,7 @@
                     message: toMessage,
                 },
                 dataType: 'json',
-                success: function (r) {
+                success: function(r) {
                     // console.log(r);
                     if (r.success) {
                         $('#genDashNotifs').append('' +
@@ -2516,7 +2480,7 @@
                         );
 
                         // Close the message after 5 seconds
-                        setTimeout(function () {
+                        setTimeout(function() {
                             console.log('remove notifs');
                             $('#genDashNotifs').empty(); // Remove the message
                         }, 10000); // 5000 milliseconds = 5 seconds
@@ -2530,7 +2494,7 @@
                         );
                     }
                 },
-                error: function (err) {
+                error: function(err) {
                     console.log(err);
                 }
             })
@@ -2538,7 +2502,7 @@
         // endregion client email notify
 
         // region verify client permit
-        $('.payment_document_receipt').on('click', '.verify-client-receipt', function (e) {
+        $('.payment_document_receipt').on('click', '.verify-client-receipt', function(e) {
             e.preventDefault();
 
             let form = $('#addvDIRForm')[0];
@@ -2554,7 +2518,7 @@
                 cache: false,
                 processData: false,
                 contentType: false,
-                success: function (r) {
+                success: function(r) {
                     if (r.success) {
                         // reload
                         $('#dTReceived').DataTable().ajax.reload(null, false);
@@ -2567,7 +2531,7 @@
                         );
 
                         // Close the message after 5 seconds
-                        setTimeout(function () {
+                        setTimeout(function() {
                             console.log('remove notifs');
                             $('#genDashNotifs').empty(); // Remove the message
                         }, 10000); // 5000 milliseconds = 5 seconds
@@ -2579,7 +2543,7 @@
         // endregion verify client permit
 
         // region download published document
-        $('.viewDocAtchReceivedCollection').on('click', '.btn-dlActAtch', function () {
+        $('.viewDocAtchReceivedCollection').on('click', '.btn-dlActAtch', function() {
             let file_path = $(this).data('file_path');
             let file_name = $(this).data('file_name');
 
@@ -2606,7 +2570,7 @@
 
         // region select item
         // Use an object instead of an array
-        $('#dTReceived').on('click', '.btn-select-routing', function (e) {
+        $('#dTReceived').on('click', '.btn-select-routing', function(e) {
             e.preventDefault();
 
             let selected = $(this).text();
@@ -2639,7 +2603,7 @@
 
         // region show modal container with selected items
         let vDIRbulkitemCounter = 1;
-        $(document).on('click', '.btn-vDIRbulksend', function (e) { //called on document because container is unstable due to dataable redraw
+        $(document).on('click', '.btn-vDIRbulksend', function(e) { //called on document because container is unstable due to dataable redraw
             e.preventDefault();
 
             // Get all keys (doc_uuids) from the object
@@ -2709,9 +2673,9 @@
                                         <label class="form-label">File Attachments (Optional)</label>
                                         <input type="file" class="form-control doc-file-uploads" 
                                             name="vDIRdocs[${act_uuid}][files][]" 
-                                            multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                            multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
                                         <small class="text-muted">
-                                            You can upload multiple files. Accepted formats: PDF, JPG, PNG, DOC, DOCX
+                                            You can upload multiple files. Accepted formats: PDF, DOCX, XLSX, PPTX
                                         </small>
                                         <div class="file_list mt-2"></div>
                                     </div>
@@ -2724,7 +2688,7 @@
         });
 
         // Handle close button inside bulk send modal container
-        $('.vDIRbulksendModal-cont').on('click', '.vDIRbulksendModal-item-close', function () {
+        $('.vDIRbulksendModal-cont').on('click', '.vDIRbulksendModal-item-close', function() {
             // Remove the parent .col-12 container
             $(this).closest('.col-12').remove();
 
@@ -2737,7 +2701,7 @@
             }
         });
 
-        $(".btn-vDIRbulksend-submit").on('click', function (e) {
+        $(".btn-vDIRbulksend-submit").on('click', function(e) {
             e.preventDefault();
 
             let valid = true;
@@ -2756,7 +2720,7 @@
             }
 
             // 3. Action Taken fields
-            $(".vDIRbulksendModal-cont input[name^='action_taken']").each(function () {
+            $(".vDIRbulksendModal-cont input[name^='action_taken']").each(function() {
                 if ($(this).val().trim() === "") {
                     valid = false;
                     messages.push("All 'Action Taken' fields must be filled in.");
@@ -2788,7 +2752,7 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function (r) {
+                    success: function(r) {
                         if (r.success) {
                             $('#genDashNotifs').append(`
                                 <div class="col-12 alert alert-info alert-dismissible fade show p-2 pe-5" role="alert">
@@ -2820,11 +2784,11 @@
                         }
 
                         // Auto-clear notifications
-                        setTimeout(function () {
+                        setTimeout(function() {
                             $('#genDashNotifs').empty();
                         }, 10000);
                     },
-                    error: function (err) {
+                    error: function(err) {
                         console.log(err);
                     }
                 });

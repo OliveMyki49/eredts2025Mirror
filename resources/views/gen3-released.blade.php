@@ -1395,7 +1395,7 @@
                 '           <input type="text" value="FileName' + vDIRlsd_atch_count + '" class="form-control" name="vDIRlsdAtch_remark[]" placeholder="Attachment Remark"> ' +
                 '        </div> ' +
                 '        <div class="p-2"> ' +
-                '           <input type="file" class="form-control vDIRlsdAtch_file" name="vDIRlsdAtch_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif"> ' +
+                '           <input type="file" class="form-control vDIRlsdAtch_file" name="vDIRlsdAtch_file[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"> ' +
                 '        </div> ' +
                 '        <div class="p-2"> ' +
                 '           <button class="btn btn-danger btn-sm btn_vDIRlsdAtchCtnr_poped_cls"> <i class="fa fa-times" aria-hidden="true"></i> </button> ' +
